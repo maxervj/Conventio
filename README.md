@@ -1,0 +1,5 @@
+- Cloner la repo
+- Dans un terminal, faites un : composer install
+- Copier/coller le fichier .env dans un fichier .env.local et paramétrer la base de données MariaDB
+- Démarrer un serveur avec la commande: symfony server:start -d
+- Ajouter un utilisateur via la commande: exemple: symfony console app:add-user nom.prenom@truc.fr motdepasse --role ROLE_ADMIN --role ROLE_ETUDIANT
