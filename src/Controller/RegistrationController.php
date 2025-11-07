@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Student;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,11 +24,11 @@ class RegistrationController extends AbstractController
     {
     }
 
-    #[Route('/register', name: 'app_register')]
+    #[Route('/register/student', name: 'app_register_student')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
     {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $student = new Student();
+        $form = $this->createForm(RegistrationFormType::class, $student);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -35,23 +36,23 @@ class RegistrationController extends AbstractController
             $plainPassword = $form->get('plainPassword')->getData();
 
             // encode the plain password
-            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+            $student->setPassword($userPasswordHasher->hashPassword($student, $plainPassword));
 
-            $entityManager->persist($user);
+            $entityManager->persist($student);
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $student,
                 (new TemplatedEmail())
                     ->from(new Address('convention.validation@conventio.com', 'Conventio Validator'))
-                    ->to((string) $user->getEmail())
+                    ->to((string) $student->getEmail())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 
             // do anything else you need here, like send an email
 
-            return $security->login($user, 'form_login', 'main');
+            return $security->login($student, 'form_login', 'main');
         }
 
         return $this->render('registration/register.html.twig', [

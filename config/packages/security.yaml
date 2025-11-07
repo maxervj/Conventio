@@ -43,6 +43,12 @@ security:
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
+    role_hierarchy:
+        ROLE_PROFESSOR: ROLE_USER
+        ROLE_STUDENT: ROLE_USER
+        ROLE_ADMIN: [ ROLE_PROFESSOR, ROLE_STUDENT ]
+
+
     access_control:
         # This makes the logout route accessible during two-factor authentication. Allows the user to
         # cancel two-factor authentication, if they need to.
