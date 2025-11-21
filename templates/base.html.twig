@@ -1,17 +1,41 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar with TailwindCSS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="sticky top-0 z-50 w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-indigo-50/60 border-b border-gray-200">
+    <div class="container mx-auto px-4 h-16 flex items-center justify-between">
+        <!-- Logo -->
+        <a href="{{ path('app_home') }}" class="flex items-center gap-2 font-bold text-xl text-blue-600">
+            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                C
+            </div>
+            <span>Conventio</span>
+        </a>
+        <!-- Navigation -->
+        <nav class="flex items-center gap-3">
+            <a href="{{ path('app_login') }}">
+                <button class="px-4 py-2 text-gray-700 hover:text-blue-600 bg-transparent border-none">Se connecter</button>
+            </a>
+            <a href="{{ path('app_register_student') }}">
+                <button class="px-4 py-2 border border-blue-600 text-blue-600 bg-transparent rounded hidden sm:flex">S'enregistrer (Étudiant)</button>
+            </a>
+            <a href="{{ path('app_register_teacher') }}">
+                <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">S'enregistrer (Professeur)</button>
+            </a>
+        </nav>
+    </div>
+</nav>
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+
+{% block body %}
+    <div class="container mt-5"></div>
+{% endblock %}
+
+</body>
 </html>
