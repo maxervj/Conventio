@@ -92,7 +92,7 @@ class RegistrationController extends AbstractController
             return $security->login($professor, 'form_login', 'main');
         }
 
-        return $this->render('registration/register_teacher.html.twig', [
+        return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
         ]);
     }
