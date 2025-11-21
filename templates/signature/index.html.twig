@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Signature index{% endblock %}
+
+{% block body %}
+    <h1>Signature index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>CiviliteProviseur</th>
+                <th>NomProviseur</th>
+                <th>PrenomProviseur</th>
+                <th>EmailProviseur</th>
+                <th>CiviliteDDF</th>
+                <th>NomDDF</th>
+                <th>PrenomDDF</th>
+                <th>EmailDDF</th>
+                <th>TelDDF</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for signature in signatures %}
+            <tr>
+                <td>{{ signature.id }}</td>
+                <td>{{ signature.civiliteProviseur }}</td>
+                <td>{{ signature.nomProviseur }}</td>
+                <td>{{ signature.prenomProviseur }}</td>
+                <td>{{ signature.emailProviseur }}</td>
+                <td>{{ signature.civiliteDDF }}</td>
+                <td>{{ signature.nomDDF }}</td>
+                <td>{{ signature.prenomDDF }}</td>
+                <td>{{ signature.emailDDF }}</td>
+                <td>{{ signature.telDDF }}</td>
+                <td>
+                    <a href="{{ path('app_signature_show', {'id': signature.id}) }}">show</a>
+                    <a href="{{ path('app_signature_edit', {'id': signature.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_signature_new') }}">Create new</a>
+{% endblock %}
