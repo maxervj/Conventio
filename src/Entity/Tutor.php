@@ -16,16 +16,17 @@ class Tutor extends User
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $telOther = null;
 
-    /**
-     * @var Collection<int, Contract>
-     */
-    #[ORM\OneToMany(targetEntity: Contract::class, mappedBy: 'tutor')]
-    private Collection $contracts;
+    // TODO: Décommenter quand l'entité Contract sera créée
+    // /**
+    //  * @var Collection<int, Contract>
+    //  */
+    // #[ORM\OneToMany(targetEntity: Contract::class, mappedBy: 'tutor')]
+    // private Collection $contracts;
 
-    public function __construct()
-    {
-        $this->contracts = new ArrayCollection();
-    }
+    // public function __construct()
+    // {
+    //     $this->contracts = new ArrayCollection();
+    // }
 
     public function getTelMobile(): ?string
     {
@@ -51,33 +52,33 @@ class Tutor extends User
         return $this;
     }
 
-    /**
-     * @return Collection<int, Contract>
-     */
-    public function getContracts(): Collection
-    {
-        return $this->contracts;
-    }
+    // /**
+    //  * @return Collection<int, Contract>
+    //  */
+    // public function getContracts(): Collection
+    // {
+    //     return $this->contracts;
+    // }
 
-    public function addContract(Contract $contract): static
-    {
-        if (!$this->contracts->contains($contract)) {
-            $this->contracts->add($contract);
-            $contract->setTutor($this);
-        }
+    // public function addContract(Contract $contract): static
+    // {
+    //     if (!$this->contracts->contains($contract)) {
+    //         $this->contracts->add($contract);
+    //         $contract->setTutor($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeContract(Contract $contract): static
-    {
-        if ($this->contracts->removeElement($contract)) {
-            // set the owning side to null (unless already changed)
-            if ($contract->getTutor() === $this) {
-                $contract->setTutor(null);
-            }
-        }
+    // public function removeContract(Contract $contract): static
+    // {
+    //     if ($this->contracts->removeElement($contract)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($contract->getTutor() === $this) {
+    //             $contract->setTutor(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }
