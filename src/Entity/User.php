@@ -3,14 +3,24 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\DiscriminatorColumn;
+use Doctrine\ORM\Mapping\DiscriminatorMap;
+use Doctrine\ORM\Mapping\InheritanceType;
+use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[InheritanceType('SINGLE_TABLE')]
+#[DiscriminatorColumn(name: 'discr', type: 'string')]
+#[DiscriminatorMap(['user' => 'User', 'student' => 'Student', 'professor' => 'Professor'])]
+class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFactorInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -31,6 +41,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $googleAuthenticatorSecret = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTime $birthDate = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTime $contractStartDate = null;
+
+    #[ORM\Column]
+    private bool $isVerified = false;
+
 
     public function getId(): ?int
     {
@@ -111,5 +134,96 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // @deprecated, to be removed when upgrading to Symfony 8
+    }
+
+    public function isGoogleAuthenticatorEnabled(): bool
+    {
+        return null !== $this->googleAuthenticatorSecret;
+    }
+
+    public function getGoogleAuthenticatorUsername(): string
+    {
+        return $this->email;
+    }
+
+    public function getGoogleAuthenticatorSecret(): string|null
+    {
+        return $this->googleAuthenticatorSecret;
+    }
+
+    public function setGoogleAuthenticatorSecret(?string $googleAuthenticatorSecret): void
+    {
+        $this->googleAuthenticatorSecret = $googleAuthenticatorSecret;
+    }
+
+    public function getBirthDate(): ?\DateTime
+    {
+        return $this->birthDate;
+    }
+
+    public function setBirthDate(?\DateTime $birthDate): static
+    {
+        $this->birthDate = $birthDate;
+
+        return $this;
+    }
+
+    public function getContractStartDate(): ?\DateTime
+    {
+        return $this->contractStartDate;
+    }
+
+    public function setContractStartDate(?\DateTime $contractStartDate): static
+    {
+        $this->contractStartDate = $contractStartDate;
+
+        return $this;
+    }
+
+    //methods to calcultate age of the user
+    public function getAge(): ?int
+    {
+        if (null === $this->birthDate) {
+            return null;
+        }
+
+        $today = new \DateTime();
+        $age = $today->diff($this->birthDate)->y;
+
+        return $age;
+    }
+
+    //method to calculate the category of contract based on the start date
+    //catégorie 1 si son contrat a été signé il y a moins d'un an, catégorie 2, si son contrat a été signé entre 1 et 5 ans, catégorie 3 entre 5 et 15 ans, catégorie 4 pour un contrat signé il y a plus de 15 ans
+    public function getContractCategory(): ?int
+    {
+        if (null === $this->contractStartDate) {
+            return null;
+        }
+
+        $today = new \DateTime();
+        $yearsOfService = $today->diff($this->contractStartDate)->y;
+
+        if ($yearsOfService < 1) {
+            return 1;
+        } elseif ($yearsOfService >= 1 && $yearsOfService < 5) {
+            return 2;
+        } elseif ($yearsOfService >= 5 && $yearsOfService < 15) {
+            return 3;
+        } else {
+            return 4;
+        }
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
     }
 }

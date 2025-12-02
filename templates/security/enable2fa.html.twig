@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Enable 2FA{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="text-center">Activez l'autentification à 2 facteurs (A2F)</h1>
+            </div>
+        </div>
+        <div class="row">
+            {% for label, messages in app.flashes %}
+                <div class="alert alert-{{ label }}">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p class="text-center">Scannez le QR code avec votre app d'authentification</p>
+            </div>
+            <div class="col-md-6">
+                <img src="{{ qr_code_data_uri(qrCodeContent) }}" alt="QR Code" />
+            </div>
+        </div>
+        <div class="row">
+            <p class="text-center">Validez l'activation en entrant le code fourni par votre app d'authentification</p>
+            {{ form_start(form) }}
+            {{ form_row(form.authenticatorCode) }}
+            <button type="submit" class="btn btn-primary">Activez l'A2F</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+
+{% endblock %}
