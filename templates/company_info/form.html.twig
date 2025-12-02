@@ -1,0 +1,530 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'company_info.title'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+        .form-section {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        .form-section h3 {
+            color: #007bff;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .required:after {
+            content: " *";
+            color: red;
+        }
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+        .form-check {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        .form-check-input {
+            margin-right: 5px;
+        }
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .schedule-table th,
+        .schedule-table td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: center;
+        }
+        .schedule-table th {
+            background-color: #007bff;
+            color: white;
+            font-weight: 500;
+        }
+        .schedule-table input {
+            width: 60px;
+            text-align: center;
+            padding: 5px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+        .time-separator {
+            margin: 0 5px;
+        }
+        .weekly-total {
+            background-color: #e7f3ff;
+            font-weight: bold;
+        }
+        .btn {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .language-selector select {
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+        }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .conditional-field {
+            margin-left: 20px;
+            margin-top: 10px;
+            display: none;
+        }
+        .conditional-field.show {
+            display: block;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="language-selector">
+        <select id="language-select" onchange="changeLanguage(this.value)">
+            <option value="fr" {{ locale == 'fr' ? 'selected' : '' }}>Français</option>
+            <option value="en" {{ locale == 'en' ? 'selected' : '' }}>English</option>
+            <option value="es" {{ locale == 'es' ? 'selected' : '' }}>Español</option>
+            <option value="it" {{ locale == 'it' ? 'selected' : '' }}>Italiano</option>
+            <option value="de" {{ locale == 'de' ? 'selected' : '' }}>Deutsch</option>
+        </select>
+    </div>
+
+    <div class="container">
+        <h1>{{ 'company_info.title'|trans }}</h1>
+
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">{{ message|trans }}</div>
+        {% endfor %}
+
+        {{ form_start(form) }}
+
+        {# Organization Information #}
+        <div class="form-section">
+            <h3>{{ 'company_info.organization_info'|trans }}</h3>
+
+            <div class="form-group">
+                {{ form_label(form.companyName, null, {'label_attr': {'class': 'required'}}) }}
+                {{ form_widget(form.companyName) }}
+                {{ form_errors(form.companyName) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.address, null, {'label_attr': {'class': 'required'}}) }}
+                {{ form_widget(form.address) }}
+                {{ form_errors(form.address) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.addressComplement) }}
+                {{ form_widget(form.addressComplement) }}
+                {{ form_errors(form.addressComplement) }}
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 15px;">
+                <div class="form-group">
+                    {{ form_label(form.postalCode, null, {'label_attr': {'class': 'required'}}) }}
+                    {{ form_widget(form.postalCode) }}
+                    {{ form_errors(form.postalCode) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.city, null, {'label_attr': {'class': 'required'}}) }}
+                    {{ form_widget(form.city) }}
+                    {{ form_errors(form.city) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.country, null, {'label_attr': {'class': 'required'}}) }}
+                {{ form_widget(form.country) }}
+                {{ form_errors(form.country) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.responsibleLastName, null, {'label_attr': {'class': 'required'}}) }}
+                {{ form_widget(form.responsibleLastName) }}
+                {{ form_errors(form.responsibleLastName) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.responsibleFirstName, null, {'label_attr': {'class': 'required'}}) }}
+                {{ form_widget(form.responsibleFirstName) }}
+                {{ form_errors(form.responsibleFirstName) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.responsibleFunction, null, {'label_attr': {'class': 'required'}}) }}
+                {{ form_widget(form.responsibleFunction) }}
+                {{ form_errors(form.responsibleFunction) }}
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="form-group">
+                    {{ form_label(form.landlinePhone) }}
+                    {{ form_widget(form.landlinePhone) }}
+                    {{ form_errors(form.landlinePhone) }}
+                    <small>{{ 'company_info.at_least_one_phone'|trans }}</small>
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.mobilePhone) }}
+                    {{ form_widget(form.mobilePhone) }}
+                    {{ form_errors(form.mobilePhone) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.email, null, {'label_attr': {'class': 'required'}}) }}
+                {{ form_widget(form.email) }}
+                <small>{{ 'company_info.email_note'|trans }}</small>
+                {{ form_errors(form.email) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.website) }}
+                {{ form_widget(form.website) }}
+                {{ form_errors(form.website) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.siret, null, {'label_attr': {'class': 'required'}}) }}
+                {{ form_widget(form.siret) }}
+                {{ form_errors(form.siret) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.insurerName, null, {'label_attr': {'class': 'required'}}) }}
+                {{ form_widget(form.insurerName) }}
+                {{ form_errors(form.insurerName) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.insurerReference, null, {'label_attr': {'class': 'required'}}) }}
+                {{ form_widget(form.insurerReference) }}
+                {{ form_errors(form.insurerReference) }}
+            </div>
+        </div>
+
+        {# Internship Location #}
+        <div class="form-section">
+            <h3>{{ 'company_info.internship_location'|trans }}</h3>
+
+            <div class="form-group">
+                {{ form_label(form.internshipAddress) }}
+                {{ form_widget(form.internshipAddress) }}
+                {{ form_errors(form.internshipAddress) }}
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 15px;">
+                <div class="form-group">
+                    {{ form_label(form.internshipPostalCode) }}
+                    {{ form_widget(form.internshipPostalCode) }}
+                    {{ form_errors(form.internshipPostalCode) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.internshipCity) }}
+                    {{ form_widget(form.internshipCity) }}
+                    {{ form_errors(form.internshipCity) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.internshipCountry) }}
+                {{ form_widget(form.internshipCountry) }}
+                {{ form_errors(form.internshipCountry) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.internshipPhone) }}
+                {{ form_widget(form.internshipPhone) }}
+                {{ form_errors(form.internshipPhone) }}
+            </div>
+        </div>
+
+        {# Supervisor Information #}
+        <div class="form-section">
+            <h3>{{ 'company_info.supervisor_info'|trans }}</h3>
+
+            <div class="form-group">
+                {{ form_label(form.supervisorLastName, null, {'label_attr': {'class': 'required'}}) }}
+                {{ form_widget(form.supervisorLastName) }}
+                {{ form_errors(form.supervisorLastName) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.supervisorFirstName, null, {'label_attr': {'class': 'required'}}) }}
+                {{ form_widget(form.supervisorFirstName) }}
+                {{ form_errors(form.supervisorFirstName) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.supervisorFunction, null, {'label_attr': {'class': 'required'}}) }}
+                {{ form_widget(form.supervisorFunction) }}
+                {{ form_errors(form.supervisorFunction) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.supervisorPhone, null, {'label_attr': {'class': 'required'}}) }}
+                {{ form_widget(form.supervisorPhone) }}
+                {{ form_errors(form.supervisorPhone) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.supervisorEmail, null, {'label_attr': {'class': 'required'}}) }}
+                {{ form_widget(form.supervisorEmail) }}
+                {{ form_errors(form.supervisorEmail) }}
+            </div>
+        </div>
+
+        {# Questionnaire #}
+        <div class="form-section">
+            <h3>{{ 'company_info.questionnaire'|trans }}</h3>
+
+            <div class="form-group">
+                {{ form_label(form.hasTravel) }}
+                {{ form_widget(form.hasTravel) }}
+                {{ form_errors(form.hasTravel) }}
+            </div>
+        </div>
+
+        {# Cost Coverage #}
+        <div class="form-section">
+            <h3>{{ 'company_info.cost_coverage'|trans }}</h3>
+
+            <div class="form-group">
+                {{ form_label(form.coversTransportCosts) }}
+                {{ form_widget(form.coversTransportCosts) }}
+                {{ form_errors(form.coversTransportCosts) }}
+
+                <div class="conditional-field" id="transport-details">
+                    {{ form_widget(form.transportCostsDetails) }}
+                    {{ form_errors(form.transportCostsDetails) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.coversMealCosts) }}
+                {{ form_widget(form.coversMealCosts) }}
+                {{ form_errors(form.coversMealCosts) }}
+
+                <div class="conditional-field" id="meal-details">
+                    {{ form_widget(form.mealCostsDetails) }}
+                    {{ form_errors(form.mealCostsDetails) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.coversAccommodationCosts) }}
+                {{ form_widget(form.coversAccommodationCosts) }}
+                {{ form_errors(form.coversAccommodationCosts) }}
+
+                <div class="conditional-field" id="accommodation-details">
+                    {{ form_widget(form.accommodationCostsDetails) }}
+                    {{ form_errors(form.accommodationCostsDetails) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.providesGratification) }}
+                {{ form_widget(form.providesGratification) }}
+                {{ form_errors(form.providesGratification) }}
+
+                <div class="conditional-field" id="gratification-details">
+                    {{ form_widget(form.gratificationDetails) }}
+                    {{ form_errors(form.gratificationDetails) }}
+                </div>
+            </div>
+        </div>
+
+        {# Work Schedule #}
+        <div class="form-section">
+            <h3>{{ 'company_info.work_schedule'|trans }}</h3>
+
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>{{ 'company_info.morning_start'|trans }}</th>
+                        <th>{{ 'company_info.morning_end'|trans }}</th>
+                        <th>{{ 'company_info.afternoon_start'|trans }}</th>
+                        <th>{{ 'company_info.afternoon_end'|trans }}</th>
+                        <th>{{ 'company_info.hours'|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] %}
+                    {% for day in days %}
+                        <tr>
+                            <td><strong>{{ ('company_info.' ~ day)|trans }}</strong></td>
+                            <td>
+                                <input type="number" name="work_schedule[{{ day }}][morning_start_h]" min="0" max="23" value="8" class="schedule-input" data-day="{{ day }}">
+                                <span class="time-separator">:</span>
+                                <input type="number" name="work_schedule[{{ day }}][morning_start_m]" min="0" max="59" value="00" class="schedule-input" data-day="{{ day }}">
+                            </td>
+                            <td>
+                                <input type="number" name="work_schedule[{{ day }}][morning_end_h]" min="0" max="23" value="12" class="schedule-input" data-day="{{ day }}">
+                                <span class="time-separator">:</span>
+                                <input type="number" name="work_schedule[{{ day }}][morning_end_m]" min="0" max="59" value="00" class="schedule-input" data-day="{{ day }}">
+                            </td>
+                            <td>
+                                <input type="number" name="work_schedule[{{ day }}][afternoon_start_h]" min="0" max="23" value="13" class="schedule-input" data-day="{{ day }}">
+                                <span class="time-separator">:</span>
+                                <input type="number" name="work_schedule[{{ day }}][afternoon_start_m]" min="0" max="59" value="00" class="schedule-input" data-day="{{ day }}">
+                            </td>
+                            <td>
+                                <input type="number" name="work_schedule[{{ day }}][afternoon_end_h]" min="0" max="23" value="17" class="schedule-input" data-day="{{ day }}">
+                                <span class="time-separator">:</span>
+                                <input type="number" name="work_schedule[{{ day }}][afternoon_end_m]" min="0" max="59" value="00" class="schedule-input" data-day="{{ day }}">
+                            </td>
+                            <td id="total-{{ day }}">8:00</td>
+                        </tr>
+                    {% endfor %}
+                    <tr class="weekly-total">
+                        <td colspan="5">{{ 'company_info.weekly_total'|trans }}</td>
+                        <td id="weekly-total">40:00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        {# Planned Activities #}
+        <div class="form-section">
+            <h3>{{ 'company_info.planned_activities'|trans }}</h3>
+
+            <div class="form-group">
+                {{ form_label(form.plannedActivities, null, {'label_attr': {'class': 'required'}}) }}
+                {{ form_widget(form.plannedActivities) }}
+                {{ form_errors(form.plannedActivities) }}
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <button type="submit" class="btn btn-primary">{{ 'company_info.submit'|trans }}</button>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+
+    <script>
+        function changeLanguage(lang) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('lang', lang);
+            window.location.href = url.toString();
+        }
+
+        // Show/hide conditional fields
+        function toggleConditionalField(radioName, detailsId) {
+            const radios = document.querySelectorAll(`input[name="${radioName}"]`);
+            const detailsField = document.getElementById(detailsId);
+
+            radios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === '1' && this.checked) {
+                        detailsField.classList.add('show');
+                    } else if (this.value === '0' && this.checked) {
+                        detailsField.classList.remove('show');
+                    }
+                });
+            });
+        }
+
+        toggleConditionalField('company_info_form[coversTransportCosts]', 'transport-details');
+        toggleConditionalField('company_info_form[coversMealCosts]', 'meal-details');
+        toggleConditionalField('company_info_form[coversAccommodationCosts]', 'accommodation-details');
+        toggleConditionalField('company_info_form[providesGratification]', 'gratification-details');
+
+        // Calculate work hours
+        function calculateDailyHours(day) {
+            const inputs = document.querySelectorAll(`.schedule-input[data-day="${day}"]`);
+            const values = Array.from(inputs).map(input => parseInt(input.value) || 0);
+
+            // Calculate morning duration
+            const morningStart = values[0] * 60 + values[1];
+            const morningEnd = values[2] * 60 + values[3];
+            const morningDuration = Math.max(0, morningEnd - morningStart);
+
+            // Calculate afternoon duration
+            const afternoonStart = values[4] * 60 + values[5];
+            const afternoonEnd = values[6] * 60 + values[7];
+            const afternoonDuration = Math.max(0, afternoonEnd - afternoonStart);
+
+            // Total duration in minutes
+            const totalMinutes = morningDuration + afternoonDuration;
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+
+            return { hours, minutes, totalMinutes };
+        }
+
+        function updateScheduleDisplay() {
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            let weeklyTotalMinutes = 0;
+
+            days.forEach(day => {
+                const result = calculateDailyHours(day);
+                document.getElementById(`total-${day}`).textContent =
+                    `${result.hours}:${String(result.minutes).padStart(2, '0')}`;
+                weeklyTotalMinutes += result.totalMinutes;
+            });
+
+            const weeklyHours = Math.floor(weeklyTotalMinutes / 60);
+            const weeklyMinutes = weeklyTotalMinutes % 60;
+            document.getElementById('weekly-total').textContent =
+                `${weeklyHours}:${String(weeklyMinutes).padStart(2, '0')}`;
+        }
+
+        // Add event listeners to all schedule inputs
+        document.querySelectorAll('.schedule-input').forEach(input => {
+            input.addEventListener('input', updateScheduleDisplay);
+            input.addEventListener('change', updateScheduleDisplay);
+        });
+
+        // Initial calculation
+        updateScheduleDisplay();
+    </script>
+{% endblock %}
