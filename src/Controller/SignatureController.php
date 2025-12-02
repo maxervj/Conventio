@@ -10,8 +10,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 
 #[Route('/signature')]
+#[IsGranted('ROLE_ADMIN')]
 final class SignatureController extends AbstractController
 {
     #[Route(name: 'app_signature_index', methods: ['GET'])]
@@ -32,6 +35,8 @@ final class SignatureController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($signature);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Les informations de signature ont été créées.');
 
             return $this->redirectToRoute('app_signature_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -59,6 +64,8 @@ final class SignatureController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            $this->addFlash('success', 'Les informations de signature ont été mises à jour.');
+
             return $this->redirectToRoute('app_signature_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -74,6 +81,8 @@ final class SignatureController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$signature->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($signature);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Les informations de signature ont été supprimées.');
         }
 
         return $this->redirectToRoute('app_signature_index', [], Response::HTTP_SEE_OTHER);

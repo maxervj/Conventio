@@ -5,54 +5,59 @@
 {% block body %}
     <h1>Signature</h1>
 
+    <h2>Informations Proviseur</h2>
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ signature.id }}</td>
-            </tr>
-            <tr>
-                <th>CiviliteProviseur</th>
+                <th>Civilité</th>
                 <td>{{ signature.civiliteProviseur }}</td>
             </tr>
             <tr>
-                <th>NomProviseur</th>
+                <th>Nom</th>
                 <td>{{ signature.nomProviseur }}</td>
             </tr>
             <tr>
-                <th>PrenomProviseur</th>
+                <th>Prenom</th>
                 <td>{{ signature.prenomProviseur }}</td>
             </tr>
             <tr>
-                <th>EmailProviseur</th>
+                <th>Email</th>
                 <td>{{ signature.emailProviseur }}</td>
             </tr>
+        </tbody>
+    </table>
+
+    <h2>Informations Directeur Délégué aux Formations</h2>
+    <table class="table">
+        <tbody>
             <tr>
-                <th>CiviliteDDF</th>
+                <th>Civilite</th>
                 <td>{{ signature.civiliteDDF }}</td>
             </tr>
             <tr>
-                <th>NomDDF</th>
+                <th>Nom</th>
                 <td>{{ signature.nomDDF }}</td>
             </tr>
             <tr>
-                <th>PrenomDDF</th>
+                <th>Prenom</th>
                 <td>{{ signature.prenomDDF }}</td>
             </tr>
             <tr>
-                <th>EmailDDF</th>
+                <th>Email</th>
                 <td>{{ signature.emailDDF }}</td>
             </tr>
             <tr>
-                <th>TelDDF</th>
+                <th>Téléphone</th>
                 <td>{{ signature.telDDF }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_signature_index') }}">back to list</a>
+    <div class="actions">
+        <a href="{{ path('app_signature_index') }}">back to list</a>
 
-    <a href="{{ path('app_signature_edit', {'id': signature.id}) }}">edit</a>
+        <a href="{{ path('app_signature_edit', {'id': signature.id}) }}">edit</a>
 
-    {{ include('signature/_delete_form.html.twig') }}
+        {{ include('signature/_delete_form.html.twig') }}
+    </div>
 {% endblock %}
