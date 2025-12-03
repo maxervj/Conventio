@@ -19,6 +19,7 @@
                         <strong>Information importante :</strong> Les informations saisies ici seront nécessaires pour l'établissement d'une convention de stage.
                     </p>
 
+                    {% if userType == 'student' %}
                     {% for flash_error in app.flashes('verify_email_error') %}
                         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
                     {% endfor %}
@@ -69,6 +70,59 @@
                             <button type="submit" class="btn btn-primary btn-lg">S'enregistrer</button>
                         </div>
                     {{ form_end(registrationForm) }}
+
+
+                    {% elseif userType == 'professor' %}
+                    {% for flash_error in app.flashes('verify_email_error') %}
+                        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+                    {% endfor %}
+
+                    {{ form_start(professorRegistration, {'attr': {'novalidate': 'novalidate'}}) }}
+                    <div class="mb-3">
+                        {{ form_label(professorRegistration.lastName, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(professorRegistration.lastName, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(professorRegistration.lastName) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(professorRegistration.firstName, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(professorRegistration.firstName, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(professorRegistration.firstName) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(professorRegistration.email, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(professorRegistration.email, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(professorRegistration.email) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(professorRegistration.plainPassword.first, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(professorRegistration.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
+                        <div class="form-text">
+                            Le mot de passe doit contenir au moins 12 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial (@$!%*?&).
+                        </div>
+                        {{ form_errors(professorRegistration.plainPassword.first) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(professorRegistration.plainPassword.second, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(professorRegistration.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(professorRegistration.plainPassword.second) }}
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        {{ form_widget(professorRegistration.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+                        {{ form_label(professorRegistration.agreeTerms, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                        <a href="{{ path('app_terms') }}" target="_blank" class="ms-1">Lire les CGU</a>
+                        {{ form_errors(professorRegistration.agreeTerms) }}
+                    </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">S'enregistrer</button>
+                        </div>
+                        {{ form_end(professorRegistration) }}
+                    {% endif %}
 
                     <div class="text-center mt-3">
                         <p>Vous avez déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a></p>

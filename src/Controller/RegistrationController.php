@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Professor;
 use App\Entity\User;
 use App\Entity\Student;
+use App\Form\ProfessorResgistrationType;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
@@ -50,6 +52,7 @@ class RegistrationController extends AbstractController
                     ->to((string) $student->getEmail())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->context(['user' => $student])
             );
 
             // do anything else you need here, like send an email
@@ -59,6 +62,7 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
+            'userType' => 'student',
         ]);
     }
 
@@ -66,7 +70,7 @@ class RegistrationController extends AbstractController
     public function registerProfessor(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
     {
         $professor = new Professor();
-        $form = $this->createForm(RegistrationFormType::class, $professor);
+        $form = $this->createForm(ProfessorResgistrationType::class, $professor);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -74,11 +78,18 @@ class RegistrationController extends AbstractController
             $plainPassword = $form->get('plainPassword')->getData();
 
             // encode the plain password
-            $professor->setPassword($userPasswordHasher->hashPassword($professor, $plainPassword));
 
+            $professor->setPassword($userPasswordHasher->hashPassword($professor, $plainPassword));
             $entityManager->persist($professor);
             $professor->setRoles(['ROLE_PROFESSOR']);
             $entityManager->flush();
+
+
+            $verificationUrl = $this->generateUrl(
+                'app_verify_email',
+                [],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
 
             // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $professor,
@@ -87,13 +98,16 @@ class RegistrationController extends AbstractController
                     ->to((string) $professor->getEmail())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->context(['user' => $professor,
+                        'verificationUrl' => $verificationUrl])
             );
 
             return $security->login($professor, 'form_login', 'main');
         }
 
         return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form,
+            'professorRegistration' => $form,
+            'userType' => 'professor'
         ]);
     }
 
@@ -111,12 +125,17 @@ class RegistrationController extends AbstractController
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
 
-            return $this->redirectToRoute('app_register');
+            if (in_array('ROLE_PROFESSOR', $user->getRoles())) { // si le rôle professeur est bien enregistré
+                return $this->redirectToRoute('app_register_teacher');
+            }
+            else if (in_array('ROLE_STUDENT', $user->getRoles())) {
+                return $this->redirectToRoute('app_register_student');
+            }
         }
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Your email address has been verified.');
 
-        return $this->redirectToRoute('app_register');
+        return $this->redirectToRoute('app_home');
     }
 }
