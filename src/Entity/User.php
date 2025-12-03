@@ -5,22 +5,16 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\DiscriminatorColumn;
-use Doctrine\ORM\Mapping\DiscriminatorMap;
-use Doctrine\ORM\Mapping\InheritanceType;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'user_type', type: 'string')]
+#[ORM\DiscriminatorMap(['student' => Student::class, 'professor' => Professor::class, 'tutor' => Tutor::class])]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-#[InheritanceType('SINGLE_TABLE')]
-#[DiscriminatorColumn(name: 'discr', type: 'string')]
-#[DiscriminatorMap(['user' => 'User', 'student' => 'Student', 'professor' => 'Professor'])]
-class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFactorInterface
+abstract class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFactorInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -29,6 +23,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
 
     #[ORM\Column(length: 180)]
     private ?string $email = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $firstName = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $lastName = null;
 
     /**
      * @var list<string> The user roles
@@ -43,16 +43,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     private ?string $password = null;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    private ?string $googleAuthenticatorSecret = null;
+    private ?string $googleAuthenticatorSecret;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $birthDate = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $contractStartDate = null;
-
-    #[ORM\Column]
-    private bool $isVerified = false;
 
 
     public function getId(): ?int
@@ -68,6 +65,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): static
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): static
+    {
+        $this->lastName = $lastName;
 
         return $this;
     }
@@ -213,17 +234,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
         } else {
             return 4;
         }
-    }
-
-    public function isVerified(): bool
-    {
-        return $this->isVerified;
-    }
-
-    public function setIsVerified(bool $isVerified): static
-    {
-        $this->isVerified = $isVerified;
-
-        return $this;
     }
 }

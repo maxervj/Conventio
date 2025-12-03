@@ -1,0 +1,322 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'company_info.confirmation_title'|trans }}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+        .confirmation-section {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+        .confirmation-section h3 {
+            color: #28a745;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        .info-row {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #495057;
+        }
+        .info-value {
+            color: #212529;
+        }
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .schedule-table th,
+        .schedule-table td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: left;
+        }
+        .schedule-table th {
+            background-color: #28a745;
+            color: white;
+            font-weight: 500;
+        }
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border: 1px solid #bee5eb;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .btn {
+            padding: 12px 40px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>{{ 'company_info.confirmation_title'|trans }}</h1>
+
+        <div class="alert-info">
+            {{ 'company_info.confirmation_message'|trans }}
+        </div>
+
+        {# Organization Information #}
+        <div class="confirmation-section">
+            <h3>{{ 'company_info.organization_info'|trans }}</h3>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.company_name'|trans }}</div>
+                <div class="info-value">{{ companyInfo.companyName }}</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.address'|trans }}</div>
+                <div class="info-value">
+                    {{ companyInfo.address }}
+                    {% if companyInfo.addressComplement %}
+                        <br>{{ companyInfo.addressComplement }}
+                    {% endif %}
+                    <br>{{ companyInfo.postalCode }} {{ companyInfo.city }}
+                    <br>{{ companyInfo.country }}
+                </div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.responsible_lastname'|trans }}</div>
+                <div class="info-value">{{ companyInfo.responsibleLastName }} {{ companyInfo.responsibleFirstName }}</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.responsible_function'|trans }}</div>
+                <div class="info-value">{{ companyInfo.responsibleFunction }}</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.landline_phone'|trans }}</div>
+                <div class="info-value">{{ companyInfo.landlinePhone ?? '-' }}</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.mobile_phone'|trans }}</div>
+                <div class="info-value">{{ companyInfo.mobilePhone ?? '-' }}</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.email'|trans }}</div>
+                <div class="info-value">{{ companyInfo.email }}</div>
+            </div>
+
+            {% if companyInfo.website %}
+                <div class="info-row">
+                    <div class="info-label">{{ 'company_info.website'|trans }}</div>
+                    <div class="info-value">{{ companyInfo.website }}</div>
+                </div>
+            {% endif %}
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.siret'|trans }}</div>
+                <div class="info-value">{{ companyInfo.siret }}</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.insurer_name'|trans }}</div>
+                <div class="info-value">{{ companyInfo.insurerName }}</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.insurer_reference'|trans }}</div>
+                <div class="info-value">{{ companyInfo.insurerReference }}</div>
+            </div>
+        </div>
+
+        {# Internship Location #}
+        {% if companyInfo.internshipAddress %}
+            <div class="confirmation-section">
+                <h3>{{ 'company_info.internship_location'|trans }}</h3>
+
+                <div class="info-row">
+                    <div class="info-label">{{ 'company_info.address'|trans }}</div>
+                    <div class="info-value">
+                        {{ companyInfo.internshipAddress }}
+                        <br>{{ companyInfo.internshipPostalCode }} {{ companyInfo.internshipCity }}
+                        <br>{{ companyInfo.internshipCountry }}
+                    </div>
+                </div>
+
+                {% if companyInfo.internshipPhone %}
+                    <div class="info-row">
+                        <div class="info-label">{{ 'company_info.internship_phone'|trans }}</div>
+                        <div class="info-value">{{ companyInfo.internshipPhone }}</div>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        {# Supervisor Information #}
+        <div class="confirmation-section">
+            <h3>{{ 'company_info.supervisor_info'|trans }}</h3>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.supervisor_lastname'|trans }}</div>
+                <div class="info-value">{{ companyInfo.supervisorLastName }} {{ companyInfo.supervisorFirstName }}</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.supervisor_function'|trans }}</div>
+                <div class="info-value">{{ companyInfo.supervisorFunction }}</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.supervisor_phone'|trans }}</div>
+                <div class="info-value">{{ companyInfo.supervisorPhone }}</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.supervisor_email'|trans }}</div>
+                <div class="info-value">{{ companyInfo.supervisorEmail }}</div>
+            </div>
+        </div>
+
+        {# Questionnaire #}
+        <div class="confirmation-section">
+            <h3>{{ 'company_info.questionnaire'|trans }}</h3>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.has_travel'|trans }}</div>
+                <div class="info-value">
+                    {{ companyInfo.hasTravel ? ('company_info.yes'|trans) : ('company_info.no'|trans) }}
+                </div>
+            </div>
+        </div>
+
+        {# Cost Coverage #}
+        <div class="confirmation-section">
+            <h3>{{ 'company_info.cost_coverage'|trans }}</h3>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.covers_transport'|trans }}</div>
+                <div class="info-value">
+                    {{ companyInfo.coversTransportCosts ? ('company_info.yes'|trans) : ('company_info.no'|trans) }}
+                    {% if companyInfo.coversTransportCosts and companyInfo.transportCostsDetails %}
+                        <br><em>{{ companyInfo.transportCostsDetails }}</em>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.covers_meals'|trans }}</div>
+                <div class="info-value">
+                    {{ companyInfo.coversMealCosts ? ('company_info.yes'|trans) : ('company_info.no'|trans) }}
+                    {% if companyInfo.coversMealCosts and companyInfo.mealCostsDetails %}
+                        <br><em>{{ companyInfo.mealCostsDetails }}</em>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.covers_accommodation'|trans }}</div>
+                <div class="info-value">
+                    {{ companyInfo.coversAccommodationCosts ? ('company_info.yes'|trans) : ('company_info.no'|trans) }}
+                    {% if companyInfo.coversAccommodationCosts and companyInfo.accommodationCostsDetails %}
+                        <br><em>{{ companyInfo.accommodationCostsDetails }}</em>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">{{ 'company_info.provides_gratification'|trans }}</div>
+                <div class="info-value">
+                    {{ companyInfo.providesGratification ? ('company_info.yes'|trans) : ('company_info.no'|trans) }}
+                    {% if companyInfo.providesGratification and companyInfo.gratificationDetails %}
+                        <br><em>{{ companyInfo.gratificationDetails }}</em>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {# Work Schedule #}
+        <div class="confirmation-section">
+            <h3>{{ 'company_info.work_schedule'|trans }}</h3>
+
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th>{{ 'company_info.day'|trans }}</th>
+                        <th>{{ 'company_info.morning'|trans }}</th>
+                        <th>{{ 'company_info.afternoon'|trans }}</th>
+                        <th>{{ 'company_info.hours'|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] %}
+                    {% for day in days %}
+                        {% set schedule = companyInfo.workSchedule[day] ?? null %}
+                        {% if schedule %}
+                            <tr>
+                                <td><strong>{{ ('company_info.' ~ day)|trans }}</strong></td>
+                                <td>{{ schedule.morning_start_h|default('--') }}:{{ schedule.morning_start_m|default('--') }} - {{ schedule.morning_end_h|default('--') }}:{{ schedule.morning_end_m|default('--') }}</td>
+                                <td>{{ schedule.afternoon_start_h|default('--') }}:{{ schedule.afternoon_start_m|default('--') }} - {{ schedule.afternoon_end_h|default('--') }}:{{ schedule.afternoon_end_m|default('--') }}</td>
+                                <td>{{ schedule.total|default('--') }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {# Planned Activities #}
+        <div class="confirmation-section">
+            <h3>{{ 'company_info.planned_activities'|trans }}</h3>
+
+            <div class="info-value" style="white-space: pre-wrap;">{{ companyInfo.plannedActivities }}</div>
+        </div>
+
+        <form method="post">
+            <div class="button-group">
+                <button type="submit" name="action" value="modify" class="btn btn-secondary">
+                    {{ 'company_info.modify'|trans }}
+                </button>
+                <button type="submit" name="action" value="confirm" class="btn btn-success">
+                    {{ 'company_info.confirm_submit'|trans }}
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
