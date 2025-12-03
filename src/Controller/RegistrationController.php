@@ -65,9 +65,10 @@ class RegistrationController extends AbstractController
 
             $mailer->send($email);
 
-            $this->addFlash('success', 'Votre compte a été créé avec succès ! Un email de confirmation vous a été envoyé. Veuillez cliquer sur le lien dans l\'email pour activer votre compte.');
-
-            return $this->redirectToRoute('app_login');
+            // Rediriger vers la page de confirmation d'inscription
+            return $this->render('registration/registration_success.html.twig', [
+                'userEmail' => $student->getEmail(),
+            ]);
         }
 
         return $this->render('registration/register.html.twig', [
