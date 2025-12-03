@@ -199,10 +199,10 @@
 
                         <div class="mb-3">
                             {{ form_label(registrationForm.plainPassword.first, null, {'label_attr': {'class': 'form-label'}}) }}
-                            <div class="input-group">
+                            <div class="input-group password-input-group">
                                 <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                                {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'Entrez votre mot de passe', 'id': 'password-first'}}) }}
-                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="password-first">
+                                {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control password-field', 'placeholder': 'Entrez votre mot de passe'}}) }}
+                                <button class="btn btn-outline-secondary toggle-password" type="button">
                                     <i class="bi bi-eye"></i>
                                 </button>
                             </div>
@@ -215,10 +215,10 @@
 
                         <div class="mb-4">
                             {{ form_label(registrationForm.plainPassword.second, null, {'label_attr': {'class': 'form-label'}}) }}
-                            <div class="input-group">
+                            <div class="input-group password-input-group">
                                 <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                                {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'Confirmez votre mot de passe', 'id': 'password-second'}}) }}
-                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="password-second">
+                                {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control password-field', 'placeholder': 'Confirmez votre mot de passe'}}) }}
+                                <button class="btn btn-outline-secondary toggle-password" type="button">
                                     <i class="bi bi-eye"></i>
                                 </button>
                             </div>
@@ -253,15 +253,16 @@
     // Fonction pour afficher/masquer le mot de passe
     document.querySelectorAll('.toggle-password').forEach(button => {
         button.addEventListener('click', function() {
-            const targetId = this.getAttribute('data-target');
-            const passwordInput = document.getElementById(targetId);
+            // Trouver le champ de mot de passe dans le même groupe input-group
+            const inputGroup = this.closest('.password-input-group');
+            const passwordInput = inputGroup.querySelector('.password-field');
             const icon = this.querySelector('i');
 
-            if (passwordInput.type === 'password') {
+            if (passwordInput && passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 icon.classList.remove('bi-eye');
                 icon.classList.add('bi-eye-slash');
-            } else {
+            } else if (passwordInput) {
                 passwordInput.type = 'password';
                 icon.classList.remove('bi-eye-slash');
                 icon.classList.add('bi-eye');

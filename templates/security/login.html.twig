@@ -246,12 +246,12 @@
                             <label for="password" class="form-label">
                                 <i class="bi bi-lock me-1"></i>Mot de passe
                             </label>
-                            <div class="input-group">
+                            <div class="input-group password-input-group">
                                 <span class="input-group-text"><i class="bi bi-lock"></i></span>
                                 <input type="password" name="_password" id="password"
-                                       class="form-control with-toggle" autocomplete="current-password" required
+                                       class="form-control with-toggle password-field" autocomplete="current-password" required
                                        placeholder="Entrez votre mot de passe">
-                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="password">
+                                <button class="btn btn-outline-secondary toggle-password" type="button">
                                     <i class="bi bi-eye"></i>
                                 </button>
                             </div>
@@ -291,15 +291,16 @@
     // Fonction pour afficher/masquer le mot de passe
     document.querySelectorAll('.toggle-password').forEach(button => {
         button.addEventListener('click', function() {
-            const targetId = this.getAttribute('data-target');
-            const passwordInput = document.getElementById(targetId);
+            // Trouver le champ de mot de passe dans le même groupe input-group
+            const inputGroup = this.closest('.password-input-group');
+            const passwordInput = inputGroup.querySelector('.password-field');
             const icon = this.querySelector('i');
 
-            if (passwordInput.type === 'password') {
+            if (passwordInput && passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 icon.classList.remove('bi-eye');
                 icon.classList.add('bi-eye-slash');
-            } else {
+            } else if (passwordInput) {
                 passwordInput.type = 'password';
                 icon.classList.remove('bi-eye-slash');
                 icon.classList.add('bi-eye');
