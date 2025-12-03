@@ -16,6 +16,22 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            user_checker: App\Security\UserChecker
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+                csrf_token_id: authenticate
+                default_target_path: app_home
+
+            logout:
+                path: app_logout
+                # Enable CSRF protection for logout
+                csrf_parameter: _csrf_token
+                csrf_token_id: logout
+                invalidate_session: true
+                # where to redirect after logout
+                # target: app_any_route
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
