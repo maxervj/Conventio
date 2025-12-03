@@ -53,12 +53,12 @@
     <p>Pour finaliser votre inscription et activer votre compte, veuillez cliquer sur le bouton ci-dessous :</p>
 
     <div style="text-align: center;">
-        <a href="{{ verificationUrl }}" class="button">Vérifier mon adresse email</a>
+        <a href="{{ signedUrl|raw }}" class="button">Vérifier mon adresse email</a>
     </div>
 
     <p>Si le bouton ne fonctionne pas, vous pouvez également copier et coller le lien suivant dans votre navigateur :</p>
     <p style="word-break: break-all; background-color: white; padding: 10px; border-left: 3px solid #0d6efd;">
-        {{ verificationUrl }}
+        {{ signedUrl|raw }}
     </p>
 
     <p><strong>Important :</strong> Ce lien est valable pour une seule utilisation.</p>

@@ -98,8 +98,7 @@ class RegistrationController extends AbstractController
                     ->to((string) $professor->getEmail())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
-                    ->context(['user' => $professor,
-                        'verificationUrl' => $verificationUrl])
+                    ->context(['user' => $professor])
             );
 
             return $security->login($professor, 'form_login', 'main');
