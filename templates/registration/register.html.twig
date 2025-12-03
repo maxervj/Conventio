@@ -141,6 +141,77 @@
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
         }
+        .email-verification-notice {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border: 2px solid #ff9800;
+            border-left: 5px solid #ff9800;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items-start;
+            box-shadow: 0 5px 20px rgba(255, 152, 0, 0.2);
+            animation: slideInDown 0.6s ease-out;
+        }
+        @keyframes slideInDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .verification-icon {
+            font-size: 3rem;
+            color: #ff9800;
+            margin-right: 1rem;
+            animation: swing 2s ease-in-out infinite;
+        }
+        @keyframes swing {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            75% { transform: rotate(-10deg); }
+        }
+        .verification-content {
+            flex: 1;
+        }
+        .verification-title {
+            color: #e65100;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .verification-message {
+            color: #e65100;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+        .verification-steps {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-top: 0.75rem;
+            border-left: 3px solid #4caf50;
+        }
+        .verification-steps p {
+            color: #2e7d32;
+            margin-bottom: 0.5rem;
+        }
+        .verification-steps ol {
+            padding-left: 1.5rem;
+            margin-bottom: 0;
+        }
+        .verification-steps li {
+            color: #2e7d32;
+            margin-bottom: 0.35rem;
+            line-height: 1.5;
+        }
+        .verification-steps li::marker {
+            color: #4caf50;
+            font-weight: bold;
+        }
     </style>
 {% endblock %}
 
@@ -157,6 +228,28 @@
                     <div class="info-box">
                         <i class="bi bi-info-circle-fill"></i>
                         <strong>Information importante :</strong> Les informations saisies ici seront nécessaires pour l'établissement de votre convention de stage.
+                    </div>
+
+                    <div class="email-verification-notice">
+                        <div class="verification-icon">
+                            <i class="bi bi-envelope-check-fill"></i>
+                        </div>
+                        <div class="verification-content">
+                            <h5 class="verification-title">
+                                <i class="bi bi-shield-check me-2"></i>Vérification de l'email requise
+                            </h5>
+                            <p class="verification-message mb-2">
+                                Après votre inscription, <strong>un email de vérification sera envoyé</strong> à votre adresse email institutionnelle.
+                            </p>
+                            <div class="verification-steps">
+                                <p class="mb-1"><small><i class="bi bi-list-check me-1"></i><strong>Étapes suivantes :</strong></small></p>
+                                <ol class="mb-0">
+                                    <li><small>Consultez votre boîte mail (vérifiez les spams)</small></li>
+                                    <li><small>Cliquez sur le lien de vérification dans l'email</small></li>
+                                    <li><small>Votre compte sera activé et vous pourrez vous connecter</small></li>
+                                </ol>
+                            </div>
+                        </div>
                     </div>
 
                     {% for flash_error in app.flashes('verify_email_error') %}
