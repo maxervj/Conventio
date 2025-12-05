@@ -28,7 +28,7 @@ export default class extends Controller {
         const hours = Math.floor(totalMinutes / 60);
         const minutes = totalMinutes % 60;
 
-        if (this.hasTotal Target) {
+        if (this.hasTotalTarget) {
             this.totalTarget.textContent = `${hours}h${minutes.toString().padStart(2, '0')}`;
         }
     }

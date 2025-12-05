@@ -65,6 +65,7 @@ class RegistrationFormType extends AbstractType
                     ]),
                     new Email([
                         'message' => 'L\'adresse email {{ value }} n\'est pas valide.',
+                        'mode' => 'html5',
                     ]),
                     new AllowedEmailDomain(
                         allowedDomains: $allowedDomains
