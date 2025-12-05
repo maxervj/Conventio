@@ -1,366 +1,81 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer un compte - Conventio{% endblock %}
+{% block title %}Enregistrement{% endblock %}
 
 {% block stylesheets %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-        }
-        .registration-container {
-            margin-top: 30px;
-            margin-bottom: 30px;
-        }
-        .registration-card {
-            border: none;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-        .card-header-custom {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2rem;
-            text-align: center;
-        }
-        .card-header-custom h2 {
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            font-size: 2rem;
-        }
-        .card-header-custom p {
-            margin: 0;
-            opacity: 0.9;
-            font-size: 1.1rem;
-        }
-        .card-body-custom {
-            padding: 2.5rem;
-        }
-        .info-box {
-            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
-            border-left: 4px solid #00acc1;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-        }
-        .info-box i {
-            color: #00acc1;
-            font-size: 1.2rem;
-            margin-right: 0.5rem;
-        }
-        .form-label {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-        .form-control, .form-check-input {
-            border-radius: 10px;
-            border: 2px solid #e0e0e0;
-            padding: 0.75rem;
-            transition: all 0.3s ease;
-        }
-        .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        }
-        .form-text {
-            color: #666;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-        }
-        .btn-register {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 10px;
-            padding: 1rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .btn-register:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-        .login-link {
-            text-align: center;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #e0e0e0;
-        }
-        .login-link a {
-            color: #667eea;
-            font-weight: 600;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        .login-link a:hover {
-            color: #764ba2;
-            text-decoration: underline;
-        }
-        .form-check {
-            padding: 1rem;
-            background-color: #f8f9fa;
-            border-radius: 10px;
-        }
-        .form-check-label {
-            color: #333;
-        }
-        .password-requirements {
-            background-color: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin-top: 0.5rem;
-        }
-        .password-requirements i {
-            color: #ffc107;
-            margin-right: 0.5rem;
-        }
-        .toggle-password {
-            border-left: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .toggle-password:hover {
-            background-color: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-        .toggle-password:focus {
-            box-shadow: none;
-        }
-        .input-group .form-control {
-            border-right: none;
-        }
-        .input-group .toggle-password {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-        }
-        .email-verification-notice {
-            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-            border: 2px solid #ff9800;
-            border-left: 5px solid #ff9800;
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items-start;
-            box-shadow: 0 5px 20px rgba(255, 152, 0, 0.2);
-            animation: slideInDown 0.6s ease-out;
-        }
-        @keyframes slideInDown {
-            0% {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .verification-icon {
-            font-size: 3rem;
-            color: #ff9800;
-            margin-right: 1rem;
-            animation: swing 2s ease-in-out infinite;
-        }
-        @keyframes swing {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(10deg); }
-            75% { transform: rotate(-10deg); }
-        }
-        .verification-content {
-            flex: 1;
-        }
-        .verification-title {
-            color: #e65100;
-            font-weight: 700;
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-        .verification-message {
-            color: #e65100;
-            font-size: 1.05rem;
-            line-height: 1.6;
-        }
-        .verification-steps {
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin-top: 0.75rem;
-            border-left: 3px solid #4caf50;
-        }
-        .verification-steps p {
-            color: #2e7d32;
-            margin-bottom: 0.5rem;
-        }
-        .verification-steps ol {
-            padding-left: 1.5rem;
-            margin-bottom: 0;
-        }
-        .verification-steps li {
-            color: #2e7d32;
-            margin-bottom: 0.35rem;
-            line-height: 1.5;
-        }
-        .verification-steps li::marker {
-            color: #4caf50;
-            font-weight: bold;
-        }
-    </style>
 {% endblock %}
 
 {% block body %}
-<div class="container registration-container">
+<div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-lg-7 col-md-9">
-            <div class="card registration-card">
-                <div class="card-header-custom">
-                    <h2><i class="bi bi-person-plus-fill"></i> Créer votre compte</h2>
-                    <p>Rejoignez Conventio pour gérer vos conventions de stage</p>
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Enregistrement</h2>
                 </div>
-                <div class="card-body card-body-custom">
-                    <div class="info-box">
-                        <i class="bi bi-info-circle-fill"></i>
-                        <strong>Information importante :</strong> Les informations saisies ici seront nécessaires pour l'établissement de votre convention de stage.
-                    </div>
-
-                    <div class="email-verification-notice">
-                        <div class="verification-icon">
-                            <i class="bi bi-envelope-check-fill"></i>
-                        </div>
-                        <div class="verification-content">
-                            <h5 class="verification-title">
-                                <i class="bi bi-shield-check me-2"></i>Vérification de l'email requise
-                            </h5>
-                            <p class="verification-message mb-2">
-                                Après votre inscription, <strong>un email de vérification sera envoyé</strong> à votre adresse email institutionnelle.
-                            </p>
-                            <div class="verification-steps">
-                                <p class="mb-1"><small><i class="bi bi-list-check me-1"></i><strong>Étapes suivantes :</strong></small></p>
-                                <ol class="mb-0">
-                                    <li><small>Consultez votre boîte mail (vérifiez les spams)</small></li>
-                                    <li><small>Cliquez sur le lien de vérification dans l'email</small></li>
-                                    <li><small>Votre compte sera activé et vous pourrez vous connecter</small></li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
+                <div class="card-body">
+                    <p class="text-muted mb-4">
+                        <strong>Information importante :</strong> Les informations saisies ici seront nécessaires pour l'établissement d'une convention de stage.
+                    </p>
 
                     {% for flash_error in app.flashes('verify_email_error') %}
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ flash_error }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
+                        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
                     {% endfor %}
 
                     {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                {{ form_label(registrationForm.lastName, null, {'label_attr': {'class': 'form-label'}}) }}
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                    {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Votre nom'}}) }}
-                                </div>
-                                {{ form_errors(registrationForm.lastName) }}
-                            </div>
+                        <div class="mb-3">
+                            {{ form_label(registrationForm.lastName, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(registrationForm.lastName) }}
+                        </div>
 
-                            <div class="col-md-6 mb-3">
-                                {{ form_label(registrationForm.firstName, null, {'label_attr': {'class': 'form-label'}}) }}
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                    {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-control', 'placeholder': 'Votre prénom'}}) }}
-                                </div>
-                                {{ form_errors(registrationForm.firstName) }}
-                            </div>
+                        <div class="mb-3">
+                            {{ form_label(registrationForm.firstName, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(registrationForm.firstName) }}
                         </div>
 
                         <div class="mb-3">
                             {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'form-label'}}) }}
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'votre.email@exemple.fr'}}) }}
-                            </div>
+                            {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
                             {{ form_errors(registrationForm.email) }}
                         </div>
 
                         <div class="mb-3">
                             {{ form_label(registrationForm.plainPassword.first, null, {'label_attr': {'class': 'form-label'}}) }}
-                            <div class="input-group password-input-group">
-                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                                {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control password-field', 'placeholder': 'Entrez votre mot de passe'}}) }}
-                                <button class="btn btn-outline-secondary toggle-password" type="button">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-                            </div>
-                            <div class="password-requirements">
-                                <i class="bi bi-shield-check"></i>
-                                <small>Le mot de passe doit contenir au moins 12 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial (@$!%*?&).</small>
+                            {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
+                            <div class="form-text">
+                                Le mot de passe doit contenir au moins 12 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial (@$!%*?&).
                             </div>
                             {{ form_errors(registrationForm.plainPassword.first) }}
                         </div>
 
-                        <div class="mb-4">
+                        <div class="mb-3">
                             {{ form_label(registrationForm.plainPassword.second, null, {'label_attr': {'class': 'form-label'}}) }}
-                            <div class="input-group password-input-group">
-                                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                                {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control password-field', 'placeholder': 'Confirmez votre mot de passe'}}) }}
-                                <button class="btn btn-outline-secondary toggle-password" type="button">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-                            </div>
+                            {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
                             {{ form_errors(registrationForm.plainPassword.second) }}
                         </div>
 
-                        <div class="mb-4 form-check">
+                        <div class="mb-3 form-check">
                             {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
                             {{ form_label(registrationForm.agreeTerms, null, {'label_attr': {'class': 'form-check-label'}}) }}
-                            <a href="{{ path('app_terms') }}" target="_blank" class="ms-1"><i class="bi bi-box-arrow-up-right"></i> Lire les CGU</a>
+                            <a href="{{ path('app_terms') }}" target="_blank" class="ms-1">Lire les CGU</a>
                             {{ form_errors(registrationForm.agreeTerms) }}
                         </div>
 
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg btn-register">
-                                <i class="bi bi-check-circle me-2"></i>Créer mon compte
-                            </button>
+                            <button type="submit" class="btn btn-primary btn-lg">S'enregistrer</button>
                         </div>
                     {{ form_end(registrationForm) }}
 
-                    <div class="login-link">
-                        <p><i class="bi bi-arrow-left-circle me-2"></i>Vous avez déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a></p>
+                    <div class="text-center mt-3">
+                        <p>Vous avez déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Fonction pour afficher/masquer le mot de passe
-    document.querySelectorAll('.toggle-password').forEach(button => {
-        button.addEventListener('click', function() {
-            // Trouver le champ de mot de passe dans le même groupe input-group
-            const inputGroup = this.closest('.password-input-group');
-            const passwordInput = inputGroup.querySelector('.password-field');
-            const icon = this.querySelector('i');
-
-            if (passwordInput && passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('bi-eye');
-                icon.classList.add('bi-eye-slash');
-            } else if (passwordInput) {
-                passwordInput.type = 'password';
-                icon.classList.remove('bi-eye-slash');
-                icon.classList.add('bi-eye');
-            }
-        });
-    });
-</script>
 {% endblock %}

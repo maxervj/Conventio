@@ -10,6 +10,17 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ProfessorRepository::class)]
 class Professor extends User
 {
+    /**
+     * @var Collection<int, Level>
+     */
+    #[ORM\ManyToMany(targetEntity: Level::class)]
+    private Collection $Level;
+
+    public function __construct()
+    {
+        $this->Level = new ArrayCollection();
+    }
+
     // TODO: Décommenter quand l'entité Contract sera créée
     // /**
     //  * @var Collection<int, Contract>
@@ -51,4 +62,34 @@ class Professor extends User
 
     //     return $this;
     // }
+
+    /**
+     * @return Collection<int, Level>
+     */
+    public function getLevel(): Collection
+    {
+        return $this->Level;
+    }
+
+    public function setLevel(Collection $Level): self
+    {
+        $this->Level = $Level;
+        return $this;
+    }
+
+    public function addLevel(Level $level): static
+    {
+        if (!$this->Level->contains($level)) {
+            $this->Level->add($level);
+        }
+
+        return $this;
+    }
+
+    public function removeLevel(Level $level): static
+    {
+        $this->Level->removeElement($level);
+
+        return $this;
+    }
 }
