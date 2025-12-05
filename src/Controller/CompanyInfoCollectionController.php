@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\InternshipCompanyInfo;
-use App\Form\CompanyInfoFormType;
+use App\Form\InternshipCompanyInfoFormType;
 use App\Repository\InternshipCompanyInfoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -57,7 +57,7 @@ class CompanyInfoCollectionController extends AbstractController
         // Check if confirmation step
         $isConfirmation = $request->query->get('confirm', false);
 
-        $form = $this->createForm(CompanyInfoFormType::class, $companyInfo);
+        $form = $this->createForm(InternshipCompanyInfoFormType::class, $companyInfo);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -67,7 +67,7 @@ class CompanyInfoCollectionController extends AbstractController
                 $companyInfo->setWorkSchedule($workSchedule);
             }
 
-            // Validate that at least one phone is provided
+            // Valide que l'au moins un numéro de téléphone est fourni
             if (!$companyInfo->getLandlinePhone() && !$companyInfo->getMobilePhone()) {
                 $this->addFlash('error', $this->translator->trans('company_info.at_least_one_phone'));
                 return $this->render('company_info/form.html.twig', [

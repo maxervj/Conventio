@@ -83,6 +83,64 @@ company_info:
   no: "Nein"
   required: "Pflichtfeld"
   at_least_one_phone: "Mindestens eine Telefonnummer ist erforderlich"
+  morning: "Morgen"
+  afternoon: "Nachmittag"
+  day: "Tag"
+
+form:
+  company:
+    name: "Name der Organisation"
+    address: "Adresse"
+    address_complement: "Adresszusatz"
+    postal_code: "Postleitzahl"
+    city: "Stadt"
+    country: "Land"
+    website: "Webseite"
+    siret: "SIRET"
+    insurer_name: "Name des Versicherers"
+    insurer_reference: "Versicherungsvertragsreferenz"
+
+  responsible:
+    last_name: "Nachname des Unternehmensverantwortlichen"
+    first_name: "Vorname des Verantwortlichen"
+    function: "Funktion des Verantwortlichen"
+    landline_phone: "Festnetztelefon"
+    mobile_phone: "Mobiltelefon"
+    email: "E-Mail (Unterzeichner der Vereinbarung)"
+
+  internship_location:
+    address: "Adresse"
+    postal_code: "Postleitzahl"
+    city: "Stadt"
+    country: "Land"
+    phone: "Telefon"
+
+  supervisor:
+    last_name: "Nachname"
+    first_name: "Vorname"
+    function: "Funktion"
+    phone: "Telefon"
+    email: "E-Mail"
+
+  travel:
+    has_travel: "Der Student wird während der Arbeitszeit reisen müssen"
+
+  costs:
+    transport: "Das Unternehmen übernimmt die Transportkosten"
+    transport_details: "Nach folgenden Modalitäten"
+    meal: "Das Unternehmen übernimmt die Verpflegungskosten"
+    meal_details: "Nach folgenden Modalitäten"
+    accommodation: "Das Unternehmen übernimmt die Unterkunftskosten"
+    accommodation_details: "Nach folgenden Modalitäten"
+    gratification: "Das Unternehmen zahlt eine Vergütung"
+    gratification_details: "Nach folgenden Modalitäten"
+
+  activities:
+    planned: "Geplante Berufstätigkeiten"
+
+  choice:
+    yes: "JA"
+    no: "NEIN"
 
 validation:
   siret_format: "SIRET muss 14 Ziffern enthalten"

@@ -83,6 +83,64 @@ company_info:
   no: "No"
   required: "Campo obligatorio"
   at_least_one_phone: "Se requiere al menos un número de teléfono"
+  morning: "Mañana"
+  afternoon: "Tarde"
+  day: "Día"
+
+form:
+  company:
+    name: "Nombre de la Organización"
+    address: "Dirección"
+    address_complement: "Complemento de Dirección"
+    postal_code: "Código Postal"
+    city: "Ciudad"
+    country: "País"
+    website: "Sitio Web"
+    siret: "SIRET"
+    insurer_name: "Nombre de la Aseguradora"
+    insurer_reference: "Referencia del Contrato de Seguro"
+
+  responsible:
+    last_name: "Apellido del Responsable de la Empresa"
+    first_name: "Nombre del Responsable"
+    function: "Función del Responsable"
+    landline_phone: "Teléfono Fijo"
+    mobile_phone: "Teléfono Móvil"
+    email: "Correo Electrónico (Firmante del Convenio)"
+
+  internship_location:
+    address: "Dirección"
+    postal_code: "Código Postal"
+    city: "Ciudad"
+    country: "País"
+    phone: "Teléfono"
+
+  supervisor:
+    last_name: "Apellido"
+    first_name: "Nombre"
+    function: "Función"
+    phone: "Teléfono"
+    email: "Correo Electrónico"
+
+  travel:
+    has_travel: "El estudiante deberá realizar desplazamientos durante el horario de trabajo"
+
+  costs:
+    transport: "La empresa cubre los gastos de transporte"
+    transport_details: "Según las siguientes condiciones"
+    meal: "La empresa cubre los gastos de restauración"
+    meal_details: "Según las siguientes condiciones"
+    accommodation: "La empresa cubre los gastos de alojamiento"
+    accommodation_details: "Según las siguientes condiciones"
+    gratification: "La empresa proporcionará una gratificación"
+    gratification_details: "Según las siguientes condiciones"
+
+  activities:
+    planned: "Actividades Previstas en el Entorno Profesional"
+
+  choice:
+    yes: "SÍ"
+    no: "NO"
 
 validation:
   siret_format: "El SIRET debe contener 14 dígitos"
