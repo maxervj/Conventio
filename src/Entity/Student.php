@@ -23,6 +23,9 @@ class Student extends User
     #[ORM\JoinTable(name: 'student_level')]
     private Collection $levels;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Level $Level = null;
+
     public function __construct()
     {
         $this->levels = new ArrayCollection();
@@ -74,6 +77,18 @@ class Student extends User
     public function setVerificationToken(?string $verificationToken): static
     {
         $this->verificationToken = $verificationToken;
+
+        return $this;
+    }
+
+    public function getLevel(): ?Level
+    {
+        return $this->Level;
+    }
+
+    public function setLevel(?Level $Level): static
+    {
+        $this->Level = $Level;
 
         return $this;
     }

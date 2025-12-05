@@ -124,15 +124,6 @@ class ProfessorResgistrationType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'label' => 'Accepter les CGU',
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'Vous devez accepter les conditions générales d\'utilisation.',
-                    ]),
-                ],
-            ])
         ;
     }
 
