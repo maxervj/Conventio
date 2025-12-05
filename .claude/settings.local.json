@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(done)",
-      "Bash(wc:*)"
+      "Bash(wc:*)",
+      "Bash(composer show:*)",
+      "Bash(composer install:*)",
+      "Bash(del composer.lock)",
+      "Bash(composer update:*)"
     ],
     "deny": [],
     "ask": []
