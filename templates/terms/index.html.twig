@@ -1,0 +1,347 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conditions Générales d'Utilisation - Conventio{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+        .terms-container {
+            margin: 2rem auto;
+        }
+        .terms-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+        .terms-header i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        .terms-header h1 {
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .terms-header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin: 0;
+        }
+        .terms-card {
+            background: white;
+            border: none;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .terms-body {
+            padding: 3rem 3.5rem;
+        }
+        .section-title {
+            color: #667eea;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+        }
+        .section-title i {
+            margin-right: 0.75rem;
+            font-size: 1.8rem;
+        }
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+        .terms-body p {
+            color: #333;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .terms-body ul {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+        .terms-body li {
+            color: #555;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 0.75rem;
+            position: relative;
+            padding-left: 0.5rem;
+        }
+        .terms-body li::marker {
+            color: #667eea;
+            font-weight: bold;
+        }
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 5px solid #ff9800;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+        .highlight-box i {
+            color: #ff9800;
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 5px solid #2196f3;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+        .info-box i {
+            color: #2196f3;
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+        .success-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left: 5px solid #4caf50;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+        .success-box i {
+            color: #4caf50;
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+        .last-update {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 2rem;
+            font-style: italic;
+            color: #666;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 2rem 0 1rem 0;
+            border-top: 2px solid #e0e0e0;
+        }
+        .btn-custom {
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+        }
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+        }
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        .btn-secondary-custom {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+        .btn-secondary-custom:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #667eea 0%, #764ba2 100%);
+            transform-origin: left;
+            transform: scaleX(0);
+            z-index: 9999;
+        }
+        @media (max-width: 768px) {
+            .terms-body {
+                padding: 2rem 1.5rem;
+            }
+            .terms-header h1 {
+                font-size: 2rem;
+            }
+            .section-title {
+                font-size: 1.3rem;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="scroll-indicator" id="scrollIndicator"></div>
+
+<div class="container terms-container">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="terms-header">
+                <i class="bi bi-file-earmark-text-fill"></i>
+                <h1>Conditions Générales d'Utilisation</h1>
+                <p>Plateforme Conventio - Gestion des conventions de stage</p>
+            </div>
+
+            <div class="card terms-card">
+                <div class="card-body terms-body">
+                    <div class="highlight-box">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <strong>Important :</strong> Veuillez lire attentivement ces conditions avant d'utiliser la plateforme Conventio.
+                    </div>
+
+                    <h2 class="section-title">
+                        <i class="bi bi-bullseye"></i>
+                        1. Objet
+                    </h2>
+                    <p>Les présentes Conditions Générales d'Utilisation (CGU) régissent l'utilisation de la plateforme <strong>Conventio</strong>, destinée à la gestion des conventions de stage. En créant un compte, vous acceptez sans réserve les présentes conditions.</p>
+
+                    <h2 class="section-title">
+                        <i class="bi bi-person-plus-fill"></i>
+                        2. Inscription
+                    </h2>
+                    <p>L'inscription à la plateforme Conventio est réservée aux <strong>étudiants disposant d'une adresse email institutionnelle valide</strong> (@lycee-faure.fr).</p>
+                    <p>En vous inscrivant, vous vous engagez à :</p>
+                    <ul>
+                        <li><i class="bi bi-check-circle-fill text-success"></i> Fournir des informations exactes et complètes</li>
+                        <li><i class="bi bi-check-circle-fill text-success"></i> Maintenir la confidentialité de vos identifiants de connexion</li>
+                        <li><i class="bi bi-check-circle-fill text-success"></i> Informer immédiatement l'administration de toute utilisation non autorisée de votre compte</li>
+                    </ul>
+
+                    <h2 class="section-title">
+                        <i class="bi bi-shield-lock-fill"></i>
+                        3. Utilisation des données personnelles
+                    </h2>
+                    <p>Les informations que vous fournissez lors de votre inscription (nom, prénom, email) sont nécessaires pour :</p>
+                    <ul>
+                        <li><i class="bi bi-file-earmark-check-fill text-primary"></i> L'établissement des conventions de stage</li>
+                        <li><i class="bi bi-file-earmark-check-fill text-primary"></i> La gestion administrative de votre dossier</li>
+                        <li><i class="bi bi-file-earmark-check-fill text-primary"></i> Les communications relatives à votre stage</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <i class="bi bi-info-circle-fill"></i>
+                        <strong>RGPD :</strong> Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez d'un droit d'accès, de rectification et de suppression de vos données personnelles.
+                    </div>
+
+                    <h2 class="section-title">
+                        <i class="bi bi-key-fill"></i>
+                        4. Sécurité du mot de passe
+                    </h2>
+                    <p>Vous êtes responsable de la sécurité de votre mot de passe. Celui-ci doit respecter les critères de sécurité suivants :</p>
+                    <div class="success-box">
+                        <ul style="margin-bottom: 0;">
+                            <li><i class="bi bi-shield-check text-success"></i> Minimum 12 caractères</li>
+                            <li><i class="bi bi-shield-check text-success"></i> Au moins une lettre majuscule</li>
+                            <li><i class="bi bi-shield-check text-success"></i> Au moins une lettre minuscule</li>
+                            <li><i class="bi bi-shield-check text-success"></i> Au moins un chiffre</li>
+                            <li><i class="bi bi-shield-check text-success"></i> Au moins un caractère spécial (@$!%*?&)</li>
+                        </ul>
+                    </div>
+
+                    <h2 class="section-title">
+                        <i class="bi bi-envelope-check-fill"></i>
+                        5. Validation du compte
+                    </h2>
+                    <p>Suite à votre inscription, un <strong>email de confirmation</strong> sera envoyé à votre adresse institutionnelle. Vous devez cliquer sur le lien de vérification pour activer votre compte.</p>
+                    <p class="text-muted"><small><i class="bi bi-exclamation-circle"></i> Sans cette validation, vous ne pourrez pas accéder à la plateforme.</small></p>
+
+                    <h2 class="section-title">
+                        <i class="bi bi-laptop-fill"></i>
+                        6. Utilisation de la plateforme
+                    </h2>
+                    <p>Vous vous engagez à utiliser la plateforme de manière responsable et conformément à sa destination. Toute utilisation abusive ou frauduleuse pourra entraîner la <strong>suspension ou la suppression de votre compte</strong>.</p>
+
+                    <h2 class="section-title">
+                        <i class="bi bi-pencil-square"></i>
+                        7. Modification des CGU
+                    </h2>
+                    <p>L'administration se réserve le droit de modifier les présentes CGU à tout moment. Les utilisateurs seront informés de toute modification significative par email.</p>
+
+                    <h2 class="section-title">
+                        <i class="bi bi-envelope-at-fill"></i>
+                        8. Contact
+                    </h2>
+                    <p>Pour toute question concernant ces CGU ou l'utilisation de la plateforme, vous pouvez contacter l'administration à l'adresse :</p>
+                    <div class="info-box">
+                        <i class="bi bi-envelope-fill"></i>
+                        <strong>Email :</strong> <a href="mailto:contact@lycee-faure.fr" style="color: #1976d2; text-decoration: none;">contact@lycee-faure.fr</a>
+                    </div>
+
+                    <div class="last-update">
+                        <i class="bi bi-calendar-check me-2"></i>
+                        Dernière mise à jour : {{ "now"|date("d/m/Y") }}
+                    </div>
+
+                    <div class="action-buttons">
+                        <a href="javascript:history.back()" class="btn btn-secondary-custom">
+                            <i class="bi bi-arrow-left me-2"></i>Retour
+                        </a>
+                        <a href="{{ path('app_register') }}" class="btn btn-primary-custom">
+                            <i class="bi bi-person-plus me-2"></i>S'inscrire maintenant
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Indicateur de défilement
+    window.addEventListener('scroll', () => {
+        const scrollIndicator = document.getElementById('scrollIndicator');
+        const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (window.scrollY / windowHeight);
+        scrollIndicator.style.transform = `scaleX(${scrolled})`;
+    });
+
+    // Animation au défilement
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Appliquer l'animation à tous les titres de section
+    document.querySelectorAll('.section-title').forEach(title => {
+        title.style.opacity = '0';
+        title.style.transform = 'translateY(20px)';
+        title.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(title);
+    });
+</script>
+{% endblock %}
