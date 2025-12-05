@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Signature{% endblock %}
+
+{% block body %}
+    <h1>Signature</h1>
+
+    <h2>Informations Proviseur</h2>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Civilité</th>
+                <td>{{ signature.civiliteProviseur }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ signature.nomProviseur }}</td>
+            </tr>
+            <tr>
+                <th>Prenom</th>
+                <td>{{ signature.prenomProviseur }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ signature.emailProviseur }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Informations Directeur Délégué aux Formations</h2>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Civilite</th>
+                <td>{{ signature.civiliteDDF }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ signature.nomDDF }}</td>
+            </tr>
+            <tr>
+                <th>Prenom</th>
+                <td>{{ signature.prenomDDF }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ signature.emailDDF }}</td>
+            </tr>
+            <tr>
+                <th>Téléphone</th>
+                <td>{{ signature.telDDF }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="actions">
+        <a href="{{ path('app_signature_index') }}">back to list</a>
+
+        <a href="{{ path('app_signature_edit', {'id': signature.id}) }}">edit</a>
+
+        {{ include('signature/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

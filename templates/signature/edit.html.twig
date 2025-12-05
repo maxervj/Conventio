@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Signature{% endblock %}
+
+{% block body %}
+    <h1>Edit Signature</h1>
+
+    {{ include('signature/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_signature_index') }}">back to list</a>
+
+    {{ include('signature/_delete_form.html.twig') }}
+{% endblock %}
