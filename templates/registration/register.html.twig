@@ -1,339 +1,227 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer un compte - Conventio{% endblock %}
-
-{% block stylesheets %}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-        }
-        .registration-container {
-            margin-top: 30px;
-            margin-bottom: 30px;
-        }
-        .registration-card {
-            border: none;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-        .card-header-custom {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2rem;
-            text-align: center;
-        }
-        .card-header-custom h2 {
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            font-size: 2rem;
-        }
-        .card-header-custom p {
-            margin: 0;
-            opacity: 0.9;
-            font-size: 1.1rem;
-        }
-        .card-body-custom {
-            padding: 2.5rem;
-        }
-        .info-box {
-            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
-            border-left: 4px solid #00acc1;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-        }
-        .info-box i {
-            color: #00acc1;
-            font-size: 1.2rem;
-            margin-right: 0.5rem;
-        }
-        .form-label {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-        .form-control, .form-check-input {
-            border-radius: 10px;
-            border: 2px solid #e0e0e0;
-            padding: 0.75rem;
-            transition: all 0.3s ease;
-        }
-        .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        }
-        .form-text {
-            color: #666;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-        }
-        .btn-register {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 10px;
-            padding: 1rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .btn-register:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-        .login-link {
-            text-align: center;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #e0e0e0;
-        }
-        .login-link a {
-            color: #667eea;
-            font-weight: 600;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        .login-link a:hover {
-            color: #764ba2;
-            text-decoration: underline;
-        }
-        .form-check {
-            padding: 1rem;
-            background-color: #f8f9fa;
-            border-radius: 10px;
-        }
-        .form-check-label {
-            color: #333;
-        }
-        .password-requirements {
-            background-color: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin-top: 0.5rem;
-        }
-        .password-requirements i {
-            color: #ffc107;
-            margin-right: 0.5rem;
-        }
-        .toggle-password {
-            border-left: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .toggle-password:hover {
-            background-color: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-        .toggle-password:focus {
-            box-shadow: none;
-        }
-        .input-group .form-control {
-            border-right: none;
-        }
-        .input-group .toggle-password {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-        }
-        .email-verification-notice {
-            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-            border: 2px solid #ff9800;
-            border-left: 5px solid #ff9800;
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items-start;
-            box-shadow: 0 5px 20px rgba(255, 152, 0, 0.2);
-            animation: slideInDown 0.6s ease-out;
-        }
-        @keyframes slideInDown {
-            0% {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .verification-icon {
-            font-size: 3rem;
-            color: #ff9800;
-            margin-right: 1rem;
-            animation: swing 2s ease-in-out infinite;
-        }
-        @keyframes swing {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(10deg); }
-            75% { transform: rotate(-10deg); }
-        }
-        .verification-content {
-            flex: 1;
-        }
-        .verification-title {
-            color: #e65100;
-            font-weight: 700;
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-        .verification-message {
-            color: #e65100;
-            font-size: 1.05rem;
-            line-height: 1.6;
-        }
-        .verification-steps {
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin-top: 0.75rem;
-            border-left: 3px solid #4caf50;
-        }
-        .verification-steps p {
-            color: #2e7d32;
-            margin-bottom: 0.5rem;
-        }
-        .verification-steps ol {
-            padding-left: 1.5rem;
-            margin-bottom: 0;
-        }
-        .verification-steps li {
-            color: #2e7d32;
-            margin-bottom: 0.35rem;
-            line-height: 1.5;
-        }
-        .verification-steps li::marker {
-            color: #4caf50;
-            font-weight: bold;
-        }
-    </style>
-{% endblock %}
+{% block title %}Créer un compte {{ userType|default('') }} - Conventio{% endblock %}
 
 {% block body %}
-<div class="container registration-container">
-    <div class="row justify-content-center">
-        <div class="col-lg-7 col-md-9">
-            <div class="card registration-card">
-                <div class="card-header-custom">
-                    <h2><i class="bi bi-person-plus-fill"></i> Créer votre compte</h2>
-                    <p>Rejoignez Conventio pour gérer vos conventions de stage</p>
-                </div>
-                <div class="card-body card-body-custom">
-                    <div class="info-box">
-                        <i class="bi bi-info-circle-fill"></i>
-                        <strong>Information importante :</strong> Les informations saisies ici seront nécessaires pour l'établissement de votre convention de stage.
-                    </div>
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl w-full mx-auto space-y-8">
+        <!-- Header -->
+        <div class="text-center">
+            <div class="mx-auto h-16 w-16 bg-gradient-to-br from-{% if userType == 'professeur' %}purple{% else %}blue{% endif %}-600 to-{% if userType == 'professeur' %}pink{% else %}indigo{% endif %}-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <svg class="h-10 w-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                </svg>
+            </div>
+            <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+                Créer votre compte {{ userType|default('') }}
+            </h2>
+            <p class="mt-2 text-sm text-gray-600">Rejoignez Conventio pour gérer vos conventions de stage</p>
+        </div>
 
-                    <div class="email-verification-notice">
-                        <div class="verification-icon">
-                            <i class="bi bi-envelope-check-fill"></i>
+        <!-- Card -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="px-6 py-8 sm:px-10">
+                <!-- Information Box -->
+                <div class="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                            </svg>
                         </div>
-                        <div class="verification-content">
-                            <h5 class="verification-title">
-                                <i class="bi bi-shield-check me-2"></i>Vérification de l'email requise
-                            </h5>
-                            <p class="verification-message mb-2">
-                                Après votre inscription, <strong>un email de vérification sera envoyé</strong> à votre adresse email institutionnelle.
+                        <div class="ml-3">
+                            <p class="text-sm text-blue-700">
+                                <strong>Information importante :</strong> Les informations saisies ici seront nécessaires pour l'établissement de votre convention de stage.
                             </p>
-                            <div class="verification-steps">
-                                <p class="mb-1"><small><i class="bi bi-list-check me-1"></i><strong>Étapes suivantes :</strong></small></p>
-                                <ol class="mb-0">
-                                    <li><small>Consultez votre boîte mail (vérifiez les spams)</small></li>
-                                    <li><small>Cliquez sur le lien de vérification dans l'email</small></li>
-                                    <li><small>Votre compte sera activé et vous pourrez vous connecter</small></li>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email Domain Notice -->
+                <div class="mb-6 bg-{% if userType == 'professeur' %}purple{% else %}indigo{% endif %}-50 border-l-4 border-{% if userType == 'professeur' %}purple{% else %}indigo{% endif %}-500 p-4 rounded-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-{% if userType == 'professeur' %}purple{% else %}indigo{% endif %}-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-{% if userType == 'professeur' %}purple{% else %}indigo{% endif %}-800">
+                                Adresse email requise
+                            </h3>
+                            <p class="mt-1 text-sm text-{% if userType == 'professeur' %}purple{% else %}indigo{% endif %}-700">
+                                {% if userType == 'professeur' %}
+                                    <strong>Professeurs :</strong> Vous devez utiliser votre <strong>adresse email de l'académie de Grenoble</strong> (ex: prenom.nom@ac-grenoble.fr)
+                                {% else %}
+                                    <strong>Étudiants :</strong> Vous devez utiliser votre adresse email du lycée <strong>@lycee-faure.fr</strong>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email Verification Notice -->
+                {% if userType == 'étudiant' %}
+                <div class="mb-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-6 w-6 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                            </svg>
+                        </div>
+                        <div class="ml-3 flex-1">
+                            <h3 class="text-sm font-medium text-amber-800">
+                                Vérification par email obligatoire
+                            </h3>
+                            <p class="mt-1 text-sm text-amber-700">
+                                Après votre inscription, un email de vérification sera envoyé. Vous devez cliquer sur le lien dans l'email pour activer votre compte.
+                            </p>
+                            <div class="mt-3 bg-white bg-opacity-50 p-3 rounded">
+                                <p class="text-xs font-semibold text-amber-800 mb-1">Étapes suivantes :</p>
+                                <ol class="text-xs text-amber-700 space-y-1 ml-4 list-decimal">
+                                    <li>Consultez votre boîte mail (vérifiez les spams)</li>
+                                    <li>Cliquez sur le lien de vérification</li>
+                                    <li>Votre compte sera activé</li>
                                 </ol>
                             </div>
                         </div>
                     </div>
+                </div>
+                {% endif %}
 
-                    {% for flash_error in app.flashes('verify_email_error') %}
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ flash_error }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    {% endfor %}
+                {% for flash_error in app.flashes('verify_email_error') %}
+                    <div class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                        <p class="text-sm text-red-700">{{ flash_error }}</p>
+                    </div>
+                {% endfor %}
 
-                    {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
+                {{ form_start(registrationForm, {'attr': {'class': 'space-y-6', 'novalidate': 'novalidate'}}) }}
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                {{ form_label(registrationForm.lastName, null, {'label_attr': {'class': 'form-label'}}) }}
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                    {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-control', 'placeholder': 'Votre nom'}}) }}
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <div>
+                            {{ form_label(registrationForm.lastName, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                    </svg>
                                 </div>
-                                {{ form_errors(registrationForm.lastName) }}
+                                {{ form_widget(registrationForm.lastName, {'attr': {'class': 'block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200', 'placeholder': 'Votre nom'}}) }}
                             </div>
+                            {{ form_errors(registrationForm.lastName) }}
+                        </div>
 
-                            <div class="col-md-6 mb-3">
-                                {{ form_label(registrationForm.firstName, null, {'label_attr': {'class': 'form-label'}}) }}
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                    {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-control', 'placeholder': 'Votre prénom'}}) }}
+                        <div>
+                            {{ form_label(registrationForm.firstName, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                    </svg>
                                 </div>
-                                {{ form_errors(registrationForm.firstName) }}
+                                {{ form_widget(registrationForm.firstName, {'attr': {'class': 'block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200', 'placeholder': 'Votre prénom'}}) }}
                             </div>
+                            {{ form_errors(registrationForm.firstName) }}
                         </div>
+                    </div>
 
-                        <div class="mb-3">
-                            {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'form-label'}}) }}
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'votre.email@exemple.fr'}}) }}
+                    <div>
+                        {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
+                                </svg>
                             </div>
-                            {{ form_errors(registrationForm.email) }}
+                            {{ form_widget(registrationForm.email, {'attr': {'class': 'block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200'}}) }}
                         </div>
+                        <p class="mt-1 text-xs text-gray-500">{{ form_help(registrationForm.email) }}</p>
+                        {{ form_errors(registrationForm.email) }}
+                    </div>
 
-                        <div class="mb-3">
-                            {{ form_label(registrationForm.plainPassword.first, null, {'label_attr': {'class': 'form-label'}}) }}
-                            <div class="input-group password-input-group">
-                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                                {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control password-field', 'placeholder': 'Entrez votre mot de passe'}}) }}
-                                <button class="btn btn-outline-secondary toggle-password" type="button">
-                                    <i class="bi bi-eye"></i>
-                                </button>
+                    <div>
+                        {{ form_label(registrationForm.plainPassword.first, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
                             </div>
-                            <div class="password-requirements">
-                                <i class="bi bi-shield-check"></i>
-                                <small>Le mot de passe doit contenir au moins 12 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial (@$!%*?&).</small>
-                            </div>
-                            {{ form_errors(registrationForm.plainPassword.first) }}
-                        </div>
-
-                        <div class="mb-4">
-                            {{ form_label(registrationForm.plainPassword.second, null, {'label_attr': {'class': 'form-label'}}) }}
-                            <div class="input-group password-input-group">
-                                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                                {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control password-field', 'placeholder': 'Confirmez votre mot de passe'}}) }}
-                                <button class="btn btn-outline-secondary toggle-password" type="button">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-                            </div>
-                            {{ form_errors(registrationForm.plainPassword.second) }}
-                        </div>
-
-                        <div class="mb-4 form-check">
-                            {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
-                            {{ form_label(registrationForm.agreeTerms, null, {'label_attr': {'class': 'form-check-label'}}) }}
-                            <a href="{{ path('app_terms') }}" target="_blank" class="ms-1"><i class="bi bi-box-arrow-up-right"></i> Lire les CGU</a>
-                            {{ form_errors(registrationForm.agreeTerms) }}
-                        </div>
-
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg btn-register">
-                                <i class="bi bi-check-circle me-2"></i>Créer mon compte
+                            {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 password-field'}}) }}
+                            <button type="button" onclick="togglePasswordField('registration_form_plainPassword_first', 'eye-icon-1')"
+                                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                                <svg id="eye-icon-1" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
                             </button>
                         </div>
-                    {{ form_end(registrationForm) }}
+                        <div class="mt-2 bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded">
+                            <p class="text-xs text-yellow-800">
+                                <strong>Exigences :</strong> Le mot de passe doit contenir au moins 12 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial (@$!%*?&).
+                            </p>
+                        </div>
+                        {{ form_errors(registrationForm.plainPassword.first) }}
+                    </div>
 
-                    <div class="login-link">
-                        <p><i class="bi bi-arrow-left-circle me-2"></i>Vous avez déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a></p>
+                    <div>
+                        {{ form_label(registrationForm.plainPassword.second, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
+                            </div>
+                            {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 password-field'}}) }}
+                            <button type="button" onclick="togglePasswordField('registration_form_plainPassword_second', 'eye-icon-2')"
+                                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                                <svg id="eye-icon-2" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        {{ form_errors(registrationForm.plainPassword.second) }}
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex items-start">
+                            {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1'}}) }}
+                            <div class="ml-3">
+                                {{ form_label(registrationForm.agreeTerms, null, {'label_attr': {'class': 'text-sm text-gray-700'}}) }}
+                                <a href="{{ path('app_terms') }}" target="_blank" class="text-blue-600 hover:text-blue-500 ml-1">
+                                    Lire les CGU
+                                    <svg class="inline h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        {{ form_errors(registrationForm.agreeTerms) }}
+                    </div>
+
+                    <button type="submit"
+                            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-{% if userType == 'professeur' %}purple{% else %}blue{% endif %}-600 to-{% if userType == 'professeur' %}pink{% else %}indigo{% endif %}-600 hover:from-{% if userType == 'professeur' %}purple{% else %}blue{% endif %}-700 hover:to-{% if userType == 'professeur' %}pink{% else %}indigo{% endif %}-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200">
+                        Créer mon compte
+                    </button>
+                {{ form_end(registrationForm) }}
+
+                <div class="mt-6">
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-gray-500">Déjà inscrit ?</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 text-center">
+                        <a href="{{ path('app_login') }}" class="text-sm font-medium text-blue-600 hover:text-blue-500">
+                            Se connecter
+                        </a>
                     </div>
                 </div>
             </div>
@@ -341,26 +229,26 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Fonction pour afficher/masquer le mot de passe
-    document.querySelectorAll('.toggle-password').forEach(button => {
-        button.addEventListener('click', function() {
-            // Trouver le champ de mot de passe dans le même groupe input-group
-            const inputGroup = this.closest('.password-input-group');
-            const passwordInput = inputGroup.querySelector('.password-field');
-            const icon = this.querySelector('i');
+function togglePasswordField(fieldId, iconId) {
+    const passwordInput = document.getElementById(fieldId);
+    const eyeIcon = document.getElementById(iconId);
 
-            if (passwordInput && passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('bi-eye');
-                icon.classList.add('bi-eye-slash');
-            } else if (passwordInput) {
-                passwordInput.type = 'password';
-                icon.classList.remove('bi-eye-slash');
-                icon.classList.add('bi-eye');
-            }
-        });
-    });
+    if (passwordInput && eyeIcon) {
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.setAttribute('fill', 'none');
+            eyeIcon.setAttribute('stroke', 'currentColor');
+            eyeIcon.setAttribute('viewBox', '0 0 24 24');
+            eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>';
+        } else {
+            passwordInput.type = 'password';
+            eyeIcon.setAttribute('fill', 'none');
+            eyeIcon.setAttribute('stroke', 'currentColor');
+            eyeIcon.setAttribute('viewBox', '0 0 24 24');
+            eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>';
+        }
+    }
+}
 </script>
 {% endblock %}

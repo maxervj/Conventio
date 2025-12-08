@@ -1,41 +1,133 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Signature index{% endblock %}
+{% block title %}Gestion de la signature - Conventio{% endblock %}
 
 {% block body %}
-    <h1>Signature index</h1>
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-extrabold text-gray-900">Informations de signature</h1>
+            <p class="mt-2 text-gray-600">Gestion des informations pour les conventions de stage</p>
+        </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Proviseur</th>
-                <th>Email</th>
-                <th>Directeur Délégué aux Formations</th>
-                <th>Email</th>
-                <th>Téléphone</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for signature in signatures %}
-            <tr>
-                <td>{{ signature.civiliteProviseur }} {{ signature.nomProviseur }} {{ signature.prenomProviseur }}</td>
-                <td>{{ signature.emailProviseur }}</td>
-                <td>{{ signature.civiliteDDF }} {{ signature.nomDDF }} {{ signature.prenomDDF }}</td>
-                <td>{{ signature.emailDDF }}</td>
-                <td>{{ signature.telDDF }}</td>
-                <td>
-                    <a href="{{ path('app_signature_show', {'id': signature.id}) }}">show</a>
-                    <a href="{{ path('app_signature_edit', {'id': signature.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="11">no records found</td>
-            </tr>
+        {% for message in app.flashes('success') %}
+            <div class="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                <div class="flex items-center">
+                    <svg class="h-5 w-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <p class="text-sm text-green-700">{{ message }}</p>
+                </div>
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
 
-    <a href="{{ path('app_signature_new') }}">Create new</a>
+        {% for message in app.flashes('error') %}
+            <div class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                <p class="text-sm text-red-700">{{ message }}</p>
+            </div>
+        {% endfor %}
+
+        {% if signature %}
+            <!-- Signature Card -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-6">
+                <div class="px-6 py-8 sm:px-10">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- Proviseur Section -->
+                        <div class="bg-blue-50 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                                <svg class="h-6 w-6 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                </svg>
+                                Proviseur
+                            </h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <p class="text-sm text-gray-600">Nom complet</p>
+                                    <p class="text-lg font-medium text-gray-900">{{ signature.civiliteProviseur }} {{ signature.prenomProviseur }} {{ signature.nomProviseur }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600">Email</p>
+                                    <p class="text-lg font-medium text-blue-600">{{ signature.emailProviseur }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DDF Section -->
+                        <div class="bg-purple-50 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                                <svg class="h-6 w-6 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                </svg>
+                                Directeur Délégué aux Formations
+                            </h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <p class="text-sm text-gray-600">Nom complet</p>
+                                    <p class="text-lg font-medium text-gray-900">{{ signature.civiliteDDF }} {{ signature.prenomDDF }} {{ signature.nomDDF }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600">Email</p>
+                                    <p class="text-lg font-medium text-purple-600">{{ signature.emailDDF }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600">Téléphone</p>
+                                    <p class="text-lg font-medium text-gray-900">{{ signature.telDDF }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metadata -->
+                    <div class="mt-6 pt-6 border-t border-gray-200">
+                        <div class="flex flex-wrap gap-4 text-sm text-gray-600">
+                            <div>
+                                <span class="font-medium">Créé par :</span> {{ signature.createdBy.email }}
+                            </div>
+                            <div>
+                                <span class="font-medium">Créé le :</span> {{ signature.createdAt|date('d/m/Y à H:i') }}
+                            </div>
+                            {% if signature.updatedAt %}
+                            <div>
+                                <span class="font-medium">Modifié le :</span> {{ signature.updatedAt|date('d/m/Y à H:i') }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="mt-6 flex gap-3">
+                        <a href="{{ path('app_signature_edit', {'id': signature.id}) }}"
+                           class="flex-1 flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition duration-200">
+                            <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                            Modifier les informations
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <!-- No Signature Card -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                <div class="px-6 py-12 sm:px-10 text-center">
+                    <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    <h3 class="mt-4 text-xl font-medium text-gray-900">Aucune signature configurée</h3>
+                    <p class="mt-2 text-gray-600">Créez les informations de signature pour les conventions de stage.</p>
+                    <div class="mt-6">
+                        <a href="{{ path('app_signature_new') }}"
+                           class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition duration-200">
+                            <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                            Créer la signature
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

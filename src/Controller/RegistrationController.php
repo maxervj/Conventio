@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Professor;
 use App\Entity\Student;
+use App\Form\ProfessorRegistrationFormType;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -18,7 +20,14 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(
+    public function register(): Response
+    {
+        // Redirect old route to student registration
+        return $this->redirectToRoute('app_register_student');
+    }
+
+    #[Route('/register/student', name: 'app_register_student')]
+    public function registerStudent(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
         EntityManagerInterface $entityManager,
@@ -73,6 +82,56 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
+            'userType' => 'étudiant',
+        ]);
+    }
+
+    #[Route('/register/professor', name: 'app_register_professor')]
+    public function registerProfessor(
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        EntityManagerInterface $entityManager,
+        MailerInterface $mailer
+    ): Response {
+        $professor = new Professor();
+        $form = $this->createForm(ProfessorRegistrationFormType::class, $professor);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $professor->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $professor,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+
+            $professor->setRoles(['ROLE_PROFESSOR']);
+
+            $entityManager->persist($professor);
+            $entityManager->flush();
+
+            // Envoyer l'email de confirmation
+            $email = (new TemplatedEmail())
+                ->from(new Address('noreply@conventio.fr', 'Conventio'))
+                ->to($professor->getEmail())
+                ->subject('Bienvenue sur Conventio')
+                ->htmlTemplate('registration/professor_confirmation_email.html.twig')
+                ->context([
+                    'professor' => $professor,
+                ]);
+
+            $mailer->send($email);
+
+            // Rediriger vers la page de confirmation d'inscription
+            return $this->render('registration/registration_success.html.twig', [
+                'userEmail' => $professor->getEmail(),
+                'userType' => 'professeur',
+            ]);
+        }
+
+        return $this->render('registration/register.html.twig', [
+            'registrationForm' => $form,
+            'userType' => 'professeur',
         ]);
     }
 

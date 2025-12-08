@@ -11,28 +11,42 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-
+// maitenant modifie l'affichage de toutes les routes de signature pour quel correspondent à l'affichage montré dans le /home
 
 #[Route('/signature')]
-#[IsGranted('ROLE_ADMIN')]
 final class SignatureController extends AbstractController
 {
     #[Route(name: 'app_signature_index', methods: ['GET'])]
     public function index(SignatureRepository $signatureRepository): Response
     {
+        // Récupérer la signature unique (s'il y en a une)
+        $signature = $signatureRepository->findOneBy([]);
+
         return $this->render('signature/index.html.twig', [
-            'signatures' => $signatureRepository->findAll(),
+            'signature' => $signature,
         ]);
     }
 
     #[Route('/new', name: 'app_signature_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SignatureRepository $signatureRepository): Response
     {
+        // Vérifier s'il existe déjà une signature
+        $existingSignature = $signatureRepository->findOneBy([]);
+
+        if ($existingSignature) {
+            $this->addFlash('error', 'Une signature existe déjà. Veuillez la modifier au lieu d\'en créer une nouvelle.');
+            return $this->redirectToRoute('app_signature_edit', ['id' => $existingSignature->getId()], Response::HTTP_SEE_OTHER);
+        }
+
         $signature = new Signature();
         $form = $this->createForm(SignatureType::class, $signature);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Définir l'utilisateur qui a créé la signature
+            $signature->setCreatedBy($this->getUser());
+            $signature->setCreatedAt(new \DateTimeImmutable());
+
             $entityManager->persist($signature);
             $entityManager->flush();
 
@@ -62,6 +76,9 @@ final class SignatureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Mettre à jour la date de modification
+            $signature->setUpdatedAt(new \DateTimeImmutable());
+
             $entityManager->flush();
 
             $this->addFlash('success', 'Les informations de signature ont été mises à jour.');
