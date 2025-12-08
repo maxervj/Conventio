@@ -5,7 +5,10 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     app.allowed_email_domains:
-        - 'lycee-faure.fr'
+        student:
+            - 'lycee-faure.fr'
+        professor:
+            - 'ac-grenoble.fr'
 
 services:
     # default configuration for services in *this* file

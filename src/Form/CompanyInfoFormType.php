@@ -110,7 +110,7 @@ class CompanyInfoFormType extends AbstractType
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
                     new Assert\NotBlank(['message' => 'company_info.required']),
-                    new Assert\Email(['message' => 'validation.email_format'])
+                    new Assert\Email(['message' => 'validation.email_format', 'mode' => 'html5'])
                 ]
             ])
             ->add('website', UrlType::class, [
@@ -213,7 +213,7 @@ class CompanyInfoFormType extends AbstractType
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
                     new Assert\NotBlank(['message' => 'company_info.required']),
-                    new Assert\Email(['message' => 'validation.email_format'])
+                    new Assert\Email(['message' => 'validation.email_format', 'mode' => 'html5'])
                 ]
             ])
 

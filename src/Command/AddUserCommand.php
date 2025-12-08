@@ -77,7 +77,7 @@ HELP
         $personalEmail = $input->getOption('personal-email');
 
         // Validate email
-        $violations = $this->validator->validate($email, [new Email()]);
+        $violations = $this->validator->validate($email, [new Email(['mode' => 'html5'])]);
         if (count($violations) > 0) {
             $io->error('The email is not valid!');
             return Command::FAILURE;

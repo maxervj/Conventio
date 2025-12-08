@@ -3,6 +3,9 @@ framework:
         scoped_clients:
             gotenberg.client:
                 base_uri: '%env(GOTENBERG_DSN)%'
+                # Disable private network check to avoid DNS issues on Windows
+                extra:
+                    no_private_network: false
                 # or you can leverage this endpoint for fast testing without Docker
                 # base_uri: 'https://demo.gotenberg.dev'
 
