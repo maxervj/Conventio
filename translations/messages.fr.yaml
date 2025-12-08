@@ -83,6 +83,64 @@ company_info:
   no: "Non"
   required: "Champ obligatoire"
   at_least_one_phone: "Au moins un numéro de téléphone est requis"
+  morning: "Matin"
+  afternoon: "Après-midi"
+  day: "Jour"
+
+form:
+  company:
+    name: "Nom de l'organisme"
+    address: "Adresse"
+    address_complement: "Complément d'adresse"
+    postal_code: "Code postal"
+    city: "Ville"
+    country: "Pays"
+    website: "Site web"
+    siret: "SIRET"
+    insurer_name: "Nom de l'assureur"
+    insurer_reference: "Référence contrat assureur"
+
+  responsible:
+    last_name: "Nom du responsable de l'entreprise"
+    first_name: "Prénom du responsable"
+    function: "Fonction du responsable"
+    landline_phone: "Téléphone fixe"
+    mobile_phone: "Téléphone portable"
+    email: "Email (signataire de la convention)"
+
+  internship_location:
+    address: "Adresse"
+    postal_code: "Code postal"
+    city: "Ville"
+    country: "Pays"
+    phone: "Téléphone"
+
+  supervisor:
+    last_name: "Nom"
+    first_name: "Prénom"
+    function: "Fonction"
+    phone: "Téléphone"
+    email: "Email"
+
+  travel:
+    has_travel: "L'étudiant sera amené à effectuer des déplacements itinérants durant le temps de travail"
+
+  costs:
+    transport: "L'entreprise prend en charge les frais de transport"
+    transport_details: "Selon les modalités suivantes"
+    meal: "L'entreprise prend en charge les frais de restauration"
+    meal_details: "Selon les modalités suivantes"
+    accommodation: "L'entreprise prend en charge les frais d'hébergement"
+    accommodation_details: "Selon les modalités suivantes"
+    gratification: "L'entreprise versera éventuellement une gratification"
+    gratification_details: "Selon les modalités suivantes"
+
+  activities:
+    planned: "Activités prévues en milieu professionnel"
+
+  choice:
+    yes: "OUI"
+    no: "NON"
 
 validation:
   siret_format: "Le SIRET doit contenir 14 chiffres"
