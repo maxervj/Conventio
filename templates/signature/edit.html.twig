@@ -1,13 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Signature{% endblock %}
+{% block title %}Modifier la signature - Conventio{% endblock %}
 
 {% block body %}
-    <h1>Edit Signature</h1>
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-extrabold text-gray-900">Modifier les informations de signature</h1>
+            <p class="mt-2 text-gray-600">Mettez à jour les informations des signataires pour les conventions de stage</p>
+        </div>
 
-    {{ include('signature/_form.html.twig', {'button_label': 'Update'}) }}
+        <!-- Form Card -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="px-6 py-8 sm:px-10">
+                {{ include('signature/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
-    <a href="{{ path('app_signature_index') }}">back to list</a>
+                <!-- Delete Form -->
+                <div class="mt-8 pt-8 border-t border-gray-200">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Zone de danger</h3>
+                    {{ include('signature/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
 
-    {{ include('signature/_delete_form.html.twig') }}
+        <!-- Back Link -->
+        <div class="mt-6 text-center">
+            <a href="{{ path('app_signature_index') }}" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition duration-200">
+                <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Retour à la liste
+            </a>
+        </div>
+    </div>
+</div>
 {% endblock %}

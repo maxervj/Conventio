@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-// maitenant modifie l'affichage de toutes les routes de signature pour quel correspondent à l'affichage montré dans le /home
 
 #[Route('/signature')]
 final class SignatureController extends AbstractController
