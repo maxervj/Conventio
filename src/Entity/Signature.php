@@ -14,7 +14,7 @@ class Signature
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 10)]
+    #[ORM\Column(length: 500)] // Augmenté pour le chiffrement
     #[Assert\NotBlank(message: 'La civilité du proviseur est obligatoire')]
     #[Assert\Choice(choices: ['M.', 'Mme'], message: 'Veuillez choisir une civilité valide')]
     private ?string $civiliteProviseur = null;
@@ -44,7 +44,7 @@ class Signature
     #[Assert\Email(message: 'L\'email {{ value }} n\'est pas valide')]
     private ?string $emailProviseur = null;
 
-    #[ORM\Column(length: 10)]
+    #[ORM\Column(length: 500)] // Augmenté pour le chiffrement
     #[Assert\NotBlank(message: 'La civilité du DDF est obligatoire')]
     #[Assert\Choice(choices: ['M.', 'Mme'], message: 'Veuillez choisir une civilité valide')]
     private ?string $civiliteDDF = null;
@@ -74,7 +74,7 @@ class Signature
     #[Assert\Email(message: 'L\'email {{ value }} n\'est pas valide')]
     private ?string $emailDDF = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(length: 500)] // Augmenté pour le chiffrement
     #[Assert\NotBlank(message: 'Le téléphone du DDF est obligatoire')]
     #[Assert\Regex(
         pattern: '/^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/',
