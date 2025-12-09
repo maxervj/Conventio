@@ -23,6 +23,35 @@ class CompanyInfoCollectionController extends AbstractController
         private TranslatorInterface $translator
     ) {}
 
+    #[Route('/company-info/test', name: 'company_info_test', methods: ['GET'])]
+    public function test(Request $request): Response
+    {
+        // Create or get a test company info record
+        $testToken = 'test-token-' . bin2hex(random_bytes(16));
+
+        // Check if we already have a test record that's not completed
+        $testCompanyInfo = $this->companyInfoRepository->findOneBy([
+            'isCompleted' => false
+        ]);
+
+        if (!$testCompanyInfo) {
+            // Create a new test record
+            $testCompanyInfo = new InternshipCompanyInfo();
+            $testCompanyInfo->setToken($testToken);
+            $testCompanyInfo->setExpiresAt(new \DateTime('+30 days'));
+            $this->entityManager->persist($testCompanyInfo);
+            $this->entityManager->flush();
+        } else {
+            $testToken = $testCompanyInfo->getToken();
+        }
+
+        // Redirect to the form with the test token
+        return $this->redirectToRoute('company_info_form', [
+            'token' => $testToken,
+            'lang' => $request->query->get('lang', 'fr')
+        ]);
+    }
+
     #[Route('/company-info/{token}', name: 'company_info_form', methods: ['GET', 'POST'])]
     public function form(string $token, Request $request): Response
     {
