@@ -2,31 +2,7 @@
 
 {% block title %}{{ 'company_info.title'|trans }}{% endblock %}
 
-{% block stylesheets %}
-    <style>
-        .required:after {
-            content: " *";
-            color: #ef4444;
-        }
-        .conditional-field {
-            display: none;
-        }
-        .conditional-field.show {
-            display: block;
-        }
-        .schedule-input {
-            width: 3.5rem;
-            text-align: center;
-        }
-        .time-separator {
-            margin: 0 0.25rem;
-            font-weight: 600;
-        }
-        .form-input {
-            @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition;
-        }
-    </style>
-{% endblock %}
+{% block stylesheets %}{% endblock %}
 
 {% block body %}
     <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-8">
