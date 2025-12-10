@@ -93,7 +93,7 @@ class RegistrationFormType extends AbstractType
                             'max' => 4096,
                         ]),
                         new PasswordStrength([
-                            'minScore' => PasswordStrength::STRENGTH_MEDIUM,
+                            'minScore' => PasswordStrength::STRENGTH_WEAK,
                             'message' => 'Le mot de passe est trop faible. Veuillez utiliser un mot de passe plus robuste avec des lettres majuscules, minuscules, chiffres et caractères spéciaux.',
                         ]),
                         new NotCompromisedPassword([

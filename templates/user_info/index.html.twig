@@ -15,5 +15,17 @@
     <ul>
         <li>{{ user.contractCategory }}</li>
     </ul>
+
+    <a href="{{ path('app_change_password') }}" class="btn btn-primary">
+        Changer Mot de passe
+    </a>
+
+
+    {% if 'ROLE_PROFESSOR' in user.roles %}
+    <a href="{{ path('app_user_info_modif_classe') }}" class="btn btn-primary">
+        Modifier les classes
+    </a>
+    {% endif %}
+
 </div>
 {% endblock %}
