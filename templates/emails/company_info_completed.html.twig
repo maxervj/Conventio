@@ -2,57 +2,20 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .header {
-            background-color: #007bff;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-radius: 8px 8px 0 0;
-        }
-        .content {
-            background-color: #f8f9fa;
-            padding: 30px;
-            border: 1px solid #dee2e6;
-            border-radius: 0 0 8px 8px;
-        }
-        .info-box {
-            background-color: white;
-            padding: 15px;
-            margin: 15px 0;
-            border-left: 4px solid #28a745;
-            border-radius: 4px;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            color: #6c757d;
-            font-size: 0.9rem;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('assets/styles/app.css') }}">
 </head>
-<body>
-    <div class="container">
-        <div class="header">
+<body class="email-body">
+    <div class="email-container">
+        <div class="email-header-info">
             <h1>{{ 'email.company_info_completed_title'|trans }}</h1>
         </div>
 
-        <div class="content">
+        <div class="email-content-info">
             <p>{{ 'email.greeting'|trans({'%name%': student.firstName ~ ' ' ~ student.lastName}) }}</p>
 
             <p>{{ 'email.company_info_completed_message'|trans }}</p>
 
-            <div class="info-box">
+            <div class="email-info-box-success">
                 <strong>{{ 'company_info.company_name'|trans }}:</strong> {{ companyInfo.companyName }}<br>
                 <strong>{{ 'company_info.email'|trans }}:</strong> {{ companyInfo.email }}<br>
                 <strong>{{ 'company_info.supervisor_lastname'|trans }}:</strong> {{ companyInfo.supervisorLastName }} {{ companyInfo.supervisorFirstName }}
@@ -60,7 +23,7 @@
 
             <p>{{ 'email.next_steps'|trans }}</p>
 
-            <div class="footer">
+            <div class="email-footer-info">
                 <p>{{ 'email.footer'|trans }}</p>
             </div>
         </div>
