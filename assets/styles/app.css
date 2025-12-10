@@ -145,6 +145,11 @@ body {
     color: #212529;
 }
 
+/* Preserve line breaks and whitespace in text content */
+.info-value-preformatted {
+    white-space: pre-wrap;
+}
+
 /* Schedule Table */
 .schedule-table {
     width: 100%;
@@ -380,25 +385,321 @@ body {
     }
 }
 
-/* ===== EMAIL STYLES (pour référence, à garder inline dans les templates) ===== */
+/* ===== EMAIL STYLES ===== */
 
-/*
-Note: Les styles ci-dessous sont documentés ici pour référence,
-mais DOIVENT rester inline dans les templates d'email pour
-assurer la compatibilité avec tous les clients email.
+/* Base styles for all emails */
+.email-body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f3f4f6;
+    margin: 0;
+    padding: 0;
+}
 
-Templates concernés:
-- templates/emails/collection_request.html.twig
-- templates/emails/company_info_completed.html.twig
-- templates/emails/company_info_request.html.twig
-- templates/emails/contact.html.twig
-- templates/registration/confirmation_email.html.twig
+/* Email wrapper - Collection Request style */
+.email-wrapper {
+    max-width: 650px;
+    margin: 30px auto;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+}
 
-Ces templates contiennent leurs propres styles inline pour:
-- .email-wrapper
-- .header
-- .content
-- .button
-- .footer
-- Etc.
-*/
+/* Email container - Contact/Standard style */
+.email-container {
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Header styles - Collection Request (gradient) */
+.email-header-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px 30px;
+    text-align: center;
+}
+
+/* Header styles - Standard blue */
+.email-header-blue {
+    background-color: #0d6efd;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px 5px 0 0;
+}
+
+/* Header styles - Contact blue */
+.email-header-contact {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+/* Header styles - Info blue */
+.email-header-info {
+    background-color: #007bff;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px 8px 0 0;
+}
+
+.email-header-gradient h1,
+.email-header-blue h1,
+.email-header-contact h1,
+.email-header-info h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* Logo in emails */
+.email-logo {
+    max-width: 150px;
+    margin-bottom: 20px;
+}
+
+/* Content area - Collection Request */
+.email-content-collection {
+    padding: 40px 35px;
+}
+
+/* Content area - Standard */
+.email-content-standard {
+    background-color: #f8f9fa;
+    padding: 30px;
+    border-radius: 0 0 5px 5px;
+}
+
+/* Content area - Contact */
+.email-content-contact {
+    padding: 30px;
+}
+
+/* Content area - Info */
+.email-content-info {
+    background-color: #f8f9fa;
+    padding: 30px;
+    border: 1px solid #dee2e6;
+    border-radius: 0 0 8px 8px;
+}
+
+/* Greeting text */
+.email-greeting {
+    font-size: 18px;
+    color: #2d3748;
+    margin-bottom: 25px;
+}
+
+/* Message text */
+.email-message {
+    color: #4a5568;
+    margin-bottom: 20px;
+    line-height: 1.8;
+}
+
+/* Info boxes - Collection Request style */
+.email-info-box {
+    background: linear-gradient(to right, #f7fafc, #edf2f7);
+    border-left: 4px solid #667eea;
+    padding: 20px;
+    margin: 25px 0;
+    border-radius: 6px;
+}
+
+.email-info-box strong {
+    color: #2d3748;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.email-info-box p {
+    margin: 8px 0;
+    color: #4a5568;
+}
+
+/* Info box - Contact style */
+.email-info-box-contact {
+    background-color: #f9fafb;
+    border-left: 4px solid #667eea;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.email-info-box-contact strong {
+    color: #667eea;
+}
+
+/* Info box - Success (green) */
+.email-info-box-success {
+    background-color: white;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #28a745;
+    border-radius: 4px;
+}
+
+/* Info box - Warning (yellow) */
+.email-info-box-warning {
+    background-color: #fff3cd;
+    padding: 15px;
+    margin: 15px 0;
+    border-left: 4px solid #ffc107;
+    border-radius: 4px;
+}
+
+/* Message box - Contact */
+.email-message-box {
+    background-color: #f3f4f6;
+    border-radius: 6px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+/* Button container */
+.email-button-container {
+    text-align: center;
+    margin: 35px 0;
+}
+
+/* Buttons - Collection Request style (gradient) */
+.email-button-gradient {
+    display: inline-block;
+    padding: 16px 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white !important;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+}
+
+.email-button-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+}
+
+/* Button - Standard blue */
+.email-button-blue {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: #0d6efd;
+    color: white !important;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 20px 0;
+}
+
+/* Button - Success green */
+.email-button-success {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: #28a745;
+    color: white !important;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+/* Deadline box */
+.email-deadline-box {
+    background-color: #fff5f5;
+    border: 1px solid #fc8181;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.email-deadline-box strong {
+    color: #c53030;
+    font-size: 16px;
+}
+
+/* Help text */
+.email-help-text {
+    background-color: #f7fafc;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #718096;
+}
+
+/* Signature section */
+.email-signature {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #e2e8f0;
+    color: #4a5568;
+}
+
+.email-signature p {
+    margin: 5px 0;
+}
+
+/* Footer - Collection Request style */
+.email-footer-dark {
+    background-color: #2d3748;
+    color: #cbd5e0;
+    padding: 25px;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.email-footer-dark a {
+    color: #667eea;
+    text-decoration: none;
+}
+
+/* Footer - Standard light */
+.email-footer-light {
+    background-color: #f9fafb;
+    padding: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: #6b7280;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* Footer - Simple */
+.email-footer-simple {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: #6c757d;
+}
+
+/* Footer - Info style */
+.email-footer-info {
+    text-align: center;
+    margin-top: 30px;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+/* Label text */
+.email-label {
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 5px;
+}
+
+/* Link in emails */
+.email-link {
+    word-break: break-all;
+    background-color: white;
+    padding: 10px;
+    border-left: 3px solid #0d6efd;
+}

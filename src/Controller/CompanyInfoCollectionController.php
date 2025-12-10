@@ -35,13 +35,14 @@ class CompanyInfoCollectionController extends AbstractController
     {
         $user = $this->getUser();
 
+
         if (!$user instanceof Student) {
             throw $this->createAccessDeniedException('Cette fonctionnalité est réservée aux étudiants.');
         }
-
+        // Crée le formulaire de demande
         $form = $this->createForm(CollectionRequestFormType::class);
         $form->handleRequest($request);
-
+        // Traite la soumission du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
@@ -54,22 +55,35 @@ class CompanyInfoCollectionController extends AbstractController
             $companyInfo->setInternshipStartDate($data['internshipStartDate']);
             $companyInfo->setInternshipEndDate($data['internshipEndDate']);
 
+            // Le token est généré automatiquement dans le constructeur de InternshipCompanyInfo
+            // Vérifier que le token est bien présent
+            if (!$companyInfo->getToken()) {
+                $companyInfo->setToken(bin2hex(random_bytes(32)));
+            }
+
             $this->entityManager->persist($companyInfo);
             $this->entityManager->flush();
 
-            // Send email to company contact
-            $this->sendCollectionRequestEmail($companyInfo);
+            // Envoi de l'email (les exceptions seront loggées dans la méthode)
+            try {
+                $this->sendCollectionRequestEmail($companyInfo);
+                $this->addFlash('success', 'Votre demande de collecte d\'informations a été envoyée avec succès à ' . $companyInfo->getContactEmail());
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'La demande a été créée mais l\'email n\'a pas pu être envoyé. Erreur: ' . $e->getMessage());
+            }
 
-            $this->addFlash('success', 'Votre demande de collecte d\'informations a été envoyée avec succès.');
-
+            // Redirige pour éviter la resoumission du formulaire
             return $this->redirectToRoute('student_request_company_info');
-        }
 
+        }
+        // Affiche le formulaire de demande
         return $this->render('company_info/request_form.html.twig', [
             'form' => $form->createView(),
         ]);
+
+
     }
-     // Route de test pour générer un token de test et rediriger vers le formulaire
+     // Route de test pour générer un token de test et rediriger vers le formulaire pour le responsable du stage
     #[Route('/company-info/test', name: 'company_info_test', methods: ['GET'])]
     public function test(Request $request): Response
     {
@@ -80,7 +94,7 @@ class CompanyInfoCollectionController extends AbstractController
         $testCompanyInfo = $this->companyInfoRepository->findOneBy([
             'isCompleted' => false
         ]);
-
+        // Si aucun enregistrement de test n'existe, en créer un nouveau
         if (!$testCompanyInfo) {
             // Create a new test record
             $testCompanyInfo = new InternshipCompanyInfo();
@@ -97,6 +111,25 @@ class CompanyInfoCollectionController extends AbstractController
             'token' => $testToken,
             'lang' => $request->query->get('lang', 'fr')
         ]);
+    }
+
+    // Route de test pour vérifier l'envoi d'email
+    #[Route('/test-email', name: 'test_email', methods: ['GET'])]
+    public function testEmail(): Response
+    {
+        try {
+            $email = (new TemplatedEmail())
+                ->from('noreply@conventio.edu')
+                ->to('test@example.com')
+                ->subject('Test d\'envoi d\'email - Conventio')
+                ->html('<h1>Email de test</h1><p>Si vous recevez cet email, la configuration du mailer fonctionne correctement.</p>');
+
+            $this->mailer->send($email);
+
+            return new Response('Email envoyé avec succès à test@example.com. Vérifiez votre serveur de mail local (MailHog/Mailpit sur localhost:8025)');
+        } catch (\Exception $e) {
+            return new Response('Erreur lors de l\'envoi de l\'email: ' . $e->getMessage(), 500);
+        }
     }
     // Formulaire de collecte d'informations auprès de l'entreprise
     #[Route('/company-info/{token}', name: 'company_info_form', methods: ['GET', 'POST'])]
@@ -195,7 +228,7 @@ class CompanyInfoCollectionController extends AbstractController
             }
 
             if ($action === 'confirm') {
-                // Mark as completed
+                // Marquer comme complété
                 $companyInfo->setIsCompleted(true);
                 $companyInfo->setCompletedAt(new \DateTime());
                 $this->entityManager->flush();
@@ -265,12 +298,22 @@ class CompanyInfoCollectionController extends AbstractController
         $contactEmail = $companyInfo->getContactEmail();
 
         if (!$contactEmail) {
-            return;
+            throw new \RuntimeException('Aucune adresse email de contact n\'a été fournie.');
+        }
+
+        if (!$student) {
+            throw new \RuntimeException('Aucun étudiant associé à cette demande.');
+        }
+
+        // Vérifier que le token existe
+        $token = $companyInfo->getToken();
+        if (!$token) {
+            throw new \RuntimeException('Aucun token n\'a été généré pour cette demande.');
         }
 
         // Generate collection URL with token
         $collectionUrl = $this->urlGenerator->generate('company_info_form', [
-            'token' => $companyInfo->getToken(),
+            'token' => $token,
             'lang' => 'fr'
         ], UrlGeneratorInterface::ABSOLUTE_URL);
 
@@ -298,11 +341,7 @@ class CompanyInfoCollectionController extends AbstractController
                 'expiresAt' => $companyInfo->getExpiresAt()
             ]);
 
-        try {
-            $this->mailer->send($email);
-        } catch (\Exception $e) {
-            // Log error but don't fail the request
-            // You can add logging here if needed
-        }
+        // Envoyer l'email et laisser l'exception remonter si ça échoue
+        $this->mailer->send($email);
     }
 }
