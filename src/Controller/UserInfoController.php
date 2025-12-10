@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Professor;
 use App\Entity\User;
-use App\Form\LevelType;
+use App\Form\SelectionClasseType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,7 +35,7 @@ final class UserInfoController extends AbstractController
         $user = $this->getUser();
 
         $professor = $entityManager->getRepository(Professor::class)->find($user->getId());
-        $form = $this->createForm(LevelType::class, $professor);
+        $form = $this->createForm(SelectionClasseType::class, $professor);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
