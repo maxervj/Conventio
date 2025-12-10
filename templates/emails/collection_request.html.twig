@@ -1,38 +1,160 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ asset('assets/styles/app.css') }}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+        .email-wrapper {
+            max-width: 650px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .logo {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .content {
+            padding: 40px 35px;
+        }
+        .greeting {
+            font-size: 18px;
+            color: #2d3748;
+            margin-bottom: 25px;
+        }
+        .message {
+            color: #4a5568;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        .info-box {
+            background: linear-gradient(to right, #f7fafc, #edf2f7);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 6px;
+        }
+        .info-box strong {
+            color: #2d3748;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .info-box p {
+            margin: 8px 0;
+            color: #4a5568;
+        }
+        .button-container {
+            text-align: center;
+            margin: 35px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+        }
+        .deadline-box {
+            background-color: #fff5f5;
+            border: 1px solid #fc8181;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .deadline-box strong {
+            color: #c53030;
+            font-size: 16px;
+        }
+        .signature {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e2e8f0;
+            color: #4a5568;
+        }
+        .signature p {
+            margin: 5px 0;
+        }
+        .footer {
+            background-color: #2d3748;
+            color: #cbd5e0;
+            padding: 25px;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        .help-text {
+            background-color: #f7fafc;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #718096;
+        }
+    </style>
 </head>
-<body class="email-body">
+<body>
     <div class="email-wrapper">
-        <div class="email-header-gradient">
-            <img src="{{ asset('/assets/img/lyceegabrielfaure_logo.jpg') }}" alt="Lycée Gabriel Fauré Logo" class="email-logo">
+        <div class="header">
+            <img src="{{ asset('/assets/img/lyceegabrielfaure_logo.jpg') }}" alt="Lycée Gabriel Fauré Logo" class="logo">
             <h1>Collection d'informations pour convention de stage</h1>
         </div>
 
-        <div class="email-content-collection">
-            <p class="email-greeting">Bonjour {% if contactName %}{{ contactName }}{% else %}Madame, Monsieur{% endif %},</p>
+        <div class="content">
+            <p class="greeting">Bonjour {% if contactName %}{{ contactName }}{% else %}Madame, Monsieur{% endif %},</p>
 
-            <p class="email-message">
+            <p class="message">
                 Nous vous contactons dans le cadre d'une demande de stage de notre élève
                 <strong>{{ student.firstName }} {{ student.lastName }}</strong>, actuellement inscrit(e)
                 au lycée Gabriel Fauré.
             </p>
 
-            <div class="email-info-box">
+            <div class="info-box">
                 <strong>Informations sur le stage :</strong>
                 <p><strong>Entreprise :</strong> {{ companyName }}</p>
                 <p><strong>Période :</strong> Du {{ startDate }} au {{ endDate }}</p>
                 <p><strong>Élève :</strong> {{ student.firstName }} {{ student.lastName }}</p>
             </div>
 
-            <p class="email-message">
+            <p class="message">
                 Afin d'établir la convention de stage, nous avons besoin de collecter certaines informations
                 concernant votre entreprise et les modalités d'accueil de notre élève.
             </p>
 
-            <p class="email-message">
+            <p class="message">
                 Ce formulaire de collecte vous permettra de nous communiquer :
             </p>
             <ul style="color: #4a5568; margin-left: 20px;">
@@ -42,37 +164,37 @@
                 <li>Les activités professionnelles prévues</li>
             </ul>
 
-            <div class="email-button-container">
-                <a href="{{ collectionUrl }}" class="email-button-gradient">📋 Fournir les informations</a>
+            <div class="button-container">
+                <a href="{{ collectionUrl }}" class="button">📋 Fournir les informations</a>
             </div>
 
-            <div class="email-deadline-box">
+            <div class="deadline-box">
                 <strong>⏰ Attention : Ce lien expire le {{ expiresAt|date('d/m/Y à H:i') }}</strong>
             </div>
 
-            <div class="email-help-text">
+            <div class="help-text">
                 💡 <strong>Bon à savoir :</strong> Le formulaire est sécurisé et peut être complété en plusieurs fois.
                 Vos données seront enregistrées au fur et à mesure de votre saisie.
             </div>
 
-            <div class="email-info-box">
+            <div class="info-box">
                 <strong>Coordonnées du lycée Gabriel Fauré :</strong>
                 <p>📍 Adresse : 2 Avenue du Rhône, 74000 Annecy</p>
                 <p>📞 Téléphone : 04 50 45 20 38</p>
                 <p>📧 Mail : <a href="mailto:sabine.trupin@ac-grenoble.fr">sabine.trupin@ac-grenoble.fr</a></p>
             </div>
 
-            <p class="email-message">
+            <p class="message">
                 Si vous rencontrez des difficultés pour remplir le formulaire ou si vous avez des questions,
                 n'hésitez pas à contacter notre service des stages ou directement l'élève.
             </p>
 
-            <p class="email-message">
+            <p class="message">
                 Nous vous remercions par avance pour votre collaboration et pour l'opportunité offerte
                 à {{ student.firstName }} de réaliser ce stage au sein de votre structure.
             </p>
 
-            <div class="email-signature">
+            <div class="signature">
                 <p><strong>Cordialement,</strong></p>
                 <p>{{ student.firstName }} {{ student.lastName }}</p>
                 <p style="font-size: 14px; color: #718096;">Élève au Lycée Gabriel Fauré</p>
@@ -80,7 +202,7 @@
             </div>
         </div>
 
-        <div class="email-footer-dark">
+        <div class="footer">
             <p><strong>Lycée Gabriel Fauré</strong></p>
             <p>Cet email a été envoyé automatiquement via la plateforme Conventio</p>
             <p>Si vous ne pouvez pas accueillir de stagiaire, merci de nous en informer rapidement.</p>

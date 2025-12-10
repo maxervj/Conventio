@@ -30,7 +30,7 @@ class CompanyInfoCollectionController extends AbstractController
 
     // Formulaire pour que l'étudiant demande la collecte d'informations à une entreprise
     #[Route('/student/request-company-info', name: 'student_request_company_info', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_USER')]
+    #[IsGranted('ROLE_STUDENT')]
     public function requestCompanyInfo(Request $request): Response
     {
         $user = $this->getUser();
@@ -170,7 +170,7 @@ class CompanyInfoCollectionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Handle work schedule from request (will be processed via JavaScript)
+            // Gère les horaires de travail séparément
             $workSchedule = $request->request->all('work_schedule');
             if ($workSchedule) {
                 $companyInfo->setWorkSchedule($workSchedule);
