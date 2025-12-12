@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20251107130524 extends AbstractMigration
+final class Version20251210080018 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,12 @@ final class Version20251107130524 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE user DROP google_authenticator_secret, DROP birth_date, DROP contract_start_date');
+        $this->addSql('CREATE TABLE login_attempts (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(180) NOT NULL, ip_address VARCHAR(45) NOT NULL, attempted_at DATETIME NOT NULL, successful TINYINT(1) NOT NULL, INDEX idx_email_attempted_at (email, attempted_at), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE `user` ADD google_authenticator_secret VARCHAR(255) DEFAULT NULL, ADD birth_date DATE DEFAULT NULL, ADD contract_start_date DATE DEFAULT NULL');
+        $this->addSql('DROP TABLE login_attempts');
     }
 }

@@ -55,7 +55,8 @@ Ce document liste tous les comptes de test disponibles pour tester les différen
 
 ### 👑 Administrateur (Admin)
 
-**Email:** `admin.test@lycee-faure.fr`
+**Email:** `
+`
 **Mot de passe:** `Test123456!`
 **Nom:** Admin Test
 **Type:** Professor

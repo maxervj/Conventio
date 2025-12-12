@@ -1,5 +1,6 @@
 company_info:
   title: "Information Collection Form for Internship Agreement"
+  subtitle: "Please fill in the information about your company"
   organization_info: "Organization Information"
   company_name: "Organization Name"
   address: "Address"
@@ -83,6 +84,64 @@ company_info:
   no: "No"
   required: "Required field"
   at_least_one_phone: "At least one phone number is required"
+  morning: "Morning"
+  afternoon: "Afternoon"
+  day: "Day"
+
+form:
+  company:
+    name: "Organization Name"
+    address: "Address"
+    address_complement: "Additional Address"
+    postal_code: "Postal Code"
+    city: "City"
+    country: "Country"
+    website: "Website"
+    siret: "Company Registration Number (SIRET)"
+    insurer_name: "Insurer Name"
+    insurer_reference: "Insurance Contract Reference"
+
+  responsible:
+    last_name: "Company Manager's Last Name"
+    first_name: "Manager's First Name"
+    function: "Manager's Position"
+    landline_phone: "Landline Phone"
+    mobile_phone: "Mobile Phone"
+    email: "Email (Agreement Signatory)"
+
+  internship_location:
+    address: "Address"
+    postal_code: "Postal Code"
+    city: "City"
+    country: "Country"
+    phone: "Phone"
+
+  supervisor:
+    last_name: "Last Name"
+    first_name: "First Name"
+    function: "Position"
+    phone: "Phone"
+    email: "Email"
+
+  travel:
+    has_travel: "The student will be required to travel during working hours"
+
+  costs:
+    transport: "The company covers transportation costs"
+    transport_details: "According to the following terms"
+    meal: "The company covers meal costs"
+    meal_details: "According to the following terms"
+    accommodation: "The company covers accommodation costs"
+    accommodation_details: "According to the following terms"
+    gratification: "The company will provide compensation"
+    gratification_details: "According to the following terms"
+
+  activities:
+    planned: "Planned Professional Activities"
+
+  choice:
+    yes: "YES"
+    no: "NO"
 
 validation:
   siret_format: "SIRET must contain 14 digits"
@@ -106,3 +165,39 @@ email:
   important: "Important:"
   collection_expiration: "This link expires on %date%. After this date, you will need to contact the school."
   collection_help: "The form takes approximately 15 minutes to complete. You will be able to review your information before final submission."
+
+reset_password:
+  title: "Password Reset"
+  forgot_password: "Forgot your password?"
+  no_problem: "No worries, we'll help you reset it"
+  email_label: "Email address"
+  email_placeholder: "your.email@example.com"
+  send_reset_link: "Send reset link"
+  back_to_login: "Back to login"
+  need_help: "Need help? Contact"
+  support: "support"
+  info_message: "Enter your email address and we will send you a link to reset your password."
+
+  reset_title: "New password"
+  reset_subtitle: "Choose a strong and secure password"
+  password_requirements: "Password requirements:"
+  requirement_length: "At least 12 characters"
+  requirement_case: "One uppercase and lowercase letter"
+  requirement_number: "At least one digit"
+  requirement_special: "At least one special character (@$!%*?&)"
+  new_password: "New password"
+  confirm_password: "Confirm password"
+  reset_button: "Reset password"
+  security_note: "After resetting your password, you will be automatically logged in and will be able to access your account."
+
+  check_email_title: "Email sent!"
+  check_email_subtitle: "Check your inbox"
+  success_message: "If an account matching your email exists, an email has been sent containing a link to reset your password."
+  link_expires: "This link will expire in"
+  next_steps: "Next steps:"
+  step_1: "Check your inbox"
+  step_2: "Click on the reset link in the email"
+  step_3: "Create your new password"
+  spam_warning: "Didn't receive the email? Check your spam folder or"
+  try_again: "try again"
+  resend_email: "Resend email"

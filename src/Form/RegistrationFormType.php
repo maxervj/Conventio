@@ -32,7 +32,7 @@ class RegistrationFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $allowedDomains = $this->params->get('app.allowed_email_domains');
+        $allowedDomains = $this->params->get('app.allowed_email_domains')['student'];
 
         $builder
             ->add('lastName', TextType::class, [
@@ -65,14 +65,16 @@ class RegistrationFormType extends AbstractType
                     ]),
                     new Email([
                         'message' => 'L\'adresse email {{ value }} n\'est pas valide.',
+                        'mode' => 'html5',
                     ]),
                     new AllowedEmailDomain(
                         allowedDomains: $allowedDomains
                     ),
                 ],
                 'attr' => [
-                    'placeholder' => 'Email',
+                    'placeholder' => 'Email (ex: prenom.nom@lycee-faure.fr)',
                 ],
+                'help' => 'Vous devez utiliser votre adresse email du lycée',
             ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,

@@ -18,27 +18,30 @@ class SignatureType extends AbstractType
         $builder
             ->add('civiliteProviseur', ChoiceType::class, [
                 'choices' => [
-                    'Monsieur' => 'Monsieur',
-                    'Madame' => 'Madame',
+                    'Monsieur' => 'M.',
+                    'Madame' => 'Mme',
                 ],
                 'label' => 'Civilité du proviseur',
                 'placeholder' => 'Sélectionnez une civilité',
             ])
             ->add('nomProviseur', TextType::class, [
                 'label' => 'Nom du proviseur',
+                'attr' => ['placeholder' => 'Dupont'],
             ])
             ->add('prenomProviseur', TextType::class, [
                 'label' => 'Prénom du proviseur',
+                'attr' => ['placeholder' => 'Jean'],
             ])
             ->add('emailProviseur', EmailType::class, [
                 'label' => 'Email du proviseur',
+                'attr' => ['placeholder' => 'proviseur@lycee-faure.fr'],
             ])
             ->add('civiliteDDF', ChoiceType::class, [
                 'choices' => [
-                    'Monsieur' => 'Monsieur',
-                    'Madame' => 'Madame',
+                    'Monsieur' => 'M.',
+                    'Madame' => 'Mme',
                 ],
-                'label' => 'Civilité du DDF',
+                'label' => 'Civilité du Directeur Délégué aux Formations',
                 'placeholder' => 'Sélectionnez une civilité',
             ])
             ->add('nomDDF', TextType::class, [

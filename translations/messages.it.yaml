@@ -1,5 +1,6 @@
 company_info:
   title: "Modulo di Raccolta Informazioni per Convenzione di Tirocinio"
+  subtitle: "Si prega di compilare le informazioni sulla vostra azienda"
   organization_info: "Informazioni sull'Organizzazione"
   company_name: "Nome dell'Organizzazione"
   address: "Indirizzo"
@@ -83,6 +84,64 @@ company_info:
   no: "No"
   required: "Campo obbligatorio"
   at_least_one_phone: "È richiesto almeno un numero di telefono"
+  morning: "Mattina"
+  afternoon: "Pomeriggio"
+  day: "Giorno"
+
+form:
+  company:
+    name: "Nome dell'Organizzazione"
+    address: "Indirizzo"
+    address_complement: "Complemento Indirizzo"
+    postal_code: "Codice Postale"
+    city: "Città"
+    country: "Paese"
+    website: "Sito Web"
+    siret: "SIRET"
+    insurer_name: "Nome dell'Assicuratore"
+    insurer_reference: "Riferimento Contratto Assicurativo"
+
+  responsible:
+    last_name: "Cognome del Responsabile dell'Azienda"
+    first_name: "Nome del Responsabile"
+    function: "Funzione del Responsabile"
+    landline_phone: "Telefono Fisso"
+    mobile_phone: "Telefono Cellulare"
+    email: "Email (Firmatario della Convenzione)"
+
+  internship_location:
+    address: "Indirizzo"
+    postal_code: "Codice Postale"
+    city: "Città"
+    country: "Paese"
+    phone: "Telefono"
+
+  supervisor:
+    last_name: "Cognome"
+    first_name: "Nome"
+    function: "Funzione"
+    phone: "Telefono"
+    email: "Email"
+
+  travel:
+    has_travel: "Lo studente dovrà effettuare spostamenti durante l'orario di lavoro"
+
+  costs:
+    transport: "L'azienda copre le spese di trasporto"
+    transport_details: "Secondo le seguenti modalità"
+    meal: "L'azienda copre le spese di ristorazione"
+    meal_details: "Secondo le seguenti modalità"
+    accommodation: "L'azienda copre le spese di alloggio"
+    accommodation_details: "Secondo le seguenti modalità"
+    gratification: "L'azienda fornirà una gratifica"
+    gratification_details: "Secondo le seguenti modalità"
+
+  activities:
+    planned: "Attività Previste in Ambito Professionale"
+
+  choice:
+    yes: "SÌ"
+    no: "NO"
 
 validation:
   siret_format: "Il SIRET deve contenere 14 cifre"
@@ -97,3 +156,39 @@ email:
   company_info_completed_message: "L'azienda ospitante ha completato le informazioni necessarie per stabilire la convenzione di tirocinio."
   next_steps: "Procederemo ora a stabilire la convenzione di tirocinio che ti sarà inviata a breve."
   footer: "Cordiali saluti, Il team pedagogico"
+
+reset_password:
+  title: "Reimpostazione password"
+  forgot_password: "Password dimenticata?"
+  no_problem: "Nessun problema, ti aiuteremo a reimpostarla"
+  email_label: "Indirizzo email"
+  email_placeholder: "tua.email@esempio.com"
+  send_reset_link: "Invia link di reimpostazione"
+  back_to_login: "Torna al login"
+  need_help: "Hai bisogno di aiuto? Contatta"
+  support: "il supporto"
+  info_message: "Inserisci il tuo indirizzo email e ti invieremo un link per reimpostare la tua password."
+
+  reset_title: "Nuova password"
+  reset_subtitle: "Scegli una password forte e sicura"
+  password_requirements: "Requisiti della password:"
+  requirement_length: "Almeno 12 caratteri"
+  requirement_case: "Una lettera maiuscola e minuscola"
+  requirement_number: "Almeno una cifra"
+  requirement_special: "Almeno un carattere speciale (@$!%*?&)"
+  new_password: "Nuova password"
+  confirm_password: "Conferma password"
+  reset_button: "Reimposta password"
+  security_note: "Dopo aver reimpostato la password, sarai automaticamente connesso e potrai accedere al tuo account."
+
+  check_email_title: "Email inviata!"
+  check_email_subtitle: "Controlla la tua casella di posta"
+  success_message: "Se esiste un account corrispondente alla tua email, è stata inviata un'email contenente un link per reimpostare la tua password."
+  link_expires: "Questo link scadrà tra"
+  next_steps: "Prossimi passi:"
+  step_1: "Controlla la tua casella di posta"
+  step_2: "Clicca sul link di reimpostazione nell'email"
+  step_3: "Crea la tua nuova password"
+  spam_warning: "Non hai ricevuto l'email? Controlla la cartella spam o"
+  try_again: "riprova"
+  resend_email: "Invia di nuovo l'email"

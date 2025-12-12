@@ -1,5 +1,6 @@
 company_info:
   title: "Formulario de Recopilación de Información para Convenio de Prácticas"
+  subtitle: "Por favor, complete la información sobre su empresa"
   organization_info: "Información de la Organización"
   company_name: "Nombre de la Organización"
   address: "Dirección"
@@ -83,6 +84,64 @@ company_info:
   no: "No"
   required: "Campo obligatorio"
   at_least_one_phone: "Se requiere al menos un número de teléfono"
+  morning: "Mañana"
+  afternoon: "Tarde"
+  day: "Día"
+
+form:
+  company:
+    name: "Nombre de la Organización"
+    address: "Dirección"
+    address_complement: "Complemento de Dirección"
+    postal_code: "Código Postal"
+    city: "Ciudad"
+    country: "País"
+    website: "Sitio Web"
+    siret: "SIRET"
+    insurer_name: "Nombre de la Aseguradora"
+    insurer_reference: "Referencia del Contrato de Seguro"
+
+  responsible:
+    last_name: "Apellido del Responsable de la Empresa"
+    first_name: "Nombre del Responsable"
+    function: "Función del Responsable"
+    landline_phone: "Teléfono Fijo"
+    mobile_phone: "Teléfono Móvil"
+    email: "Correo Electrónico (Firmante del Convenio)"
+
+  internship_location:
+    address: "Dirección"
+    postal_code: "Código Postal"
+    city: "Ciudad"
+    country: "País"
+    phone: "Teléfono"
+
+  supervisor:
+    last_name: "Apellido"
+    first_name: "Nombre"
+    function: "Función"
+    phone: "Teléfono"
+    email: "Correo Electrónico"
+
+  travel:
+    has_travel: "El estudiante deberá realizar desplazamientos durante el horario de trabajo"
+
+  costs:
+    transport: "La empresa cubre los gastos de transporte"
+    transport_details: "Según las siguientes condiciones"
+    meal: "La empresa cubre los gastos de restauración"
+    meal_details: "Según las siguientes condiciones"
+    accommodation: "La empresa cubre los gastos de alojamiento"
+    accommodation_details: "Según las siguientes condiciones"
+    gratification: "La empresa proporcionará una gratificación"
+    gratification_details: "Según las siguientes condiciones"
+
+  activities:
+    planned: "Actividades Previstas en el Entorno Profesional"
+
+  choice:
+    yes: "SÍ"
+    no: "NO"
 
 validation:
   siret_format: "El SIRET debe contener 14 dígitos"
@@ -97,3 +156,39 @@ email:
   company_info_completed_message: "La empresa de acogida ha completado la información necesaria para establecer su convenio de prácticas."
   next_steps: "Ahora procederemos a establecer el convenio de prácticas que se le enviará en breve."
   footer: "Atentamente, El equipo pedagógico"
+
+reset_password:
+  title: "Restablecimiento de contraseña"
+  forgot_password: "¿Olvidó su contraseña?"
+  no_problem: "No hay problema, le ayudaremos a restablecerla"
+  email_label: "Dirección de correo electrónico"
+  email_placeholder: "su.correo@ejemplo.com"
+  send_reset_link: "Enviar enlace de restablecimiento"
+  back_to_login: "Volver al inicio de sesión"
+  need_help: "¿Necesita ayuda? Contacte"
+  support: "soporte"
+  info_message: "Ingrese su dirección de correo electrónico y le enviaremos un enlace para restablecer su contraseña."
+
+  reset_title: "Nueva contraseña"
+  reset_subtitle: "Elija una contraseña fuerte y segura"
+  password_requirements: "Requisitos de la contraseña:"
+  requirement_length: "Al menos 12 caracteres"
+  requirement_case: "Una letra mayúscula y minúscula"
+  requirement_number: "Al menos un dígito"
+  requirement_special: "Al menos un carácter especial (@$!%*?&)"
+  new_password: "Nueva contraseña"
+  confirm_password: "Confirmar contraseña"
+  reset_button: "Restablecer contraseña"
+  security_note: "Después de restablecer su contraseña, se conectará automáticamente y podrá acceder a su cuenta."
+
+  check_email_title: "¡Correo enviado!"
+  check_email_subtitle: "Verifique su bandeja de entrada"
+  success_message: "Si existe una cuenta que coincida con su correo electrónico, se ha enviado un correo con un enlace para restablecer su contraseña."
+  link_expires: "Este enlace expirará en"
+  next_steps: "Próximos pasos:"
+  step_1: "Verifique su bandeja de entrada"
+  step_2: "Haga clic en el enlace de restablecimiento en el correo"
+  step_3: "Cree su nueva contraseña"
+  spam_warning: "¿No recibió el correo? Revise su carpeta de spam o"
+  try_again: "intente de nuevo"
+  resend_email: "Reenviar correo"

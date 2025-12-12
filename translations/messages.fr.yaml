@@ -1,5 +1,6 @@
 company_info:
   title: "Formulaire de collecte d'informations pour la convention de stage"
+  subtitle: "Veuillez remplir les informations concernant votre entreprise"
   organization_info: "Informations organisme"
   company_name: "Nom de l'organisme"
   address: "Adresse"
@@ -71,9 +72,11 @@ company_info:
   confirmation_title: "Récapitulatif des informations"
   confirmation_message: "Veuillez vérifier les informations saisies avant validation définitive."
 
-  success_title: "Merci"
-  success_message: "Merci d'avoir fourni ces informations. Vous recevrez sous peu, la convention de stage à signer électroniquement."
+  success_title: "Informations enregistrées avec succès"
+  success_message: "Merci d'avoir pris le temps de remplir ce formulaire. Toutes les informations ont été transmises à l'étudiant."
   success_thanks: "Merci encore pour l'accueil d'un stagiaire de notre lycée."
+  next_steps: "Prochaines étapes"
+  convention_info: "L'étudiant va maintenant préparer la convention de stage avec ces informations. Vous recevrez bientôt la convention à signer électroniquement."
 
   error_expired: "Ce lien a expiré."
   error_completed: "Ce formulaire a déjà été complété."
@@ -83,6 +86,64 @@ company_info:
   no: "Non"
   required: "Champ obligatoire"
   at_least_one_phone: "Au moins un numéro de téléphone est requis"
+  morning: "Matin"
+  afternoon: "Après-midi"
+  day: "Jour"
+
+form:
+  company:
+    name: "Nom de l'organisme"
+    address: "Adresse"
+    address_complement: "Complément d'adresse"
+    postal_code: "Code postal"
+    city: "Ville"
+    country: "Pays"
+    website: "Site web"
+    siret: "SIRET"
+    insurer_name: "Nom de l'assureur"
+    insurer_reference: "Référence contrat assureur"
+
+  responsible:
+    last_name: "Nom du responsable de l'entreprise"
+    first_name: "Prénom du responsable"
+    function: "Fonction du responsable"
+    landline_phone: "Téléphone fixe"
+    mobile_phone: "Téléphone portable"
+    email: "Email (signataire de la convention)"
+
+  internship_location:
+    address: "Adresse"
+    postal_code: "Code postal"
+    city: "Ville"
+    country: "Pays"
+    phone: "Téléphone"
+
+  supervisor:
+    last_name: "Nom"
+    first_name: "Prénom"
+    function: "Fonction"
+    phone: "Téléphone"
+    email: "Email"
+
+  travel:
+    has_travel: "L'étudiant sera amené à effectuer des déplacements itinérants durant le temps de travail"
+
+  costs:
+    transport: "L'entreprise prend en charge les frais de transport"
+    transport_details: "Selon les modalités suivantes"
+    meal: "L'entreprise prend en charge les frais de restauration"
+    meal_details: "Selon les modalités suivantes"
+    accommodation: "L'entreprise prend en charge les frais d'hébergement"
+    accommodation_details: "Selon les modalités suivantes"
+    gratification: "L'entreprise versera éventuellement une gratification"
+    gratification_details: "Selon les modalités suivantes"
+
+  activities:
+    planned: "Activités prévues en milieu professionnel"
+
+  choice:
+    yes: "OUI"
+    no: "NON"
 
 validation:
   siret_format: "Le SIRET doit contenir 14 chiffres"
@@ -106,3 +167,39 @@ email:
   important: "Important :"
   collection_expiration: "Ce lien expire le %date%. Au-delà de cette date, vous devrez contacter l'établissement."
   collection_help: "Le formulaire prend environ 15 minutes à compléter. Vous pourrez vérifier vos informations avant la validation définitive."
+
+reset_password:
+  title: "Réinitialisation du mot de passe"
+  forgot_password: "Mot de passe oublié ?"
+  no_problem: "Pas de problème, nous allons vous aider à le réinitialiser"
+  email_label: "Adresse email"
+  email_placeholder: "votre.email@example.com"
+  send_reset_link: "Envoyer le lien de réinitialisation"
+  back_to_login: "Retour à la connexion"
+  need_help: "Besoin d'aide ? Contactez"
+  support: "le support"
+  info_message: "Saisissez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe."
+
+  reset_title: "Nouveau mot de passe"
+  reset_subtitle: "Choisissez un mot de passe fort et sécurisé"
+  password_requirements: "Exigences du mot de passe :"
+  requirement_length: "Au moins 12 caractères"
+  requirement_case: "Une lettre majuscule et minuscule"
+  requirement_number: "Au moins un chiffre"
+  requirement_special: "Au moins un caractère spécial (@$!%*?&)"
+  new_password: "Nouveau mot de passe"
+  confirm_password: "Confirmez le mot de passe"
+  reset_button: "Réinitialiser le mot de passe"
+  security_note: "Après avoir réinitialisé votre mot de passe, vous serez automatiquement connecté et pourrez accéder à votre compte."
+
+  check_email_title: "Email envoyé !"
+  check_email_subtitle: "Vérifiez votre boîte de réception"
+  success_message: "Si un compte correspondant à votre email existe, un email vient d'être envoyé contenant un lien pour réinitialiser votre mot de passe."
+  link_expires: "Ce lien expirera dans"
+  next_steps: "Prochaines étapes :"
+  step_1: "Vérifiez votre boîte de réception"
+  step_2: "Cliquez sur le lien de réinitialisation dans l'email"
+  step_3: "Créez votre nouveau mot de passe"
+  spam_warning: "Vous ne recevez pas l'email ? Vérifiez votre dossier spam ou"
+  try_again: "réessayez"
+  resend_email: "Renvoyer l'email"
