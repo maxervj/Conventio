@@ -2,8 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Level;
 use App\Entity\Professor;
 use App\Validator\AllowedEmailDomain;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -114,6 +116,18 @@ class ProfessorResgistrationType extends AbstractType
                     ],
                 ],
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
+            ])
+            ->add('Level', EntityType::class, [
+                'class' => Level::class,
+                'choice_label' => 'LevelName', // ou le champ à afficher
+                'multiple' => true,
+                'expanded' => true, // cases à cocher
+                'label' => 'Les classes que vous enseignerez *',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez sélectionner au moins une classe',
+                    ]),
+                ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'label' => 'Accepter les CGU',
