@@ -72,9 +72,11 @@ company_info:
   confirmation_title: "Récapitulatif des informations"
   confirmation_message: "Veuillez vérifier les informations saisies avant validation définitive."
 
-  success_title: "Merci"
-  success_message: "Merci d'avoir fourni ces informations. Vous recevrez sous peu, la convention de stage à signer électroniquement."
+  success_title: "Informations enregistrées avec succès"
+  success_message: "Merci d'avoir pris le temps de remplir ce formulaire. Toutes les informations ont été transmises à l'étudiant."
   success_thanks: "Merci encore pour l'accueil d'un stagiaire de notre lycée."
+  next_steps: "Prochaines étapes"
+  convention_info: "L'étudiant va maintenant préparer la convention de stage avec ces informations. Vous recevrez bientôt la convention à signer électroniquement."
 
   error_expired: "Ce lien a expiré."
   error_completed: "Ce formulaire a déjà été complété."
