@@ -28,6 +28,28 @@ class CompanyInfoCollectionController extends AbstractController
         private UrlGeneratorInterface $urlGenerator
     ) {}
 
+    // Liste des collectes d'informations de l'étudiant
+    #[Route('/student/my-requests', name: 'student_my_requests', methods: ['GET'])]
+    #[IsGranted('ROLE_STUDENT')]
+    public function myRequests(): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof Student) {
+            throw $this->createAccessDeniedException('Cette fonctionnalité est réservée aux étudiants.');
+        }
+
+        // Récupérer toutes les collectes d'informations de l'étudiant
+        $companyInfos = $this->companyInfoRepository->findBy(
+            ['student' => $user],
+            ['createdAt' => 'DESC']
+        );
+
+        return $this->render('student/my_requests.html.twig', [
+            'companyInfos' => $companyInfos,
+        ]);
+    }
+
     // Formulaire pour que l'étudiant demande la collecte d'informations à une entreprise
     #[Route('/student/request-company-info', name: 'student_request_company_info', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_STUDENT')]
@@ -111,25 +133,6 @@ class CompanyInfoCollectionController extends AbstractController
             'token' => $testToken,
             'lang' => $request->query->get('lang', 'fr')
         ]);
-    }
-
-    // Route de test pour vérifier l'envoi d'email
-    #[Route('/test-email', name: 'test_email', methods: ['GET'])]
-    public function testEmail(): Response
-    {
-        try {
-            $email = (new TemplatedEmail())
-                ->from('noreply@conventio.edu')
-                ->to('test@example.com')
-                ->subject('Test d\'envoi d\'email - Conventio')
-                ->html('<h1>Email de test</h1><p>Si vous recevez cet email, la configuration du mailer fonctionne correctement.</p>');
-
-            $this->mailer->send($email);
-
-            return new Response('Email envoyé avec succès à test@example.com. Vérifiez votre serveur de mail local (MailHog/Mailpit sur localhost:8025)');
-        } catch (\Exception $e) {
-            return new Response('Erreur lors de l\'envoi de l\'email: ' . $e->getMessage(), 500);
-        }
     }
     // Formulaire de collecte d'informations auprès de l'entreprise
     #[Route('/company-info/{token}', name: 'company_info_form', methods: ['GET', 'POST'])]
