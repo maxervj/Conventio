@@ -24,6 +24,12 @@ security:
                 csrf_token_id: authenticate
                 default_target_path: app_home
 
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path: /
+                always_remember_me: false
+
             logout:
                 path: app_logout
                 # Enable CSRF protection for logout

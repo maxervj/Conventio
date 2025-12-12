@@ -10,6 +10,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: InternshipCompanyInfoRepository::class)]
 class InternshipCompanyInfo
 {
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -34,32 +36,44 @@ class InternshipCompanyInfo
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTime $expiresAt = null;
 
-    // Organization information
-    #[ORM\Column(type: 'string', length: 255)]
-    private ?string $companyName = null;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $contactName = null;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $contactEmail = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTime $internshipStartDate = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTime $internshipEndDate = null;
+
+    // Information de l'entreprise
+    #[ORM\Column(type: 'string', length: 255)]
+    private ?string $companyName = null ;
+
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $address = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $addressComplement = null;
 
-    #[ORM\Column(type: 'string', length: 10)]
+    #[ORM\Column(type: 'string', length: 10, nullable: true)]
     private ?string $postalCode = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $city = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $country = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $responsibleLastName = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $responsibleFirstName = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $responsibleFunction = null;
 
     #[ORM\Column(type: 'string', length: 20, nullable: true)]
@@ -68,19 +82,19 @@ class InternshipCompanyInfo
     #[ORM\Column(type: 'string', length: 20, nullable: true)]
     private ?string $mobilePhone = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $email = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $website = null;
 
-    #[ORM\Column(type: 'string', length: 14)]
+    #[ORM\Column(type: 'string', length: 14, nullable: true)]
     private ?string $siret = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $insurerName = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $insurerReference = null;
 
     // Internship location (if different)
@@ -100,22 +114,22 @@ class InternshipCompanyInfo
     private ?string $internshipPhone = null;
 
     // Supervisor information
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $supervisorLastName = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $supervisorFirstName = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $supervisorFunction = null;
 
-    #[ORM\Column(type: 'string', length: 20)]
+    #[ORM\Column(type: 'string', length: 20, nullable: true)]
     private ?string $supervisorPhone = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $supervisorEmail = null;
 
-    // Travel during internship
+    // Déplacements éventuels
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $hasTravel = false;
 
@@ -149,13 +163,13 @@ class InternshipCompanyInfo
     private array $workSchedule = [];
 
     // Professional activities
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $plannedActivities = null;
 
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->expiresAt = (new \DateTime())->modify('+30 days');
+        $this->expiresAt = (new \DateTime())->modify('+7 days');
         $this->token = bin2hex(random_bytes(32));
     }
 
@@ -643,6 +657,50 @@ class InternshipCompanyInfo
     public function setPlannedActivities(string $plannedActivities): static
     {
         $this->plannedActivities = $plannedActivities;
+        return $this;
+    }
+
+    public function getContactName(): ?string
+    {
+        return $this->contactName;
+    }
+
+    public function setContactName(?string $contactName): static
+    {
+        $this->contactName = $contactName;
+        return $this;
+    }
+
+    public function getContactEmail(): ?string
+    {
+        return $this->contactEmail;
+    }
+
+    public function setContactEmail(?string $contactEmail): static
+    {
+        $this->contactEmail = $contactEmail;
+        return $this;
+    }
+
+    public function getInternshipStartDate(): ?\DateTime
+    {
+        return $this->internshipStartDate;
+    }
+
+    public function setInternshipStartDate(?\DateTime $internshipStartDate): static
+    {
+        $this->internshipStartDate = $internshipStartDate;
+        return $this;
+    }
+
+    public function getInternshipEndDate(): ?\DateTime
+    {
+        return $this->internshipEndDate;
+    }
+
+    public function setInternshipEndDate(?\DateTime $internshipEndDate): static
+    {
+        $this->internshipEndDate = $internshipEndDate;
         return $this;
     }
 }

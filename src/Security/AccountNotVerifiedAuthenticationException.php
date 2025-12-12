@@ -8,6 +8,6 @@ class AccountNotVerifiedAuthenticationException extends AccountStatusException
 {
     public function getMessageKey(): string
     {
-        return 'Votre compte n\'a pas encore été vérifié. Veuillez consulter votre email et cliquer sur le lien de vérification.';
+        return 'Compte non validé. Cliquez sur le lien reçu dans votre boite mail.';
     }
 }

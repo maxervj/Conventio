@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\Student;
+use App\Service\LoginAttemptService;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -11,8 +12,18 @@ class UserChecker implements UserCheckerInterface
 {
     private const REQUIRED_STUDENT_DOMAIN = '@lycee-faure.fr';
 
+    public function __construct(
+        private LoginAttemptService $loginAttemptService
+    ) {
+    }
+
     public function checkPreAuth(UserInterface $user): void
     {
+        // Check for too many login attempts
+        if ($this->loginAttemptService->isLockedOut($user->getUserIdentifier())) {
+            $minutesRemaining = $this->loginAttemptService->getLockoutTimeRemaining($user->getUserIdentifier());
+            throw new TooManyLoginAttemptsException($minutesRemaining ?? 10);
+        }
         if (!$user instanceof Student) {
             return;
         }

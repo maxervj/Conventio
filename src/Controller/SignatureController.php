@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/signature')]
+#[IsGranted('ROLE_ADMIN')]
 final class SignatureController extends AbstractController
 {
     #[Route(name: 'app_signature_index', methods: ['GET'])]
