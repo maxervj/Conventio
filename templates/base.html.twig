@@ -15,6 +15,22 @@
     {% block stylesheets %}{% endblock %}
     {% block javascripts %}
         {% block importmap %}{{ importmap('app') }}{% endblock %}
+
+        {# Scripts #}
+            <script>
+                // Toggle mobile menu
+                document.addEventListener('DOMContentLoaded', function() {
+                    const mobileMenuButton = document.getElementById('mobile-menu-button');
+                    const mobileMenu = document.getElementById('mobile-menu');
+
+                    if (mobileMenuButton && mobileMenu) {
+                        mobileMenuButton.addEventListener('click', function() {
+                            mobileMenu.classList.toggle('hidden');
+                        });
+                    }
+                });
+            </script>
+
     {% endblock %}
 </head>
 <body class="bg-gray-50">
@@ -223,22 +239,5 @@
             </div>
         </div>
     </footer>
-
-    {# Scripts #}
-    {% block javascripts %}
-        <script>
-            // Toggle mobile menu
-            document.addEventListener('DOMContentLoaded', function() {
-                const mobileMenuButton = document.getElementById('mobile-menu-button');
-                const mobileMenu = document.getElementById('mobile-menu');
-
-                if (mobileMenuButton && mobileMenu) {
-                    mobileMenuButton.addEventListener('click', function() {
-                        mobileMenu.classList.toggle('hidden');
-                    });
-                }
-            });
-        </script>
-    {% endblock %}
 </body>
 </html>
