@@ -703,3 +703,166 @@ body {
     padding: 10px;
     border-left: 3px solid #0d6efd;
 }
+
+/* ===== EMAIL - Collection Request Specific Styles ===== */
+
+/* Body styles for collection request email */
+.collection-request-body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.8;
+    color: #333;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 0;
+}
+
+/* Email wrapper for collection request */
+.collection-request-wrapper {
+    max-width: 650px;
+    margin: 30px auto;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Header for collection request */
+.collection-request-header {
+    background: linear-gradient(135deg, #1e73be 0%, #0a4d8f 100%);
+    color: white;
+    padding: 40px 30px;
+    text-align: center;
+}
+
+/* Logo in collection request */
+.collection-request-logo {
+    max-width: 180px;
+    margin-bottom: 20px;
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header title */
+.collection-request-header h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* Content area */
+.collection-request-content {
+    padding: 40px 35px;
+}
+
+/* Greeting */
+.collection-request-greeting {
+    font-size: 18px;
+    color: #2d3748;
+    margin-bottom: 25px;
+}
+
+/* Message */
+.collection-request-message {
+    color: #4a5568;
+    margin-bottom: 20px;
+    line-height: 1.8;
+}
+
+/* Info box */
+.collection-request-info-box {
+    background: linear-gradient(to right, #e3f2fd, #f0f7ff);
+    border-left: 4px solid #1e73be;
+    padding: 20px;
+    margin: 25px 0;
+    border-radius: 6px;
+}
+
+.collection-request-info-box strong {
+    color: #2d3748;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.collection-request-info-box p {
+    margin: 8px 0;
+    color: #4a5568;
+}
+
+/* Button container */
+.collection-request-button-container {
+    text-align: center;
+    margin: 35px 0;
+}
+
+/* Button */
+.collection-request-button {
+    display: inline-block;
+    padding: 16px 40px;
+    background: linear-gradient(135deg, #1e73be 0%, #0a4d8f 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(30, 115, 190, 0.4);
+    transition: all 0.3s ease;
+}
+
+.collection-request-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(30, 115, 190, 0.5);
+}
+
+/* Deadline box */
+.collection-request-deadline-box {
+    background-color: #fff5f5;
+    border: 1px solid #fc8181;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.collection-request-deadline-box strong {
+    color: #c53030;
+    font-size: 16px;
+}
+
+/* Signature */
+.collection-request-signature {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #e2e8f0;
+    color: #4a5568;
+}
+
+.collection-request-signature p {
+    margin: 5px 0;
+}
+
+/* Footer */
+.collection-request-footer {
+    background-color: #2d3748;
+    color: #cbd5e0;
+    padding: 25px;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.collection-request-footer a {
+    color: #667eea;
+    text-decoration: none;
+}
+
+/* Help text */
+.collection-request-help-text {
+    background-color: #f7fafc;
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #718096;
+}

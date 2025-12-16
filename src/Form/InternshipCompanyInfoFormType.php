@@ -26,7 +26,7 @@ class InternshipCompanyInfoFormType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'This field is required']),
+                    new Assert\NotBlank(['message' => 'company_info.required']),
                     new Assert\Length(['max' => 255]),
                 ],
             ])
@@ -35,7 +35,7 @@ class InternshipCompanyInfoFormType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'This field is required']),
+                    new Assert\NotBlank(['message' => 'company_info.required']),
                 ],
             ])
             ->add('addressComplement', TextType::class, [
@@ -57,7 +57,7 @@ class InternshipCompanyInfoFormType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'This field is required']),
+                    new Assert\NotBlank(['message' => 'company_info.required']),
                     new Assert\Length(['max' => 255]),
                 ],
             ])
@@ -67,7 +67,7 @@ class InternshipCompanyInfoFormType extends AbstractType
                 'choices' => $this->getCountries(),
                 'attr' => ['class' => 'form-select'],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'This field is required']),
+                    new Assert\NotBlank(['message' => 'company_info.required']),
                 ],
             ])
 
@@ -77,7 +77,7 @@ class InternshipCompanyInfoFormType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'This field is required']),
+                    new Assert\NotBlank(['message' => 'company_info.required']),
                     new Assert\Length(['max' => 255]),
                 ],
             ])
@@ -86,7 +86,7 @@ class InternshipCompanyInfoFormType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'This field is required']),
+                    new Assert\NotBlank(['message' => 'company_info.required']),
                     new Assert\Length(['max' => 255]),
                 ],
             ])
@@ -95,7 +95,7 @@ class InternshipCompanyInfoFormType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'This field is required']),
+                    new Assert\NotBlank(['message' => 'company_info.required']),
                     new Assert\Length(['max' => 255]),
                 ],
             ])
@@ -120,8 +120,8 @@ class InternshipCompanyInfoFormType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'This field is required']),
-                    new Assert\Email(['message' => 'Please enter a valid email address']),
+                    new Assert\NotBlank(['message' => 'company_info.required']),
+                    new Assert\Email(['message' => 'validation.email_format']),
                 ],
             ])
             ->add('website', UrlType::class, [
@@ -143,7 +143,7 @@ class InternshipCompanyInfoFormType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'This field is required']),
+                    new Assert\NotBlank(['message' => 'company_info.required']),
                     new Assert\Length(['max' => 255]),
                 ],
             ])
@@ -152,7 +152,7 @@ class InternshipCompanyInfoFormType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'This field is required']),
+                    new Assert\NotBlank(['message' => 'company_info.required']),
                     new Assert\Length(['max' => 255]),
                 ],
             ])
@@ -194,7 +194,7 @@ class InternshipCompanyInfoFormType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'This field is required']),
+                    new Assert\NotBlank(['message' => 'company_info.required']),
                     new Assert\Length(['max' => 255]),
                 ],
             ])
@@ -203,7 +203,7 @@ class InternshipCompanyInfoFormType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'This field is required']),
+                    new Assert\NotBlank(['message' => 'company_info.required']),
                     new Assert\Length(['max' => 255]),
                 ],
             ])
@@ -212,7 +212,7 @@ class InternshipCompanyInfoFormType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'This field is required']),
+                    new Assert\NotBlank(['message' => 'company_info.required']),
                     new Assert\Length(['max' => 255]),
                 ],
             ])
@@ -230,8 +230,8 @@ class InternshipCompanyInfoFormType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => 'form-control'],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'This field is required']),
-                    new Assert\Email(['message' => 'Please enter a valid email address']),
+                    new Assert\NotBlank(['message' => 'company_info.required']),
+                    new Assert\Email(['message' => 'validation.email_format']),
                 ],
             ])
 
@@ -315,7 +315,7 @@ class InternshipCompanyInfoFormType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => 'form-control', 'rows' => 8],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'This field is required']),
+                    new Assert\NotBlank(['message' => 'company_info.required']),
                 ],
             ])
         ;
@@ -325,6 +325,7 @@ class InternshipCompanyInfoFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => InternshipCompanyInfo::class,
+            'translation_domain' => 'messages',
         ]);
     }
 
