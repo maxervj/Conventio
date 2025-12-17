@@ -10,45 +10,55 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ProfessorRepository::class)]
 class Professor extends User
 {
-    // TODO: Décommenter quand l'entité Contract sera créée
-    // /**
-    //  * @var Collection<int, Contract>
-    //  */
-    // #[ORM\OneToMany(targetEntity: Contract::class, mappedBy: 'coordinator')]
-    // private Collection $coordinatedContracts;
+    /**
+     * @var Collection<int, Level>
+     */
+    #[ORM\ManyToMany(targetEntity: Level::class, inversedBy: 'teachers')]
+    #[ORM\JoinTable(name: 'professor_taught_levels')]
+    private Collection $taughtLevels;
 
-    // public function __construct()
-    // {
-    //     $this->coordinatedContracts = new ArrayCollection();
-    // }
+    #[ORM\ManyToOne(targetEntity: Level::class, inversedBy: 'referentProfessor')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Level $referentLevel = null;
 
-    // /**
-    //  * @return Collection<int, Contract>
-    //  */
-    // public function getCoordinatedContracts(): Collection
-    // {
-    //     return $this->coordinatedContracts;
-    // }
+    public function __construct()
+    {
+        $this->taughtLevels = new ArrayCollection();
+    }
 
-    // public function addCoordinatedContract(Contract $contract): static
-    // {
-    //     if (!$this->coordinatedContracts->contains($contract)) {
-    //         $this->coordinatedContracts->add($contract);
-    //         $contract->setCoordinator($this);
-    //     }
+    /**
+     * @return Collection<int, Level>
+     */
+    public function getTaughtLevels(): Collection
+    {
+        return $this->taughtLevels;
+    }
 
-    //     return $this;
-    // }
+    public function addTaughtLevel(Level $level): static
+    {
+        if (!$this->taughtLevels->contains($level)) {
+            $this->taughtLevels->add($level);
+        }
 
-    // public function removeCoordinatedContract(Contract $contract): static
-    // {
-    //     if ($this->coordinatedContracts->removeElement($contract)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($contract->getCoordinator() === $this) {
-    //             $contract->setCoordinator(null);
-    //         }
-    //     }
+        return $this;
+    }
 
-    //     return $this;
-    // }
+    public function removeTaughtLevel(Level $level): static
+    {
+        $this->taughtLevels->removeElement($level);
+
+        return $this;
+    }
+
+    public function getReferentLevel(): ?Level
+    {
+        return $this->referentLevel;
+    }
+
+    public function setReferentLevel(?Level $referentLevel): static
+    {
+        $this->referentLevel = $referentLevel;
+
+        return $this;
+    }
 }
