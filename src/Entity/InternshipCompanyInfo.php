@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: InternshipCompanyInfoRepository::class)]
+#[ORM\Table(name: 'company_info_collection')]
 class InternshipCompanyInfo
 {
 
@@ -89,6 +90,14 @@ class InternshipCompanyInfo
     private ?string $website = null;
 
     #[ORM\Column(type: 'string', length: 14, nullable: true)]
+    #[Assert\Length(
+        exactly: 14,
+        exactMessage: 'Le SIRET doit contenir exactement {{ limit }} caractères'
+    )]
+    #[Assert\Regex(
+        pattern: '/^\d{14}$/',
+        message: 'Le SIRET doit contenir uniquement des chiffres'
+    )]
     private ?string $siret = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]

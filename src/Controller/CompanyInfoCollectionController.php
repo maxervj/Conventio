@@ -105,35 +105,7 @@ class CompanyInfoCollectionController extends AbstractController
 
 
     }
-     // Route de test pour générer un token de test et rediriger vers le formulaire pour le responsable du stage
-    #[Route('/company-info/test', name: 'company_info_test', methods: ['GET'])]
-    public function test(Request $request): Response
-    {
-        // Create or get a test company info record
-        $testToken = 'test-token-' . bin2hex(random_bytes(16));
 
-        // Check if we already have a test record that's not completed
-        $testCompanyInfo = $this->companyInfoRepository->findOneBy([
-            'isCompleted' => false
-        ]);
-        // Si aucun enregistrement de test n'existe, en créer un nouveau
-        if (!$testCompanyInfo) {
-            // Create a new test record
-            $testCompanyInfo = new InternshipCompanyInfo();
-            $testCompanyInfo->setToken($testToken);
-            $testCompanyInfo->setExpiresAt(new \DateTime('+30 days'));
-            $this->entityManager->persist($testCompanyInfo);
-            $this->entityManager->flush();
-        } else {
-            $testToken = $testCompanyInfo->getToken();
-        }
-
-        // Redirect to the form with the test token
-        return $this->redirectToRoute('company_info_form', [
-            'token' => $testToken,
-            'lang' => $request->query->get('lang', 'fr')
-        ]);
-    }
     // Formulaire de collecte d'informations auprès de l'entreprise
     #[Route('/company-info/{token}', name: 'company_info_form', methods: ['GET', 'POST'])]
     public function form(string $token, Request $request): Response
@@ -141,6 +113,10 @@ class CompanyInfoCollectionController extends AbstractController
         // Set locale from query parameter if provided
         $locale = $request->query->get('lang', 'fr');
         $request->setLocale($locale);
+
+        // Save locale in session for persistence
+        $session = $request->getSession();
+        $session->set('_locale', $locale);
 
         $companyInfo = $this->companyInfoRepository->findValidToken($token);
 
@@ -211,8 +187,9 @@ class CompanyInfoCollectionController extends AbstractController
     #[Route('/company-info/{token}/confirm', name: 'company_info_confirm', methods: ['GET', 'POST'])]
     public function confirm(string $token, Request $request): Response
     {
-        $locale = $request->query->get('lang', 'fr');
+        $locale = $request->query->get('lang', $request->getSession()->get('_locale', 'fr'));
         $request->setLocale($locale);
+        $request->getSession()->set('_locale', $locale);
 
         $companyInfo = $this->companyInfoRepository->findValidToken($token);
 
@@ -256,8 +233,9 @@ class CompanyInfoCollectionController extends AbstractController
     #[Route('/company-info/{token}/success', name: 'company_info_success', methods: ['GET'])]
     public function success(string $token, Request $request): Response
     {
-        $locale = $request->query->get('lang', 'fr');
+        $locale = $request->query->get('lang', $request->getSession()->get('_locale', 'fr'));
         $request->setLocale($locale);
+        $request->getSession()->set('_locale', $locale);
 
         $companyInfo = $this->companyInfoRepository->findByToken($token);
 

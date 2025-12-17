@@ -1,194 +1,174 @@
-company_info:
-  title: "Modulo di Raccolta Informazioni per Convenzione di Tirocinio"
-  subtitle: "Si prega di compilare le informazioni sulla vostra azienda"
-  organization_info: "Informazioni sull'Organizzazione"
-  company_name: "Nome dell'Organizzazione"
-  address: "Indirizzo"
-  address_complement: "Complemento Indirizzo"
-  postal_code: "Codice Postale"
-  city: "Città"
-  country: "Paese"
-  responsible_lastname: "Cognome del Responsabile dell'Azienda"
-  responsible_firstname: "Nome del Responsabile"
-  responsible_function: "Funzione del Responsabile"
-  landline_phone: "Telefono Fisso"
-  mobile_phone: "Telefono Cellulare"
-  email: "Email"
-  email_note: "Attenzione: firmatario della convenzione"
-  website: "Sito Web"
-  siret: "SIRET"
-  insurer_name: "Nome dell'Assicuratore"
-  insurer_reference: "Riferimento Contratto Assicurativo"
-
-  internship_location: "Luogo di Accoglienza del Tirocinante (se diverso)"
-  internship_address: "Indirizzo"
-  internship_postal_code: "Codice Postale"
-  internship_city: "Città"
-  internship_country: "Paese"
-  internship_phone: "Telefono"
-
-  supervisor_info: "Tutor di Tirocinio"
-  supervisor_lastname: "Cognome"
-  supervisor_firstname: "Nome"
-  supervisor_function: "Funzione"
-  supervisor_phone: "Telefono"
-  supervisor_email: "Email"
-
-  questionnaire: "Questionario"
-  has_travel: "Lo studente dovrà effettuare spostamenti durante l'orario di lavoro"
-
-  cost_coverage: "Partecipazione alle Spese del Tirocinante e Gratifica"
-  covers_transport: "L'azienda copre le spese di trasporto"
-  transport_details: "Secondo le seguenti modalità"
-  covers_meals: "L'azienda copre le spese di ristorazione"
-  meal_details: "Secondo le seguenti modalità"
-  covers_accommodation: "L'azienda copre le spese di alloggio"
-  accommodation_details: "Secondo le seguenti modalità"
-  provides_gratification: "L'azienda fornirà eventualmente una gratifica"
-  gratification_details: "Secondo le seguenti modalità"
-
-  work_schedule: "Orario di Lavoro"
-  monday: "Lunedì"
-  tuesday: "Martedì"
-  wednesday: "Mercoledì"
-  thursday: "Giovedì"
-  friday: "Venerdì"
-  saturday: "Sabato"
-  sunday: "Domenica"
-  morning_start: "Inizio Mattina"
-  morning_end: "Fine Mattina"
-  afternoon_start: "Inizio Pomeriggio"
-  afternoon_end: "Fine Pomeriggio"
-  weekly_total: "Totale Settimanale"
-  hours: "ore"
-
-  planned_activities: "Attività Previste in Ambito Professionale"
-  activities_description: "Descrizione delle attività previste in ambito professionale"
-
-  submit: "Invia"
-  modify: "Modifica"
-  confirm_submit: "Conferma Invio per Stabilimento della Convenzione"
-
-  confirmation_title: "Riepilogo Informazioni"
-  confirmation_message: "Si prega di verificare le informazioni inserite prima della convalida definitiva."
-
-  success_title: "Grazie"
-  success_message: "Grazie per aver fornito queste informazioni. Riceverete presto la convenzione di tirocinio da firmare elettronicamente."
-  success_thanks: "Grazie ancora per l'accoglienza di un tirocinante della nostra scuola."
-
-  error_expired: "Questo link è scaduto."
-  error_completed: "Questo modulo è già stato completato."
-  error_invalid: "Link non valido."
-
-  yes: "Sì"
-  no: "No"
-  required: "Campo obbligatorio"
-  at_least_one_phone: "È richiesto almeno un numero di telefono"
-  morning: "Mattina"
-  afternoon: "Pomeriggio"
-  day: "Giorno"
-
-form:
-  company:
-    name: "Nome dell'Organizzazione"
-    address: "Indirizzo"
-    address_complement: "Complemento Indirizzo"
-    postal_code: "Codice Postale"
-    city: "Città"
-    country: "Paese"
-    website: "Sito Web"
-    siret: "SIRET"
-    insurer_name: "Nome dell'Assicuratore"
-    insurer_reference: "Riferimento Contratto Assicurativo"
-
-  responsible:
-    last_name: "Cognome del Responsabile dell'Azienda"
-    first_name: "Nome del Responsabile"
-    function: "Funzione del Responsabile"
-    landline_phone: "Telefono Fisso"
-    mobile_phone: "Telefono Cellulare"
-    email: "Email (Firmatario della Convenzione)"
-
-  internship_location:
-    address: "Indirizzo"
-    postal_code: "Codice Postale"
-    city: "Città"
-    country: "Paese"
-    phone: "Telefono"
-
-  supervisor:
-    last_name: "Cognome"
-    first_name: "Nome"
-    function: "Funzione"
-    phone: "Telefono"
-    email: "Email"
-
-  travel:
-    has_travel: "Lo studente dovrà effettuare spostamenti durante l'orario di lavoro"
-
-  costs:
-    transport: "L'azienda copre le spese di trasporto"
-    transport_details: "Secondo le seguenti modalità"
-    meal: "L'azienda copre le spese di ristorazione"
-    meal_details: "Secondo le seguenti modalità"
-    accommodation: "L'azienda copre le spese di alloggio"
-    accommodation_details: "Secondo le seguenti modalità"
-    gratification: "L'azienda fornirà una gratifica"
-    gratification_details: "Secondo le seguenti modalità"
-
-  activities:
-    planned: "Attività Previste in Ambito Professionale"
-
-  choice:
-    yes: "SÌ"
-    no: "NO"
-
-validation:
-  siret_format: "Il SIRET deve contenere 14 cifre"
-  phone_format: "Formato telefono non valido"
-  hours_range: "Le ore devono essere comprese tra 0 e 23"
-  minutes_range: "I minuti devono essere compresi tra 0 e 59"
-
-email:
-  company_info_completed_subject: "Informazioni aziendali raccolte per il tirocinio"
-  company_info_completed_title: "Informazioni Aziendali Ricevute"
-  greeting: "Ciao %name%,"
-  company_info_completed_message: "L'azienda ospitante ha completato le informazioni necessarie per stabilire la convenzione di tirocinio."
-  next_steps: "Procederemo ora a stabilire la convenzione di tirocinio che ti sarà inviata a breve."
-  footer: "Cordiali saluti, Il team pedagogico"
-
-reset_password:
-  title: "Reimpostazione password"
-  forgot_password: "Password dimenticata?"
-  no_problem: "Nessun problema, ti aiuteremo a reimpostarla"
-  email_label: "Indirizzo email"
-  email_placeholder: "tua.email@esempio.com"
-  send_reset_link: "Invia link di reimpostazione"
-  back_to_login: "Torna al login"
-  need_help: "Hai bisogno di aiuto? Contatta"
-  support: "il supporto"
-  info_message: "Inserisci il tuo indirizzo email e ti invieremo un link per reimpostare la tua password."
-
-  reset_title: "Nuova password"
-  reset_subtitle: "Scegli una password forte e sicura"
-  password_requirements: "Requisiti della password:"
-  requirement_length: "Almeno 12 caratteri"
-  requirement_case: "Una lettera maiuscola e minuscola"
-  requirement_number: "Almeno una cifra"
-  requirement_special: "Almeno un carattere speciale (@$!%*?&)"
-  new_password: "Nuova password"
-  confirm_password: "Conferma password"
-  reset_button: "Reimposta password"
-  security_note: "Dopo aver reimpostato la password, sarai automaticamente connesso e potrai accedere al tuo account."
-
-  check_email_title: "Email inviata!"
-  check_email_subtitle: "Controlla la tua casella di posta"
-  success_message: "Se esiste un account corrispondente alla tua email, è stata inviata un'email contenente un link per reimpostare la tua password."
-  link_expires: "Questo link scadrà tra"
-  next_steps: "Prossimi passi:"
-  step_1: "Controlla la tua casella di posta"
-  step_2: "Clicca sul link di reimpostazione nell'email"
-  step_3: "Crea la tua nuova password"
-  spam_warning: "Non hai ricevuto l'email? Controlla la cartella spam o"
-  try_again: "riprova"
-  resend_email: "Invia di nuovo l'email"
+company_info.title: 'Modulo di Raccolta Informazioni per Convenzione di Tirocinio'
+company_info.subtitle: 'Si prega di compilare le informazioni sulla vostra azienda'
+company_info.organization_info: "Informazioni sull'Organizzazione"
+company_info.company_name: "Nome dell'Organizzazione"
+company_info.address: Indirizzo
+company_info.address_complement: 'Complemento Indirizzo'
+company_info.postal_code: 'Codice Postale'
+company_info.city: Città
+company_info.country: Paese
+company_info.responsible_lastname: "Cognome del Responsabile dell'Azienda"
+company_info.responsible_firstname: 'Nome del Responsabile'
+company_info.responsible_function: 'Funzione del Responsabile'
+company_info.landline_phone: 'Telefono Fisso'
+company_info.mobile_phone: 'Telefono Cellulare'
+company_info.email: Email
+company_info.email_note: 'Attenzione: firmatario della convenzione'
+company_info.website: 'Sito Web'
+company_info.siret: SIRET
+company_info.insurer_name: "Nome dell'Assicuratore"
+company_info.insurer_reference: 'Riferimento Contratto Assicurativo'
+company_info.internship_location: 'Luogo di Accoglienza del Tirocinante (se diverso)'
+company_info.internship_address: Indirizzo
+company_info.internship_postal_code: 'Codice Postale'
+company_info.internship_city: Città
+company_info.internship_country: Paese
+company_info.internship_phone: Telefono
+company_info.supervisor_info: 'Tutor di Tirocinio'
+company_info.supervisor_lastname: Cognome
+company_info.supervisor_firstname: Nome
+company_info.supervisor_function: Funzione
+company_info.supervisor_phone: Telefono
+company_info.supervisor_email: Email
+company_info.questionnaire: Questionario
+company_info.has_travel: "Lo studente dovrà effettuare spostamenti durante l'orario di lavoro"
+company_info.cost_coverage: 'Partecipazione alle Spese del Tirocinante e Gratifica'
+company_info.covers_transport: "L'azienda copre le spese di trasporto"
+company_info.transport_details: 'Secondo le seguenti modalità'
+company_info.covers_meals: "L'azienda copre le spese di ristorazione"
+company_info.meal_details: 'Secondo le seguenti modalità'
+company_info.covers_accommodation: "L'azienda copre le spese di alloggio"
+company_info.accommodation_details: 'Secondo le seguenti modalità'
+company_info.provides_gratification: "L'azienda fornirà eventualmente una gratifica"
+company_info.gratification_details: 'Secondo le seguenti modalità'
+company_info.work_schedule: 'Orario di Lavoro'
+company_info.monday: Lunedì
+company_info.tuesday: Martedì
+company_info.wednesday: Mercoledì
+company_info.thursday: Giovedì
+company_info.friday: Venerdì
+company_info.saturday: Sabato
+company_info.sunday: Domenica
+company_info.morning_start: 'Inizio Mattina'
+company_info.morning_end: 'Fine Mattina'
+company_info.afternoon_start: 'Inizio Pomeriggio'
+company_info.afternoon_end: 'Fine Pomeriggio'
+company_info.weekly_total: 'Totale Settimanale'
+company_info.hours: ore
+company_info.planned_activities: 'Attività Previste in Ambito Professionale'
+company_info.activities_description: 'Descrizione delle attività previste in ambito professionale'
+company_info.submit: Invia
+company_info.modify: Modifica
+company_info.confirm_submit: 'Conferma Invio per Stabilimento della Convenzione'
+company_info.confirmation_title: 'Riepilogo Informazioni'
+company_info.confirmation_message: 'Si prega di verificare le informazioni inserite prima della convalida definitiva.'
+company_info.success_title: 'Raccolta Informazioni Completata con Successo'
+company_info.success_message: 'Grazie per aver dedicato del tempo a compilare questo modulo. Tutte le informazioni sono state registrate con successo e trasmesse allo studente.'
+company_info.success_thanks: "Grazie ancora per l'accoglienza di un tirocinante della nostra scuola."
+company_info.next_steps: 'Prossimi Passi'
+company_info.convention_info: 'Le informazioni fornite saranno verificate da un professore supervisore. Una volta validate, lo studente preparerà la convenzione di tirocinio e ve la invierà per la firma elettronica.'
+company_info.step_1: 'Verifica delle Informazioni'
+company_info.step_1_desc: 'Un professore supervisore verificherà le informazioni fornite'
+company_info.step_2: 'Preparazione della Convenzione'
+company_info.step_2_desc: 'Lo studente preparerà la convenzione di tirocinio con le vostre informazioni'
+company_info.step_3: 'Firma Elettronica'
+company_info.step_3_desc: 'Riceverete la convenzione da firmare elettronicamente'
+company_info.error_expired: 'Questo link è scaduto.'
+company_info.error_completed: 'Questo modulo è già stato completato.'
+company_info.error_invalid: 'Link non valido.'
+company_info.yes: Sì
+company_info.no: 'No'
+company_info.required: 'Campo obbligatorio'
+company_info.at_least_one_phone: 'È richiesto almeno un numero di telefono'
+company_info.morning: Mattina
+company_info.afternoon: Pomeriggio
+company_info.day: Giorno
+form.company.name: "Nome dell'Organizzazione"
+form.company.address: Indirizzo
+form.company.address_complement: 'Complemento Indirizzo'
+form.company.postal_code: 'Codice Postale'
+form.company.city: Città
+form.company.country: Paese
+form.company.website: 'Sito Web'
+form.company.siret: SIRET
+form.company.insurer_name: "Nome dell'Assicuratore"
+form.company.insurer_reference: 'Riferimento Contratto Assicurativo'
+form.responsible.last_name: "Cognome del Responsabile dell'Azienda"
+form.responsible.first_name: 'Nome del Responsabile'
+form.responsible.function: 'Funzione del Responsabile'
+form.responsible.landline_phone: 'Telefono Fisso'
+form.responsible.mobile_phone: 'Telefono Cellulare'
+form.responsible.email: 'Email (Firmatario della Convenzione)'
+form.internship_location.address: Indirizzo
+form.internship_location.postal_code: 'Codice Postale'
+form.internship_location.city: Città
+form.internship_location.country: Paese
+form.internship_location.phone: Telefono
+form.supervisor.last_name: Cognome
+form.supervisor.first_name: Nome
+form.supervisor.function: Funzione
+form.supervisor.phone: Telefono
+form.supervisor.email: Email
+form.travel.has_travel: "Lo studente dovrà effettuare spostamenti durante l'orario di lavoro"
+form.costs.transport: "L'azienda copre le spese di trasporto"
+form.costs.transport_details: 'Secondo le seguenti modalità'
+form.costs.meal: "L'azienda copre le spese di ristorazione"
+form.costs.meal_details: 'Secondo le seguenti modalità'
+form.costs.accommodation: "L'azienda copre le spese di alloggio"
+form.costs.accommodation_details: 'Secondo le seguenti modalità'
+form.costs.gratification: "L'azienda fornirà una gratifica"
+form.costs.gratification_details: 'Secondo le seguenti modalità'
+form.activities.planned: 'Attività Previste in Ambito Professionale'
+form.choice.yes: SÌ
+form.choice.no: 'NO'
+validation.siret_format: 'Il SIRET deve contenere 14 cifre'
+validation.phone_format: 'Formato telefono non valido'
+validation.email_format: "Si prega di inserire un indirizzo email valido"
+validation.hours_range: 'Le ore devono essere comprese tra 0 e 23'
+validation.minutes_range: 'I minuti devono essere compresi tra 0 e 59'
+email.company_info_completed_subject: 'Informazioni aziendali raccolte per il tirocinio'
+email.company_info_completed_title: 'Informazioni Aziendali Ricevute'
+email.greeting: 'Ciao %name%,'
+email.company_info_completed_message: "L'azienda ospitante ha completato le informazioni necessarie per stabilire la convenzione di tirocinio."
+email.next_steps: 'Procederemo ora a stabilire la convenzione di tirocinio che ti sarà inviata a breve.'
+email.footer: 'Cordiali saluti, Il team pedagogico'
+reset_password.title: 'Reimpostazione password'
+reset_password.forgot_password: 'Password dimenticata?'
+reset_password.no_problem: 'Nessun problema, ti aiuteremo a reimpostarla'
+reset_password.email_label: 'Indirizzo email'
+reset_password.email_placeholder: tua.email@esempio.com
+reset_password.send_reset_link: 'Invia link di reimpostazione'
+reset_password.back_to_login: 'Torna al login'
+reset_password.need_help: 'Hai bisogno di aiuto? Contatta'
+reset_password.support: 'il supporto'
+reset_password.info_message: 'Inserisci il tuo indirizzo email e ti invieremo un link per reimpostare la tua password.'
+reset_password.reset_title: 'Nuova password'
+reset_password.reset_subtitle: 'Scegli una password forte e sicura'
+reset_password.password_requirements: 'Requisiti della password:'
+reset_password.requirement_length: 'Almeno 12 caratteri'
+reset_password.requirement_case: 'Una lettera maiuscola e minuscola'
+reset_password.requirement_number: 'Almeno una cifra'
+reset_password.requirement_special: 'Almeno un carattere speciale (@$!%*?&)'
+reset_password.new_password: 'Nuova password'
+reset_password.confirm_password: 'Conferma password'
+reset_password.reset_button: 'Reimposta password'
+reset_password.security_note: 'Dopo aver reimpostato la password, sarai automaticamente connesso e potrai accedere al tuo account.'
+reset_password.check_email_title: 'Email inviata!'
+reset_password.check_email_subtitle: 'Controlla la tua casella di posta'
+reset_password.success_message: "Se esiste un account corrispondente alla tua email, è stata inviata un'email contenente un link per reimpostare la tua password."
+reset_password.link_expires: 'Questo link scadrà tra'
+reset_password.next_steps: 'Prossimi passi:'
+reset_password.step_1: 'Controlla la tua casella di posta'
+reset_password.step_2: "Clicca sul link di reimpostazione nell'email"
+reset_password.step_3: 'Crea la tua nuova password'
+reset_password.spam_warning: "Non hai ricevuto l'email? Controlla la cartella spam o"
+reset_password.try_again: riprova
+reset_password.resend_email: "Invia di nuovo l'email"
+email.collection_request_subject: __email.collection_request_subject
+email.collection_request_title: __email.collection_request_title
+email.collection_greeting: __email.collection_greeting
+email.collection_message: __email.collection_message
+email.collection_button: __email.collection_button
+email.important: __email.important
+email.collection_expiration: __email.collection_expiration
+email.collection_help: __email.collection_help
