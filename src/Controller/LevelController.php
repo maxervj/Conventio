@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Level;
+use App\Form\LevelType;
 use App\Form\SelectionClasseType;
 use App\Repository\LevelRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,7 +27,7 @@ final class LevelController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $level = new Level();
-        $form = $this->createForm(SelectionClasseType::class, $level);
+        $form = $this->createForm(LevelType::class, $level);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -53,7 +54,7 @@ final class LevelController extends AbstractController
     #[Route('/{id}/edit', name: 'app_level_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Level $level, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(SelectionClasseType::class, $level);
+        $form = $this->createForm(LevelType::class, $level);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

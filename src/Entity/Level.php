@@ -18,8 +18,8 @@ class Level
     #[ORM\Column]
     private ?int $id_level = null;
 
-    #[ORM\Column]
-    private ?int $levelCode = null;
+    #[ORM\Column(length: 255)]
+    private ?string $levelCode = null;
 
     #[ORM\Column(length: 255)]
     private ?string $levelName = null;
@@ -52,12 +52,12 @@ class Level
         return $this;
     }
 
-    public function getLevelCode(): ?int
+    public function getLevelCode(): ?string
     {
         return $this->levelCode;
     }
 
-    public function setLevelCode(int $levelCode): static
+    public function setLevelCode(string $levelCode): static
     {
         $this->levelCode = $levelCode;
 
