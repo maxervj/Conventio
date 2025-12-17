@@ -11,12 +11,26 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
 use Symfony\Component\Validator\Constraints\PasswordStrength;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class ChangePasswordFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('currentPassword', PasswordType::class, [
+                'label' => 'Mot de passe actuel *',
+                'mapped' => false,
+                'attr' => [
+                    'autocomplete' => 'current-password',
+                    'placeholder' => 'Votre mot de passe actuel',
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez saisir votre mot de passe actuel',
+                    ]),
+                ],
+            ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'options' => [
@@ -36,9 +50,16 @@ class ChangePasswordFormType extends AbstractType
                             'max' => 4096,
                         ]),
                         new PasswordStrength([
-                            'minScore' => PasswordStrength::STRENGTH_WEAK,
+                            'minScore' => PasswordStrength::STRENGTH_MEDIUM,
+                            'message' => 'Le mot de passe est trop faible. Veuillez utiliser un mot de passe plus robuste avec des lettres majuscules, minuscules, chiffres et caractères spéciaux.',
                         ]),
-                        new NotCompromisedPassword(),
+                        new NotCompromisedPassword([
+                            'message' => 'Ce mot de passe a été compromis dans une fuite de données. Veuillez en choisir un autre.',
+                        ]),
+                        new Regex([
+                            'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/',
+                            'message' => 'Le mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial (@$!%*?&)',
+                        ]),
                     ],
                     'label' => 'Nouveau mot de passe',
                 ],
