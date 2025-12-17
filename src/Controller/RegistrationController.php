@@ -69,7 +69,7 @@ class RegistrationController extends AbstractController
                 ->htmlTemplate('registration/confirmation_email.html.twig')
                 ->context([
                     'verificationUrl' => $verificationUrl,
-                    'student' => $student,
+                    'user' => $student,
                 ]);
 
             $mailer->send($email);
@@ -117,7 +117,7 @@ class RegistrationController extends AbstractController
                 ->subject('Bienvenue sur Conventio')
                 ->htmlTemplate('registration/professor_confirmation_email.html.twig')
                 ->context([
-                    'professor' => $professor,
+                    'user' => $professor,
                 ]);
 
             $mailer->send($email);

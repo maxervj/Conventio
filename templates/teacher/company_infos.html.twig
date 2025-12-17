@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Collectes d'entreprise à valider{% endblock %}
+
+{% block body %}
+    <h1>Collectes d'entreprise à valider</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Entreprise</th>
+            <th>Étudiant</th>
+            <th>Date de création</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for info in companyInfos %}
+            <tr>
+                <td>{{ info.id }}</td>
+                <td>{{ info.companyName }}</td>
+                <td>{{ info.student.lastName }}</td>
+                <td>{{ info.createdAt|date('d/m/Y H:i') }}</td>
+                <td>
+                    <form method="post" action="{{ path('teacher_company_info_validate', {id: info.id}) }}">
+                        <button class="btn btn-success" type="submit">Valider</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">Aucune collecte à valider.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

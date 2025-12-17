@@ -1,41 +1,241 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conventio</title>
+    <title>{% block title %}Conventio{% endblock %}</title>
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+
+    {% block stylesheets %}{% endblock %}
 </head>
-<body>
-<nav class="sticky top-0 z-50 w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-indigo-50/60 border-b border-gray-200">
-    <div class="container mx-auto px-4 h-16 flex items-center justify-between">
-        <!-- Logo -->
-        <a href="{{ path('app_home') }}" class="flex items-center gap-2 font-bold text-xl text-blue-600">
-            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
-                C
+<body class="bg-gray-50">
+{# Navigation principale #}
+{% if app.user %}
+    <nav class="sticky top-0 z-50 w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90 border-b border-gray-200 shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                {# Logo #}
+                <a href="{{ path('app_home') }}" class="flex items-center gap-2 font-bold text-xl text-blue-600 hover:text-blue-700 transition">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-md">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <span class="hidden sm:inline">Conventio</span>
+                </a>
+
+                {# Menu principal selon type d'utilisateur #}
+                <div class="flex items-center gap-4">
+                    {# Menu pour ÉTUDIANTS #}
+                    {% if app.user is instanceof('App\\Entity\\Student') %}
+                        <div class="hidden md:flex items-center gap-2">
+                            <a href="{{ path('app_home') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                </svg>
+                                <span>Accueil</span>
+                            </a>
+                            <a href="{{ path('student_my_requests') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                </svg>
+                                <span>Mes demandes</span>
+                            </a>
+                            <a href="{{ path('student_request_company_info') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                                <span>Nouvelle demande</span>
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    {# Menu pour PROFESSEURS #}
+                    {% if app.user is instanceof('App\\Entity\\Professor') %}
+                        <div class="hidden md:flex items-center gap-2">
+                            <a href="{{ path('app_home') }}" class="px-4 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                </svg>
+                                <span>Accueil</span>
+                            </a>
+                            <a href="#" class="px-4 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                </svg>
+                                <span>Mes étudiants</span>
+                            </a>
+                            <a href="#" class="px-4 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                </svg>
+                                <span>Conventions</span>
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    {# Menu pour TUTEURS #}
+                    {% if app.user is instanceof('App\\Entity\\Tutor') %}
+                        <div class="hidden md:flex items-center gap-2">
+                            <a href="{{ path('app_home') }}" class="px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                </svg>
+                                <span>Accueil</span>
+                            </a>
+                            <a href="#" class="px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                </svg>
+                                <span>Mes stagiaires</span>
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    {# Menu Burger Mobile #}
+                    <div class="md:hidden">
+                        <button id="mobile-menu-button" class="p-2 text-gray-700 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    {# User Info et Déconnexion #}
+                    <div class="flex items-center gap-3 border-l border-gray-200 pl-4">
+                        <div class="hidden sm:flex items-center gap-2">
+                            <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                                {{ app.user.firstName|first|upper }}{{ app.user.lastName|first|upper }}
+                            </div>
+                            <div class="text-left">
+                                <p class="text-sm font-semibold text-gray-900">{{ app.user.firstName }} {{ app.user.lastName }}</p>
+                                <p class="text-xs text-gray-500">
+                                    {% if app.user is instanceof('App\\Entity\\Student') %}
+                                        Étudiant
+                                    {% elseif app.user is instanceof('App\\Entity\\Professor') %}
+                                        Professeur
+                                    {% elseif app.user is instanceof('App\\Entity\\Tutor') %}
+                                        Tuteur
+                                    {% else %}
+                                        Utilisateur
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        <form action="{{ path('app_logout') }}" method="post" class="inline">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+                            <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200 flex items-center gap-2 shadow-sm">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                </svg>
+                                <span class="hidden sm:inline">Déconnexion</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <span>Conventio</span>
-        </a>
-        <!-- Navigation -->
-        <nav class="flex items-center gap-3">
-            <a href="{{ path('app_login') }}">
-                <button class="px-4 py-2 text-gray-700 hover:text-blue-600 bg-transparent border-none">Se connecter</button>
+        </div>
+
+        {# Mobile Menu #}
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 bg-white">
+            <div class="px-4 py-3 space-y-1">
+                {% if app.user is instanceof('App\\Entity\\Student') %}
+                    <a href="{{ path('app_home') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">
+                        <svg class="inline h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                        Accueil
+                    </a>
+                    <a href="{{ path('student_my_requests') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">
+                        <svg class="inline h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                        Mes demandes
+                    </a>
+                    <a href="{{ path('student_request_company_info') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">
+                        <svg class="inline h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Nouvelle demande
+                    </a>
+                {% elseif app.user is instanceof('App\\Entity\\Professor') %}
+                    <a href="{{ path('app_home') }}" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition">Accueil</a>
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition">Mes étudiants</a>
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition">Conventions</a>
+                {% elseif app.user is instanceof('App\\Entity\\Tutor') %}
+                    <a href="{{ path('app_home') }}" class="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition">Accueil</a>
+                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition">Mes stagiaires</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+{% else %}
+    {# Navigation pour utilisateurs non connectés #}
+    <nav class="sticky top-0 z-50 w-full bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-indigo-50/60 border-b border-gray-200">
+        <div class="container mx-auto px-4 h-16 flex items-center justify-between">
+            <a href="{{ path('app_home') }}" class="flex items-center gap-2 font-bold text-xl text-blue-600">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                    C
+                </div>
+                <span>Conventio</span>
             </a>
-            <a href="{{ path('app_register_student') }}">
-                <button class="px-4 py-2 border border-blue-600 text-blue-600 bg-transparent rounded hidden sm:flex">S'enregistrer (Étudiant)</button>
-            </a>
-            <a href="{{ path('app_register_teacher') }}">
-                <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">S'enregistrer (Professeur)</button>
-            </a>
-        </nav>
+            <nav class="flex items-center gap-3">
+                <a href="{{ path('app_login') }}">
+                    <button class="px-4 py-2 text-gray-700 hover:text-blue-600 bg-transparent border-none">Se connecter</button>
+                </a>
+                <a href="{{ path('app_register_student') }}">
+                    <button class="px-4 py-2 border border-blue-600 text-blue-600 bg-transparent rounded hover:bg-blue-50 hidden sm:flex">S'enregistrer (Étudiant)</button>
+                </a>
+                <a href="{{ path('app_register_professor') }}">
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">S'enregistrer (Professeur)</button>
+                </a>
+            </nav>
+        </div>
+    </nav>
+{% endif %}
+
+{# Contenu principal #}
+<main>
+    {% block body %}
+        <div class="container mx-auto px-4 py-8"></div>
+    {% endblock %}
+</main>
+
+{# Footer #}
+<footer class="bg-gray-800 text-white mt-auto">
+    <div class="container mx-auto px-4 py-6">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+            <p class="text-sm text-gray-400">© {{ "now"|date("Y") }} Conventio - Lycée Gabriel Fauré</p>
+            <div class="flex gap-4 mt-4 md:mt-0">
+                <a href="#" class="text-sm text-gray-400 hover:text-white transition">Mentions légales</a>
+                <a href="#" class="text-sm text-gray-400 hover:text-white transition">CGU</a>
+                <a href="#" class="text-sm text-gray-400 hover:text-white transition">Contact</a>
+            </div>
+        </div>
     </div>
-</nav>
+</footer>
 
+{# Scripts #}
+{% block javascripts %}
+    <script>
+        // Toggle mobile menu
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
 
-{% block body %}
-    <div class="container mt-5"></div>
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        });
+    </script>
 {% endblock %}
-
 </body>
 </html>

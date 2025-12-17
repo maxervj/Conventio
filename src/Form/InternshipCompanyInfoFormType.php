@@ -135,7 +135,7 @@ class InternshipCompanyInfoFormType extends AbstractType
                 'attr' => ['class' => 'form-control', 'placeholder' => '123 456 789 01234'],
                 'constraints' => [
                     new Assert\NotBlank(['message' => 'This field is required']),
-                    new Siret(),
+
                 ],
             ])
             ->add('insurerName', TextType::class, [

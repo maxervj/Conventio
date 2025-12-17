@@ -269,6 +269,36 @@ class CompanyInfoCollectionController extends AbstractController
             'locale' => $locale
         ]);
     }
+
+    /*#[Route('/teacher/company-infos', name: 'teacher_company_infos', methods: ['GET'])]
+    #[IsGranted('ROLE_PROFESSOR')]
+    public function listForProfessor(): Response
+    {
+        $companyInfos = $this->companyInfoRepository->findBy(
+            ['isCompleted' => true], // On affiche les collectes complétées
+            ['createdAt' => 'DESC']
+        );
+
+        return $this->render('teacher/company_infos.html.twig', [
+            'companyInfos' => $companyInfos,
+        ]);
+    }
+
+    #[Route('/teacher/company-info/{id}/validate', name: 'teacher_company_info_validate', methods: ['POST'])]
+    #[IsGranted('ROLE_PROFESSOR')]
+    public function validate(int $id): Response
+    {
+        $companyInfo = $this->companyInfoRepository->find($id);
+        if (!$companyInfo) {
+            throw $this->createNotFoundException('Collecte non trouvée.');
+        }
+
+        // Ici, tu pourras plus tard ajouter la logique de validation (ex : setIsValidatedByTeacher(true))
+
+        $this->addFlash('success', 'Validation enregistrée (simulation).');
+        return $this->redirectToRoute('teacher_company_infos');
+    }*/
+
     // Envoie une notification par email à l'étudiant une fois les informations soumises
     private function sendNotificationToStudent(InternshipCompanyInfo $companyInfo): void
     {

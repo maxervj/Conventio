@@ -1,0 +1,51 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DoctrineMigrations;
+
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
+
+/**
+ * Auto-generated Migration: Please modify to your needs!
+ */
+final class Version20251216102151 extends AbstractMigration
+{
+    public function getDescription(): string
+    {
+        return '';
+    }
+
+    public function up(Schema $schema): void
+    {
+        // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql('CREATE TABLE company_info_collection (id INT AUTO_INCREMENT NOT NULL, student_id INT NOT NULL, token VARCHAR(255) NOT NULL, is_completed TINYINT(1) DEFAULT 0 NOT NULL, completed_at DATETIME DEFAULT NULL, created_at DATETIME NOT NULL, expires_at DATETIME DEFAULT NULL, contact_name VARCHAR(255) DEFAULT NULL, contact_email VARCHAR(255) DEFAULT NULL, internship_start_date DATE DEFAULT NULL, internship_end_date DATE DEFAULT NULL, company_name VARCHAR(255) NOT NULL, address LONGTEXT DEFAULT NULL, address_complement LONGTEXT DEFAULT NULL, postal_code VARCHAR(10) DEFAULT NULL, city VARCHAR(255) DEFAULT NULL, country VARCHAR(255) DEFAULT NULL, responsible_last_name VARCHAR(255) DEFAULT NULL, responsible_first_name VARCHAR(255) DEFAULT NULL, responsible_function VARCHAR(255) DEFAULT NULL, landline_phone VARCHAR(20) DEFAULT NULL, mobile_phone VARCHAR(20) DEFAULT NULL, email VARCHAR(255) DEFAULT NULL, website VARCHAR(255) DEFAULT NULL, siret VARCHAR(14) DEFAULT NULL, insurer_name VARCHAR(255) DEFAULT NULL, insurer_reference VARCHAR(255) DEFAULT NULL, internship_address LONGTEXT DEFAULT NULL, internship_postal_code VARCHAR(10) DEFAULT NULL, internship_city VARCHAR(255) DEFAULT NULL, internship_country VARCHAR(255) DEFAULT NULL, internship_phone VARCHAR(20) DEFAULT NULL, supervisor_last_name VARCHAR(255) DEFAULT NULL, supervisor_first_name VARCHAR(255) DEFAULT NULL, supervisor_function VARCHAR(255) DEFAULT NULL, supervisor_phone VARCHAR(20) DEFAULT NULL, supervisor_email VARCHAR(255) DEFAULT NULL, has_travel TINYINT(1) DEFAULT 0 NOT NULL, covers_transport_costs TINYINT(1) DEFAULT 0 NOT NULL, transport_costs_details LONGTEXT DEFAULT NULL, covers_meal_costs TINYINT(1) DEFAULT 0 NOT NULL, meal_costs_details LONGTEXT DEFAULT NULL, covers_accommodation_costs TINYINT(1) DEFAULT 0 NOT NULL, accommodation_costs_details LONGTEXT DEFAULT NULL, provides_gratification TINYINT(1) DEFAULT 0 NOT NULL, gratification_details LONGTEXT DEFAULT NULL, work_schedule JSON NOT NULL, planned_activities LONGTEXT DEFAULT NULL, UNIQUE INDEX UNIQ_EB7963E35F37A13B (token), INDEX IDX_EB7963E3CB944F1A (student_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE convention (id INT AUTO_INCREMENT NOT NULL, student_id INT NOT NULL, referent_professor_id INT DEFAULT NULL, company_info_id INT DEFAULT NULL, status VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL, validated_at DATETIME DEFAULT NULL, signed_at DATETIME DEFAULT NULL, completed_at DATETIME DEFAULT NULL, document_path VARCHAR(255) DEFAULT NULL, document_hash VARCHAR(255) DEFAULT NULL, student_signature_token VARCHAR(255) DEFAULT NULL, student_signed_at DATETIME DEFAULT NULL, company_signature_token VARCHAR(255) DEFAULT NULL, company_signed_at DATETIME DEFAULT NULL, school_signature_token VARCHAR(255) DEFAULT NULL, school_signed_at DATETIME DEFAULT NULL, validation_notes LONGTEXT DEFAULT NULL, rejection_reason LONGTEXT DEFAULT NULL, INDEX IDX_8556657ECB944F1A (student_id), INDEX IDX_8556657EFBFE69BA (referent_professor_id), UNIQUE INDEX UNIQ_8556657E7DD9DB2F (company_info_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE login_attempts (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(180) NOT NULL, ip_address VARCHAR(45) NOT NULL, attempted_at DATETIME NOT NULL, successful TINYINT(1) NOT NULL, INDEX idx_email_attempted_at (email, attempted_at), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE signature (id INT AUTO_INCREMENT NOT NULL, created_by_id INT NOT NULL, civilite_proviseur VARCHAR(500) NOT NULL, nom_proviseur VARCHAR(255) NOT NULL, prenom_proviseur VARCHAR(255) NOT NULL, email_proviseur VARCHAR(255) NOT NULL, civilite_ddf VARCHAR(500) NOT NULL, nom_ddf VARCHAR(255) NOT NULL, prenom_ddf VARCHAR(255) NOT NULL, email_ddf VARCHAR(255) NOT NULL, tel_ddf VARCHAR(500) NOT NULL, created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', updated_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime_immutable)\', INDEX IDX_AE880141B03A8386 (created_by_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE company_info_collection ADD CONSTRAINT FK_EB7963E3CB944F1A FOREIGN KEY (student_id) REFERENCES `user` (id)');
+        $this->addSql('ALTER TABLE convention ADD CONSTRAINT FK_8556657ECB944F1A FOREIGN KEY (student_id) REFERENCES `user` (id)');
+        $this->addSql('ALTER TABLE convention ADD CONSTRAINT FK_8556657EFBFE69BA FOREIGN KEY (referent_professor_id) REFERENCES `user` (id)');
+        $this->addSql('ALTER TABLE convention ADD CONSTRAINT FK_8556657E7DD9DB2F FOREIGN KEY (company_info_id) REFERENCES company_info_collection (id)');
+        $this->addSql('ALTER TABLE signature ADD CONSTRAINT FK_AE880141B03A8386 FOREIGN KEY (created_by_id) REFERENCES `user` (id)');
+        $this->addSql('ALTER TABLE internship_company_info DROP FOREIGN KEY FK_D5941F9CCB944F1A');
+        $this->addSql('DROP TABLE internship_company_info');
+    }
+
+    public function down(Schema $schema): void
+    {
+        // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql('CREATE TABLE internship_company_info (id INT AUTO_INCREMENT NOT NULL, student_id INT NOT NULL, token VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, is_completed TINYINT(1) DEFAULT 0 NOT NULL, completed_at DATETIME DEFAULT NULL, created_at DATETIME NOT NULL, expires_at DATETIME DEFAULT NULL, company_name VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, address LONGTEXT CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, address_complement LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`, postal_code VARCHAR(10) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, city VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, country VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, responsible_last_name VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, responsible_first_name VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, responsible_function VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, landline_phone VARCHAR(20) CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`, mobile_phone VARCHAR(20) CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`, email VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, website VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`, siret VARCHAR(14) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, insurer_name VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, insurer_reference VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, internship_address LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`, internship_postal_code VARCHAR(10) CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`, internship_city VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`, internship_country VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`, internship_phone VARCHAR(20) CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`, supervisor_last_name VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, supervisor_first_name VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, supervisor_function VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, supervisor_phone VARCHAR(20) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, supervisor_email VARCHAR(255) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, has_travel TINYINT(1) DEFAULT 0 NOT NULL, covers_transport_costs TINYINT(1) DEFAULT 0 NOT NULL, transport_costs_details LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`, covers_meal_costs TINYINT(1) DEFAULT 0 NOT NULL, meal_costs_details LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`, covers_accommodation_costs TINYINT(1) DEFAULT 0 NOT NULL, accommodation_costs_details LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`, provides_gratification TINYINT(1) DEFAULT 0 NOT NULL, gratification_details LONGTEXT CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`, work_schedule JSON NOT NULL, planned_activities LONGTEXT CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, INDEX IDX_D5941F9CCB944F1A (student_id), UNIQUE INDEX UNIQ_D5941F9C5F37A13B (token), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB COMMENT = \'\' ');
+        $this->addSql('ALTER TABLE internship_company_info ADD CONSTRAINT FK_D5941F9CCB944F1A FOREIGN KEY (student_id) REFERENCES user (id) ON UPDATE NO ACTION ON DELETE NO ACTION');
+        $this->addSql('ALTER TABLE company_info_collection DROP FOREIGN KEY FK_EB7963E3CB944F1A');
+        $this->addSql('ALTER TABLE convention DROP FOREIGN KEY FK_8556657ECB944F1A');
+        $this->addSql('ALTER TABLE convention DROP FOREIGN KEY FK_8556657EFBFE69BA');
+        $this->addSql('ALTER TABLE convention DROP FOREIGN KEY FK_8556657E7DD9DB2F');
+        $this->addSql('ALTER TABLE signature DROP FOREIGN KEY FK_AE880141B03A8386');
+        $this->addSql('DROP TABLE company_info_collection');
+        $this->addSql('DROP TABLE convention');
+        $this->addSql('DROP TABLE login_attempts');
+        $this->addSql('DROP TABLE signature');
+    }
+}
