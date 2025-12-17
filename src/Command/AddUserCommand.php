@@ -143,7 +143,7 @@ HELP
 
             $io->note('Student accounts are not verified by default. Use the verification system to verify the account.');
         }
-        dd($user);
+
         // Persist user
         $this->entityManager->persist($user);
         $this->entityManager->flush();
