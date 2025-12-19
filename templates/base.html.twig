@@ -52,7 +52,7 @@
                     {# Menu principal selon type d'utilisateur #}
                     <div class="flex items-center gap-4">
                         {# Menu pour ÉTUDIANTS #}
-                        {% if app.user is instanceof('App\\Entity\\Student') %}
+                        {% if app.user and is_granted('ROLE_STUDENT') %}
                             <div class="hidden md:flex items-center gap-2">
                                 <a href="{{ path('app_home') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 flex items-center gap-2">
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -76,7 +76,7 @@
                         {% endif %}
 
                         {# Menu pour PROFESSEURS #}
-                        {% if app.user is instanceof('App\\Entity\\Professor') %}
+                        {% if app.user and is_granted('ROLE_PROFESSOR') %}
                             <div class="hidden md:flex items-center gap-2">
                                 <a href="{{ path('app_home') }}" class="px-4 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition duration-200 flex items-center gap-2">
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,6 +117,30 @@
                             </div>
                         {% endif %}
 
+                        {# Menu pour Admin #}
+                        {% if app.user and is_granted('ROLE_ADMIN') %}
+                            <div class="hidden md:flex items-center gap-2">
+                                <a href="{{ path('app_home') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                    </svg>
+                                    <span>Accueil</span>
+                                </a>
+                                <a href="{{ path('app_signature_index') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                    </svg>
+                                    <span>Information de signature</span>
+                                </a>
+                                <a href="{{ path('app_formation_index') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                    </svg>
+                                    <span>Formation</span>
+                                </a>
+                            </div>
+                        {% endif %}
+
                         {# Menu Burger Mobile #}
                         <div class="md:hidden">
                             <button id="mobile-menu-button" class="p-2 text-gray-700 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition">
@@ -135,12 +159,14 @@
                                 <div class="text-left">
                                     <p class="text-sm font-semibold text-gray-900">{{ app.user.firstName }} {{ app.user.lastName }}</p>
                                     <p class="text-xs text-gray-500">
-                                        {% if app.user is instanceof('App\\Entity\\Student') %}
+                                        {% if app.user and is_granted('ROLE_STUDENT') %}
                                             Étudiant
-                                        {% elseif app.user is instanceof('App\\Entity\\Professor') %}
+                                        {% elseif app.user and is_granted('ROLE_PROFESSOR') %}
                                             Professeur
                                         {% elseif app.user is instanceof('App\\Entity\\Tutor') %}
                                             Tuteur
+                                        {% elseif is_granted('ROLE_ADMIN') %}
+                                            Administrateur
                                         {% else %}
                                             Utilisateur
                                         {% endif %}
@@ -164,7 +190,7 @@
             {# Mobile Menu #}
             <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 bg-white">
                 <div class="px-4 py-3 space-y-1">
-                    {% if app.user is instanceof('App\\Entity\\Student') %}
+                    {% if app.user and is_granted('ROLE_STUDENT') %}
                         <a href="{{ path('app_home') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">
                             <svg class="inline h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
