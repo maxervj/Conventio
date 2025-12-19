@@ -1,11 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Formation{% endblock %}
+{% block title %}Nouvelle Formation{% endblock %}
 
 {% block body %}
-    <h1>Create new Formation</h1>
+
 
     {{ include('formation/_form.html.twig') }}
 
-    <a href="{{ path('app_formation_index') }}">back to list</a>
+    <div class="mt-6 text-center">
+        <a href="{{ path('app_formation_index') }}" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition duration-200">
+            <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Retour à la liste
+        </a>
+    </div>
 {% endblock %}
