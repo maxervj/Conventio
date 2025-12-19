@@ -53,10 +53,13 @@ body {
 
 /* ===== FORMULAIRES - Company Info ===== */
 
+/* Étoiles désactivées pour les champs requis */
+/*
 .required:after {
     content: " *";
     color: #ef4444;
 }
+*/
 
 .conditional-field {
     display: none;
