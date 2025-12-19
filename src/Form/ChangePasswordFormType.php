@@ -36,7 +36,7 @@ class ChangePasswordFormType extends AbstractType
                             'max' => 4096,
                         ]),
                         new PasswordStrength([
-                            'minscore' => PasswordStrength::STRENGTH_WEAK,
+                            'minScore' => PasswordStrength::STRENGTH_WEAK,
                         ]),
                         new NotCompromisedPassword(),
                     ],
