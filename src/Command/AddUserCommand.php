@@ -42,7 +42,7 @@ class AddUserCommand extends Command
             ->addArgument('password', InputArgument::REQUIRED, 'Password (minimum 6 characters)')
             ->addArgument('firstName', InputArgument::REQUIRED, 'First name')
             ->addArgument('lastName', InputArgument::REQUIRED, 'Last name')
-            ->addOption('type', 't', InputOption::VALUE_REQUIRED, 'User type: student, professor, or tutor', 'student')
+            ->addArgument('type', InputArgument::REQUIRED, 'User type: student, professor, or tutor')
             ->addOption('role', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'Additional roles (e.g., ROLE_ADMIN)', [])
             ->addOption('personal-email', null, InputOption::VALUE_OPTIONAL, 'Personal email (for students only)')
             ->setHelp(<<<'HELP'
@@ -73,7 +73,7 @@ HELP
         $password = $input->getArgument('password');
         $firstName = $input->getArgument('firstName');
         $lastName = $input->getArgument('lastName');
-        $userType = strtolower($input->getOption('type'));
+        $userType = strtolower($input->getArgument('type'));
         $personalEmail = $input->getOption('personal-email');
 
         // Validate email

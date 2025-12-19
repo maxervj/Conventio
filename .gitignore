@@ -17,8 +17,11 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
-###> claude ###
-/.claude/
-###< nul ###
-/.nul/
-###> null ###
+
+###> IDE ###
+/.idea/
+###< IDE ###
+
+###> fichiers temporaires ###
+nul
+###< fichiers temporaires ###
