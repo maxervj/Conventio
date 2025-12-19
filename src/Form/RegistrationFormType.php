@@ -2,8 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Level;
 use App\Entity\Student;
 use App\Validator\AllowedEmailDomain;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -115,6 +117,19 @@ class RegistrationFormType extends AbstractType
                     ],
                 ],
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
+            ])
+            ->add('levels', EntityType::class, [
+                'class' => Level::class,
+                'choice_label' => 'LevelName',
+                'label' => 'Classe BTS *',
+                'multiple' => true,
+                'expanded' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez sélectionner au moins une classe',
+                    ]),
+                ],
+                'help' => 'Sélectionnez votre/vos classe(s) de BTS',
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'label' => 'Accepter les CGU',

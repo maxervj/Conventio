@@ -30,9 +30,23 @@ class Level
     #[ORM\ManyToMany(targetEntity: Student::class, mappedBy: 'levels')]
     private Collection $students;
 
+    /**
+     * @var Collection<int, Professor>
+     */
+    #[ORM\ManyToMany(targetEntity: Professor::class, mappedBy: 'taughtLevels')]
+    private Collection $teachers;
+
+    /**
+     * @var Collection<int, Professor>
+     */
+    #[ORM\OneToMany(targetEntity: Professor::class, mappedBy: 'referentLevel')]
+    private Collection $referentProfessors;
+
     public function __construct()
     {
         $this->students = new ArrayCollection();
+        $this->teachers = new ArrayCollection();
+        $this->referentProfessors = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -101,5 +115,66 @@ class Level
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Professor>
+     */
+    public function getTeachers(): Collection
+    {
+        return $this->teachers;
+    }
+
+    public function addTeacher(Professor $professor): static
+    {
+        if (!$this->teachers->contains($professor)) {
+            $this->teachers->add($professor);
+            $professor->addTaughtLevel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeacher(Professor $professor): static
+    {
+        if ($this->teachers->removeElement($professor)) {
+            $professor->removeTaughtLevel($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Professor>
+     */
+    public function getReferentProfessors(): Collection
+    {
+        return $this->referentProfessors;
+    }
+
+    public function addReferentProfessor(Professor $professor): static
+    {
+        if (!$this->referentProfessors->contains($professor)) {
+            $this->referentProfessors->add($professor);
+            $professor->setReferentLevel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReferentProfessor(Professor $professor): static
+    {
+        if ($this->referentProfessors->removeElement($professor)) {
+            if ($professor->getReferentLevel() === $this) {
+                $professor->setReferentLevel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->LevelName ?? '';
     }
 }
