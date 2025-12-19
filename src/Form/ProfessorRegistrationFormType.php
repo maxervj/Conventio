@@ -118,6 +118,15 @@ class ProfessorRegistrationFormType extends AbstractType
                 ],
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
             ])
+            ->add('taughtLevels', EntityType::class, [
+                'class' => Level::class,
+                'choice_label' => 'LevelName',
+                'label' => 'Classes que vous enseignez *',
+                'multiple' => true,
+                'expanded' => true,
+                'required' => false,
+                'help' => 'Sélectionnez toutes les classes dans lesquelles vous enseignez',
+            ])
             ->add('referentLevel', EntityType::class, [
                 'class' => Level::class,
                 'choice_label' => 'LevelName',

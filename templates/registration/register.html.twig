@@ -186,6 +186,38 @@
                         {{ form_errors(registrationForm.plainPassword.second) }}
                     </div>
 
+                    {# Classes BTS - Only for students and professors #}
+                    {% if registrationForm.levels is defined %}
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                            {{ form_label(registrationForm.levels, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-3'}}) }}
+                            <div class="space-y-2">
+                                {{ form_widget(registrationForm.levels) }}
+                            </div>
+                            <p class="mt-2 text-xs text-gray-600">{{ form_help(registrationForm.levels) }}</p>
+                            {{ form_errors(registrationForm.levels) }}
+                        </div>
+                    {% endif %}
+
+                    {% if registrationForm.taughtLevels is defined %}
+                        <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                            {{ form_label(registrationForm.taughtLevels, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-3'}}) }}
+                            <div class="space-y-2">
+                                {{ form_widget(registrationForm.taughtLevels) }}
+                            </div>
+                            <p class="mt-2 text-xs text-gray-600">{{ form_help(registrationForm.taughtLevels) }}</p>
+                            {{ form_errors(registrationForm.taughtLevels) }}
+                        </div>
+                    {% endif %}
+
+                    {% if registrationForm.referentLevel is defined %}
+                        <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
+                            {{ form_label(registrationForm.referentLevel, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-2'}}) }}
+                            {{ form_widget(registrationForm.referentLevel, {'attr': {'class': 'block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition duration-200'}}) }}
+                            <p class="mt-2 text-xs text-gray-600">{{ form_help(registrationForm.referentLevel) }}</p>
+                            {{ form_errors(registrationForm.referentLevel) }}
+                        </div>
+                    {% endif %}
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <div class="flex items-start">
                             {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1'}}) }}
@@ -228,6 +260,45 @@
         </div>
     </div>
 </div>
+
+<style>
+/* Style pour les checkboxes de classes */
+input[type="checkbox"] {
+    height: 1rem;
+    width: 1rem;
+    color: rgb(37 99 235);
+    border-radius: 0.25rem;
+    border-width: 1px;
+    border-color: rgb(209 213 219);
+}
+
+input[type="checkbox"]:focus {
+    --tw-ring-color: rgb(59 130 246 / 0.5);
+    --tw-ring-offset-width: 2px;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.form-check:hover {
+    background-color: rgb(255 255 255 / 0.5);
+}
+
+.form-check label {
+    margin-left: 0.5rem;
+    font-size: 0.875rem;
+    color: rgb(55 65 81);
+    cursor: pointer;
+    font-weight: 500;
+}
+</style>
 
 <script>
 function togglePasswordField(buttonElement, iconId) {
