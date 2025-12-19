@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon profil - Conventio{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+        <!-- Header -->
+        <div class="mb-8">
+            <a href="{{ path('app_profile') }}" class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-500 mb-4">
+                <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Retour au profil
+            </a>
+            <h1 class="text-3xl font-extrabold text-gray-900">Modifier mon profil</h1>
+            <p class="mt-2 text-sm text-gray-600">Gérez les classes auxquelles vous appartenez</p>
+        </div>
+
+        <!-- Card -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8">
+            {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+
+                <!-- Classes -->
+                <div>
+                    {{ form_label(form.levels, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                    <div class="space-y-2">
+                        {{ form_widget(form.levels, {'attr': {'class': 'space-y-2'}}) }}
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500">{{ form_help(form.levels) }}</p>
+                    {{ form_errors(form.levels) }}
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex items-center justify-end space-x-3 pt-4">
+                    <a href="{{ path('app_profile') }}" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition duration-200">
+                        Annuler
+                    </a>
+                    <button type="submit" class="px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition duration-200">
+                        Enregistrer les modifications
+                    </button>
+                </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+<style>
+/* Style pour les checkboxes */
+input[type="checkbox"] {
+    height: 1rem;
+    width: 1rem;
+    color: rgb(37 99 235);
+    border-radius: 0.25rem;
+    border-width: 1px;
+    border-color: rgb(209 213 219);
+}
+
+input[type="checkbox"]:focus {
+    --tw-ring-color: rgb(59 130 246 / 0.5);
+    --tw-ring-offset-width: 2px;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.form-check:hover {
+    background-color: rgb(249 250 251);
+}
+
+.form-check label {
+    margin-left: 0.5rem;
+    font-size: 0.875rem;
+    color: rgb(55 65 81);
+    cursor: pointer;
+}
+</style>
+{% endblock %}
