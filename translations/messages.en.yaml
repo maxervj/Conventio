@@ -1,211 +1,174 @@
-company_info:
-  title: "Information Collection Form for Internship Agreement"
-  subtitle: "Please fill in the information about your company"
-  organization_info: "Organization Information"
-  company_name: "Organization Name"
-  address: "Address"
-  address_complement: "Additional Address"
-  postal_code: "Postal Code"
-  city: "City"
-  country: "Country"
-  responsible_lastname: "Company Manager's Last Name"
-  responsible_firstname: "Manager's First Name"
-  responsible_function: "Manager's Position"
-  landline_phone: "Landline Phone"
-  mobile_phone: "Mobile Phone"
-  email: "Email"
-  email_note: "Note: Agreement signatory"
-  website: "Website"
-  siret: "SIRET"
-  insurer_name: "Insurer Name"
-  insurer_reference: "Insurance Contract Reference"
-
-  internship_location: "Intern Reception Location (if different)"
-  internship_address: "Address"
-  internship_postal_code: "Postal Code"
-  internship_city: "City"
-  internship_country: "Country"
-  internship_phone: "Phone"
-
-  supervisor_info: "Internship Supervisor"
-  supervisor_lastname: "Last Name"
-  supervisor_firstname: "First Name"
-  supervisor_function: "Position"
-  supervisor_phone: "Phone"
-  supervisor_email: "Email"
-
-  questionnaire: "Questionnaire"
-  has_travel: "The student will be required to travel during working hours"
-
-  cost_coverage: "Intern Expense Coverage and Allowance"
-  covers_transport: "The company covers transportation costs"
-  transport_details: "According to the following terms"
-  covers_meals: "The company covers meal costs"
-  meal_details: "According to the following terms"
-  covers_accommodation: "The company covers accommodation costs"
-  accommodation_details: "According to the following terms"
-  provides_gratification: "The company may provide an allowance"
-  gratification_details: "According to the following terms"
-
-  work_schedule: "Work Schedule"
-  monday: "Monday"
-  tuesday: "Tuesday"
-  wednesday: "Wednesday"
-  thursday: "Thursday"
-  friday: "Friday"
-  saturday: "Saturday"
-  sunday: "Sunday"
-  morning_start: "Morning Start"
-  morning_end: "Morning End"
-  afternoon_start: "Afternoon Start"
-  afternoon_end: "Afternoon End"
-  weekly_total: "Weekly Total"
-  hours: "hours"
-
-  planned_activities: "Planned Professional Activities"
-  activities_description: "Description of planned professional activities"
-
-  submit: "Submit"
-  modify: "Modify"
-  confirm_submit: "Confirm Submission for Agreement Preparation"
-
-  confirmation_title: "Information Summary"
-  confirmation_message: "Please review the information entered before final submission."
-
-  success_title: "Information Collection Completed Successfully"
-  success_message: "Thank you for taking the time to complete this form. All information has been successfully recorded and transmitted to the student."
-  success_thanks: "Thank you again for welcoming an intern from our school."
-  next_steps: "Next Steps"
-  convention_info: "The information you provided will be reviewed by a supervising professor. Once validated, the student will prepare the internship agreement and send it to you for electronic signature."
-  step_1: "Information Review"
-  step_1_desc: "A supervising professor will review the provided information"
-  step_2: "Agreement Preparation"
-  step_2_desc: "The student will prepare the internship agreement with your information"
-  step_3: "Electronic Signature"
-  step_3_desc: "You will receive the agreement to sign electronically"
-
-  error_expired: "This link has expired."
-  error_completed: "This form has already been completed."
-  error_invalid: "Invalid link."
-
-  yes: "Yes"
-  no: "No"
-  required: "Required field"
-  at_least_one_phone: "At least one phone number is required"
-  morning: "Morning"
-  afternoon: "Afternoon"
-  day: "Day"
-
-form:
-  company:
-    name: "Organization Name"
-    address: "Address"
-    address_complement: "Additional Address"
-    postal_code: "Postal Code"
-    city: "City"
-    country: "Country"
-    website: "Website"
-    siret: "Company Registration Number (SIRET)"
-    insurer_name: "Insurer Name"
-    insurer_reference: "Insurance Contract Reference"
-
-  responsible:
-    last_name: "Company Manager's Last Name"
-    first_name: "Manager's First Name"
-    function: "Manager's Position"
-    landline_phone: "Landline Phone"
-    mobile_phone: "Mobile Phone"
-    email: "Email (Agreement Signatory)"
-
-  internship_location:
-    address: "Address"
-    postal_code: "Postal Code"
-    city: "City"
-    country: "Country"
-    phone: "Phone"
-
-  supervisor:
-    last_name: "Last Name"
-    first_name: "First Name"
-    function: "Position"
-    phone: "Phone"
-    email: "Email"
-
-  travel:
-    has_travel: "The student will be required to travel during working hours"
-
-  costs:
-    transport: "The company covers transportation costs"
-    transport_details: "According to the following terms"
-    meal: "The company covers meal costs"
-    meal_details: "According to the following terms"
-    accommodation: "The company covers accommodation costs"
-    accommodation_details: "According to the following terms"
-    gratification: "The company will provide compensation"
-    gratification_details: "According to the following terms"
-
-  activities:
-    planned: "Planned Professional Activities"
-
-  choice:
-    yes: "YES"
-    no: "NO"
-
-validation:
-  siret_format: "SIRET must contain 14 digits"
-  phone_format: "Invalid phone format"
-  hours_range: "Hours must be between 0 and 23"
-  minutes_range: "Minutes must be between 0 and 59"
-
-email:
-  company_info_completed_subject: "Company information collected for your internship"
-  company_info_completed_title: "Company Information Received"
-  greeting: "Hello %name%,"
-  company_info_completed_message: "The host company has completed the information necessary for establishing your internship agreement."
-  next_steps: "We will now proceed with establishing the internship agreement which will be sent to you shortly."
-  footer: "Best regards, The pedagogical team"
-
-  collection_request_subject: "Information request for internship agreement"
-  collection_request_title: "Information Collection Form"
-  collection_greeting: "Dear Sir or Madam,"
-  collection_message: "Thank you for welcoming %student% for an internship in your organization. To prepare the internship agreement, we invite you to complete the online form by clicking the button below."
-  collection_button: "Access the form"
-  important: "Important:"
-  collection_expiration: "This link expires on %date%. After this date, you will need to contact the school."
-  collection_help: "The form takes approximately 15 minutes to complete. You will be able to review your information before final submission."
-
-reset_password:
-  title: "Password Reset"
-  forgot_password: "Forgot your password?"
-  no_problem: "No worries, we'll help you reset it"
-  email_label: "Email address"
-  email_placeholder: "your.email@example.com"
-  send_reset_link: "Send reset link"
-  back_to_login: "Back to login"
-  need_help: "Need help? Contact"
-  support: "support"
-  info_message: "Enter your email address and we will send you a link to reset your password."
-
-  reset_title: "New password"
-  reset_subtitle: "Choose a strong and secure password"
-  password_requirements: "Password requirements:"
-  requirement_length: "At least 12 characters"
-  requirement_case: "One uppercase and lowercase letter"
-  requirement_number: "At least one digit"
-  requirement_special: "At least one special character (@$!%*?&)"
-  new_password: "New password"
-  confirm_password: "Confirm password"
-  reset_button: "Reset password"
-  security_note: "After resetting your password, you will be automatically logged in and will be able to access your account."
-
-  check_email_title: "Email sent!"
-  check_email_subtitle: "Check your inbox"
-  success_message: "If an account matching your email exists, an email has been sent containing a link to reset your password."
-  link_expires: "This link will expire in"
-  next_steps: "Next steps:"
-  step_1: "Check your inbox"
-  step_2: "Click on the reset link in the email"
-  step_3: "Create your new password"
-  spam_warning: "Didn't receive the email? Check your spam folder or"
-  try_again: "try again"
-  resend_email: "Resend email"
+company_info.title: 'Information Collection Form for Internship Agreement'
+company_info.subtitle: 'Please fill in the information about your company'
+company_info.organization_info: 'Organization Information'
+company_info.company_name: 'Organization Name'
+company_info.address: Address
+company_info.address_complement: 'Additional Address'
+company_info.postal_code: 'Postal Code'
+company_info.city: City
+company_info.country: Country
+company_info.responsible_lastname: "Company Manager's Last Name"
+company_info.responsible_firstname: "Manager's First Name"
+company_info.responsible_function: "Manager's Position"
+company_info.landline_phone: 'Landline Phone'
+company_info.mobile_phone: 'Mobile Phone'
+company_info.email: Email
+company_info.email_note: 'Note: Agreement signatory'
+company_info.website: Website
+company_info.siret: SIRET
+company_info.insurer_name: 'Insurer Name'
+company_info.insurer_reference: 'Insurance Contract Reference'
+company_info.internship_location: 'Intern Reception Location (if different)'
+company_info.internship_address: Address
+company_info.internship_postal_code: 'Postal Code'
+company_info.internship_city: City
+company_info.internship_country: Country
+company_info.internship_phone: Phone
+company_info.supervisor_info: 'Internship Supervisor'
+company_info.supervisor_lastname: 'Last Name'
+company_info.supervisor_firstname: 'First Name'
+company_info.supervisor_function: Position
+company_info.supervisor_phone: Phone
+company_info.supervisor_email: Email
+company_info.questionnaire: Questionnaire
+company_info.has_travel: 'The student will be required to travel during working hours'
+company_info.cost_coverage: 'Intern Expense Coverage and Allowance'
+company_info.covers_transport: 'The company covers transportation costs'
+company_info.transport_details: 'According to the following terms'
+company_info.covers_meals: 'The company covers meal costs'
+company_info.meal_details: 'According to the following terms'
+company_info.covers_accommodation: 'The company covers accommodation costs'
+company_info.accommodation_details: 'According to the following terms'
+company_info.provides_gratification: 'The company may provide an allowance'
+company_info.gratification_details: 'According to the following terms'
+company_info.work_schedule: 'Work Schedule'
+company_info.monday: Monday
+company_info.tuesday: Tuesday
+company_info.wednesday: Wednesday
+company_info.thursday: Thursday
+company_info.friday: Friday
+company_info.saturday: Saturday
+company_info.sunday: Sunday
+company_info.morning_start: 'Morning Start'
+company_info.morning_end: 'Morning End'
+company_info.afternoon_start: 'Afternoon Start'
+company_info.afternoon_end: 'Afternoon End'
+company_info.weekly_total: 'Weekly Total'
+company_info.hours: hours
+company_info.planned_activities: 'Planned Professional Activities'
+company_info.activities_description: 'Description of planned professional activities'
+company_info.submit: Submit
+company_info.modify: Modify
+company_info.confirm_submit: 'Confirm Submission for Agreement Preparation'
+company_info.confirmation_title: 'Information Summary'
+company_info.confirmation_message: 'Please review the information entered before final submission.'
+company_info.success_title: 'Information Collection Completed Successfully'
+company_info.success_message: 'Thank you for taking the time to complete this form. All information has been successfully recorded and transmitted to the student.'
+company_info.success_thanks: 'Thank you again for welcoming an intern from our school.'
+company_info.next_steps: 'Next Steps'
+company_info.convention_info: 'The information you provided will be reviewed by a supervising professor. Once validated, the student will prepare the internship agreement and send it to you for electronic signature.'
+company_info.step_1: 'Information Review'
+company_info.step_1_desc: 'A supervising professor will review the provided information'
+company_info.step_2: 'Agreement Preparation'
+company_info.step_2_desc: 'The student will prepare the internship agreement with your information'
+company_info.step_3: 'Electronic Signature'
+company_info.step_3_desc: 'You will receive the agreement to sign electronically'
+company_info.error_expired: 'This link has expired.'
+company_info.error_completed: 'This form has already been completed.'
+company_info.error_invalid: 'Invalid link.'
+company_info.yes: 'Yes'
+company_info.no: 'No'
+company_info.required: 'Required field'
+company_info.at_least_one_phone: 'At least one phone number is required'
+company_info.morning: Morning
+company_info.afternoon: Afternoon
+company_info.day: Day
+form.company.name: 'Organization Name'
+form.company.address: Address
+form.company.address_complement: 'Additional Address'
+form.company.postal_code: 'Postal Code'
+form.company.city: City
+form.company.country: Country
+form.company.website: Website
+form.company.siret: 'Company Registration Number (SIRET)'
+form.company.insurer_name: 'Insurer Name'
+form.company.insurer_reference: 'Insurance Contract Reference'
+form.responsible.last_name: "Company Manager's Last Name"
+form.responsible.first_name: "Manager's First Name"
+form.responsible.function: "Manager's Position"
+form.responsible.landline_phone: 'Landline Phone'
+form.responsible.mobile_phone: 'Mobile Phone'
+form.responsible.email: 'Email (Agreement Signatory)'
+form.internship_location.address: Address
+form.internship_location.postal_code: 'Postal Code'
+form.internship_location.city: City
+form.internship_location.country: Country
+form.internship_location.phone: Phone
+form.supervisor.last_name: 'Last Name'
+form.supervisor.first_name: 'First Name'
+form.supervisor.function: Position
+form.supervisor.phone: Phone
+form.supervisor.email: Email
+form.travel.has_travel: 'The student will be required to travel during working hours'
+form.costs.transport: 'The company covers transportation costs'
+form.costs.transport_details: 'According to the following terms'
+form.costs.meal: 'The company covers meal costs'
+form.costs.meal_details: 'According to the following terms'
+form.costs.accommodation: 'The company covers accommodation costs'
+form.costs.accommodation_details: 'According to the following terms'
+form.costs.gratification: 'The company will provide compensation'
+form.costs.gratification_details: 'According to the following terms'
+form.activities.planned: 'Planned Professional Activities'
+form.choice.yes: 'YES'
+form.choice.no: 'NO'
+validation.siret_format: 'SIRET must contain 14 digits'
+validation.phone_format: 'Invalid phone format'
+validation.email_format: "Please enter a valid email address"
+validation.hours_range: 'Hours must be between 0 and 23'
+validation.minutes_range: 'Minutes must be between 0 and 59'
+email.company_info_completed_subject: 'Company information collected for your internship'
+email.company_info_completed_title: 'Company Information Received'
+email.greeting: 'Hello %name%,'
+email.company_info_completed_message: 'The host company has completed the information necessary for establishing your internship agreement.'
+email.next_steps: 'We will now proceed with establishing the internship agreement which will be sent to you shortly.'
+email.footer: 'Best regards, The pedagogical team'
+email.collection_request_subject: 'Information request for internship agreement'
+email.collection_request_title: 'Information Collection Form'
+email.collection_greeting: 'Dear Sir or Madam,'
+email.collection_message: 'Thank you for welcoming %student% for an internship in your organization. To prepare the internship agreement, we invite you to complete the online form by clicking the button below.'
+email.collection_button: 'Access the form'
+email.important: 'Important:'
+email.collection_expiration: 'This link expires on %date%. After this date, you will need to contact the school.'
+email.collection_help: 'The form takes approximately 15 minutes to complete. You will be able to review your information before final submission.'
+reset_password.title: 'Password Reset'
+reset_password.forgot_password: 'Forgot your password?'
+reset_password.no_problem: "No worries, we'll help you reset it"
+reset_password.email_label: 'Email address'
+reset_password.email_placeholder: your.email@example.com
+reset_password.send_reset_link: 'Send reset link'
+reset_password.back_to_login: 'Back to login'
+reset_password.need_help: 'Need help? Contact'
+reset_password.support: support
+reset_password.info_message: 'Enter your email address and we will send you a link to reset your password.'
+reset_password.reset_title: 'New password'
+reset_password.reset_subtitle: 'Choose a strong and secure password'
+reset_password.password_requirements: 'Password requirements:'
+reset_password.requirement_length: 'At least 12 characters'
+reset_password.requirement_case: 'One uppercase and lowercase letter'
+reset_password.requirement_number: 'At least one digit'
+reset_password.requirement_special: 'At least one special character (@$!%*?&)'
+reset_password.new_password: 'New password'
+reset_password.confirm_password: 'Confirm password'
+reset_password.reset_button: 'Reset password'
+reset_password.security_note: 'After resetting your password, you will be automatically logged in and will be able to access your account.'
+reset_password.check_email_title: 'Email sent!'
+reset_password.check_email_subtitle: 'Check your inbox'
+reset_password.success_message: 'If an account matching your email exists, an email has been sent containing a link to reset your password.'
+reset_password.link_expires: 'This link will expire in'
+reset_password.next_steps: 'Next steps:'
+reset_password.step_1: 'Check your inbox'
+reset_password.step_2: 'Click on the reset link in the email'
+reset_password.step_3: 'Create your new password'
+reset_password.spam_warning: "Didn't receive the email? Check your spam folder or"
+reset_password.try_again: 'try again'
+reset_password.resend_email: 'Resend email'

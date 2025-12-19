@@ -1,202 +1,174 @@
-company_info:
-  title: "Informationssammlungsformular für Praktikumsvereinbarung"
-  subtitle: "Bitte füllen Sie die Informationen über Ihr Unternehmen aus"
-  organization_info: "Organisationsinformationen"
-  company_name: "Name der Organisation"
-  address: "Adresse"
-  address_complement: "Adresszusatz"
-  postal_code: "Postleitzahl"
-  city: "Stadt"
-  country: "Land"
-  responsible_lastname: "Nachname des Unternehmensverantwortlichen"
-  responsible_firstname: "Vorname des Verantwortlichen"
-  responsible_function: "Funktion des Verantwortlichen"
-  landline_phone: "Festnetztelefon"
-  mobile_phone: "Mobiltelefon"
-  email: "E-Mail"
-  email_note: "Achtung: Unterzeichner der Vereinbarung"
-  website: "Webseite"
-  siret: "SIRET"
-  insurer_name: "Name des Versicherers"
-  insurer_reference: "Versicherungsvertragsreferenz"
-
-  internship_location: "Praktikumsort (falls abweichend)"
-  internship_address: "Adresse"
-  internship_postal_code: "Postleitzahl"
-  internship_city: "Stadt"
-  internship_country: "Land"
-  internship_phone: "Telefon"
-
-  supervisor_info: "Praktikumsbetreuer"
-  supervisor_lastname: "Nachname"
-  supervisor_firstname: "Vorname"
-  supervisor_function: "Funktion"
-  supervisor_phone: "Telefon"
-  supervisor_email: "E-Mail"
-
-  questionnaire: "Fragebogen"
-  has_travel: "Der Student wird während der Arbeitszeit reisen müssen"
-
-  cost_coverage: "Beteiligung an den Praktikantenkosten und Vergütung"
-  covers_transport: "Das Unternehmen übernimmt die Transportkosten"
-  transport_details: "Nach folgenden Modalitäten"
-  covers_meals: "Das Unternehmen übernimmt die Verpflegungskosten"
-  meal_details: "Nach folgenden Modalitäten"
-  covers_accommodation: "Das Unternehmen übernimmt die Unterkunftskosten"
-  accommodation_details: "Nach folgenden Modalitäten"
-  provides_gratification: "Das Unternehmen zahlt möglicherweise eine Vergütung"
-  gratification_details: "Nach folgenden Modalitäten"
-
-  work_schedule: "Arbeitszeiten"
-  monday: "Montag"
-  tuesday: "Dienstag"
-  wednesday: "Mittwoch"
-  thursday: "Donnerstag"
-  friday: "Freitag"
-  saturday: "Samstag"
-  sunday: "Sonntag"
-  morning_start: "Beginn Morgen"
-  morning_end: "Ende Morgen"
-  afternoon_start: "Beginn Nachmittag"
-  afternoon_end: "Ende Nachmittag"
-  weekly_total: "Wöchentliche Gesamtstunden"
-  hours: "Stunden"
-
-  planned_activities: "Geplante Berufstätigkeiten"
-  activities_description: "Beschreibung der geplanten Berufstätigkeiten"
-
-  submit: "Absenden"
-  modify: "Ändern"
-  confirm_submit: "Endgültig Bestätigen für Vereinbarungserstellung"
-
-  confirmation_title: "Informationsübersicht"
-  confirmation_message: "Bitte überprüfen Sie die eingegebenen Informationen vor der endgültigen Bestätigung."
-
-  success_title: "Informationssammlung erfolgreich abgeschlossen"
-  success_message: "Vielen Dank, dass Sie sich die Zeit genommen haben, dieses Formular auszufüllen. Alle Informationen wurden erfolgreich erfasst und an den Studenten übermittelt."
-  success_thanks: "Nochmals vielen Dank für die Aufnahme eines Praktikanten unserer Schule."
-  next_steps: "Nächste Schritte"
-  convention_info: "Die von Ihnen bereitgestellten Informationen werden von einem betreuenden Professor überprüft. Nach der Validierung wird der Student die Praktikumsvereinbarung vorbereiten und Ihnen zur elektronischen Unterzeichnung zusenden."
-  step_1: "Informationsprüfung"
-  step_1_desc: "Ein betreuender Professor wird die bereitgestellten Informationen überprüfen"
-  step_2: "Vereinbarungsvorbereitung"
-  step_2_desc: "Der Student wird die Praktikumsvereinbarung mit Ihren Informationen vorbereiten"
-  step_3: "Elektronische Unterzeichnung"
-  step_3_desc: "Sie erhalten die Vereinbarung zur elektronischen Unterzeichnung"
-
-  error_expired: "Dieser Link ist abgelaufen."
-  error_completed: "Dieses Formular wurde bereits ausgefüllt."
-  error_invalid: "Ungültiger Link."
-
-  yes: "Ja"
-  no: "Nein"
-  required: "Pflichtfeld"
-  at_least_one_phone: "Mindestens eine Telefonnummer ist erforderlich"
-  morning: "Morgen"
-  afternoon: "Nachmittag"
-  day: "Tag"
-
-form:
-  company:
-    name: "Name der Organisation"
-    address: "Adresse"
-    address_complement: "Adresszusatz"
-    postal_code: "Postleitzahl"
-    city: "Stadt"
-    country: "Land"
-    website: "Webseite"
-    siret: "SIRET"
-    insurer_name: "Name des Versicherers"
-    insurer_reference: "Versicherungsvertragsreferenz"
-
-  responsible:
-    last_name: "Nachname des Unternehmensverantwortlichen"
-    first_name: "Vorname des Verantwortlichen"
-    function: "Funktion des Verantwortlichen"
-    landline_phone: "Festnetztelefon"
-    mobile_phone: "Mobiltelefon"
-    email: "E-Mail (Unterzeichner der Vereinbarung)"
-
-  internship_location:
-    address: "Adresse"
-    postal_code: "Postleitzahl"
-    city: "Stadt"
-    country: "Land"
-    phone: "Telefon"
-
-  supervisor:
-    last_name: "Nachname"
-    first_name: "Vorname"
-    function: "Funktion"
-    phone: "Telefon"
-    email: "E-Mail"
-
-  travel:
-    has_travel: "Der Student wird während der Arbeitszeit reisen müssen"
-
-  costs:
-    transport: "Das Unternehmen übernimmt die Transportkosten"
-    transport_details: "Nach folgenden Modalitäten"
-    meal: "Das Unternehmen übernimmt die Verpflegungskosten"
-    meal_details: "Nach folgenden Modalitäten"
-    accommodation: "Das Unternehmen übernimmt die Unterkunftskosten"
-    accommodation_details: "Nach folgenden Modalitäten"
-    gratification: "Das Unternehmen zahlt eine Vergütung"
-    gratification_details: "Nach folgenden Modalitäten"
-
-  activities:
-    planned: "Geplante Berufstätigkeiten"
-
-  choice:
-    yes: "JA"
-    no: "NEIN"
-
-validation:
-  siret_format: "SIRET muss 14 Ziffern enthalten"
-  phone_format: "Ungültiges Telefonformat"
-  hours_range: "Stunden müssen zwischen 0 und 23 liegen"
-  minutes_range: "Minuten müssen zwischen 0 und 59 liegen"
-
-email:
-  company_info_completed_subject: "Unternehmensinformationen für Ihr Praktikum gesammelt"
-  company_info_completed_title: "Unternehmensinformationen Empfangen"
-  greeting: "Hallo %name%,"
-  company_info_completed_message: "Das Gastunternehmen hat die erforderlichen Informationen zur Erstellung Ihrer Praktikumsvereinbarung ausgefüllt."
-  next_steps: "Wir werden nun mit der Erstellung der Praktikumsvereinbarung fortfahren, die Ihnen in Kürze zugesandt wird."
-  footer: "Mit freundlichen Grüßen, Das pädagogische Team"
-
-reset_password:
-  title: "Passwort zurücksetzen"
-  forgot_password: "Passwort vergessen?"
-  no_problem: "Kein Problem, wir helfen Ihnen beim Zurücksetzen"
-  email_label: "E-Mail-Adresse"
-  email_placeholder: "ihre.email@beispiel.com"
-  send_reset_link: "Zurücksetzungslink senden"
-  back_to_login: "Zurück zur Anmeldung"
-  need_help: "Brauchen Sie Hilfe? Kontaktieren Sie"
-  support: "den Support"
-  info_message: "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts."
-
-  reset_title: "Neues Passwort"
-  reset_subtitle: "Wählen Sie ein starkes und sicheres Passwort"
-  password_requirements: "Passwortanforderungen:"
-  requirement_length: "Mindestens 12 Zeichen"
-  requirement_case: "Ein Groß- und Kleinbuchstabe"
-  requirement_number: "Mindestens eine Ziffer"
-  requirement_special: "Mindestens ein Sonderzeichen (@$!%*?&)"
-  new_password: "Neues Passwort"
-  confirm_password: "Passwort bestätigen"
-  reset_button: "Passwort zurücksetzen"
-  security_note: "Nach dem Zurücksetzen Ihres Passworts werden Sie automatisch angemeldet und können auf Ihr Konto zugreifen."
-
-  check_email_title: "E-Mail gesendet!"
-  check_email_subtitle: "Überprüfen Sie Ihren Posteingang"
-  success_message: "Wenn ein Konto mit Ihrer E-Mail-Adresse existiert, wurde eine E-Mail mit einem Link zum Zurücksetzen Ihres Passworts gesendet."
-  link_expires: "Dieser Link läuft ab in"
-  next_steps: "Nächste Schritte:"
-  step_1: "Überprüfen Sie Ihren Posteingang"
-  step_2: "Klicken Sie auf den Zurücksetzungslink in der E-Mail"
-  step_3: "Erstellen Sie Ihr neues Passwort"
-  spam_warning: "Keine E-Mail erhalten? Überprüfen Sie Ihren Spam-Ordner oder"
-  try_again: "versuchen Sie es erneut"
-  resend_email: "E-Mail erneut senden"
+company_info.title: 'Informationssammlungsformular für Praktikumsvereinbarung'
+company_info.subtitle: 'Bitte füllen Sie die Informationen über Ihr Unternehmen aus'
+company_info.organization_info: Organisationsinformationen
+company_info.company_name: 'Name der Organisation'
+company_info.address: Adresse
+company_info.address_complement: Adresszusatz
+company_info.postal_code: Postleitzahl
+company_info.city: Stadt
+company_info.country: Land
+company_info.responsible_lastname: 'Nachname des Unternehmensverantwortlichen'
+company_info.responsible_firstname: 'Vorname des Verantwortlichen'
+company_info.responsible_function: 'Funktion des Verantwortlichen'
+company_info.landline_phone: Festnetztelefon
+company_info.mobile_phone: Mobiltelefon
+company_info.email: E-Mail
+company_info.email_note: 'Achtung: Unterzeichner der Vereinbarung'
+company_info.website: Webseite
+company_info.siret: SIRET
+company_info.insurer_name: 'Name des Versicherers'
+company_info.insurer_reference: Versicherungsvertragsreferenz
+company_info.internship_location: 'Praktikumsort (falls abweichend)'
+company_info.internship_address: Adresse
+company_info.internship_postal_code: Postleitzahl
+company_info.internship_city: Stadt
+company_info.internship_country: Land
+company_info.internship_phone: Telefon
+company_info.supervisor_info: Praktikumsbetreuer
+company_info.supervisor_lastname: Nachname
+company_info.supervisor_firstname: Vorname
+company_info.supervisor_function: Funktion
+company_info.supervisor_phone: Telefon
+company_info.supervisor_email: E-Mail
+company_info.questionnaire: Fragebogen
+company_info.has_travel: 'Der Student wird während der Arbeitszeit reisen müssen'
+company_info.cost_coverage: 'Beteiligung an den Praktikantenkosten und Vergütung'
+company_info.covers_transport: 'Das Unternehmen übernimmt die Transportkosten'
+company_info.transport_details: 'Nach folgenden Modalitäten'
+company_info.covers_meals: 'Das Unternehmen übernimmt die Verpflegungskosten'
+company_info.meal_details: 'Nach folgenden Modalitäten'
+company_info.covers_accommodation: 'Das Unternehmen übernimmt die Unterkunftskosten'
+company_info.accommodation_details: 'Nach folgenden Modalitäten'
+company_info.provides_gratification: 'Das Unternehmen zahlt möglicherweise eine Vergütung'
+company_info.gratification_details: 'Nach folgenden Modalitäten'
+company_info.work_schedule: Arbeitszeiten
+company_info.monday: Montag
+company_info.tuesday: Dienstag
+company_info.wednesday: Mittwoch
+company_info.thursday: Donnerstag
+company_info.friday: Freitag
+company_info.saturday: Samstag
+company_info.sunday: Sonntag
+company_info.morning_start: 'Beginn Morgen'
+company_info.morning_end: 'Ende Morgen'
+company_info.afternoon_start: 'Beginn Nachmittag'
+company_info.afternoon_end: 'Ende Nachmittag'
+company_info.weekly_total: 'Wöchentliche Gesamtstunden'
+company_info.hours: Stunden
+company_info.planned_activities: 'Geplante Berufstätigkeiten'
+company_info.activities_description: 'Beschreibung der geplanten Berufstätigkeiten'
+company_info.submit: Absenden
+company_info.modify: Ändern
+company_info.confirm_submit: 'Endgültig Bestätigen für Vereinbarungserstellung'
+company_info.confirmation_title: Informationsübersicht
+company_info.confirmation_message: 'Bitte überprüfen Sie die eingegebenen Informationen vor der endgültigen Bestätigung.'
+company_info.success_title: 'Informationssammlung erfolgreich abgeschlossen'
+company_info.success_message: 'Vielen Dank, dass Sie sich die Zeit genommen haben, dieses Formular auszufüllen. Alle Informationen wurden erfolgreich erfasst und an den Studenten übermittelt.'
+company_info.success_thanks: 'Nochmals vielen Dank für die Aufnahme eines Praktikanten unserer Schule.'
+company_info.next_steps: 'Nächste Schritte'
+company_info.convention_info: 'Die von Ihnen bereitgestellten Informationen werden von einem betreuenden Professor überprüft. Nach der Validierung wird der Student die Praktikumsvereinbarung vorbereiten und Ihnen zur elektronischen Unterzeichnung zusenden.'
+company_info.step_1: Informationsprüfung
+company_info.step_1_desc: 'Ein betreuender Professor wird die bereitgestellten Informationen überprüfen'
+company_info.step_2: Vereinbarungsvorbereitung
+company_info.step_2_desc: 'Der Student wird die Praktikumsvereinbarung mit Ihren Informationen vorbereiten'
+company_info.step_3: 'Elektronische Unterzeichnung'
+company_info.step_3_desc: 'Sie erhalten die Vereinbarung zur elektronischen Unterzeichnung'
+company_info.error_expired: 'Dieser Link ist abgelaufen.'
+company_info.error_completed: 'Dieses Formular wurde bereits ausgefüllt.'
+company_info.error_invalid: 'Ungültiger Link.'
+company_info.yes: Ja
+company_info.no: Nein
+company_info.required: Pflichtfeld
+company_info.at_least_one_phone: 'Mindestens eine Telefonnummer ist erforderlich'
+company_info.morning: Morgen
+company_info.afternoon: Nachmittag
+company_info.day: Tag
+form.company.name: 'Name der Organisation'
+form.company.address: Adresse
+form.company.address_complement: Adresszusatz
+form.company.postal_code: Postleitzahl
+form.company.city: Stadt
+form.company.country: Land
+form.company.website: Webseite
+form.company.siret: SIRET
+form.company.insurer_name: 'Name des Versicherers'
+form.company.insurer_reference: Versicherungsvertragsreferenz
+form.responsible.last_name: 'Nachname des Unternehmensverantwortlichen'
+form.responsible.first_name: 'Vorname des Verantwortlichen'
+form.responsible.function: 'Funktion des Verantwortlichen'
+form.responsible.landline_phone: Festnetztelefon
+form.responsible.mobile_phone: Mobiltelefon
+form.responsible.email: 'E-Mail (Unterzeichner der Vereinbarung)'
+form.internship_location.address: Adresse
+form.internship_location.postal_code: Postleitzahl
+form.internship_location.city: Stadt
+form.internship_location.country: Land
+form.internship_location.phone: Telefon
+form.supervisor.last_name: Nachname
+form.supervisor.first_name: Vorname
+form.supervisor.function: Funktion
+form.supervisor.phone: Telefon
+form.supervisor.email: E-Mail
+form.travel.has_travel: 'Der Student wird während der Arbeitszeit reisen müssen'
+form.costs.transport: 'Das Unternehmen übernimmt die Transportkosten'
+form.costs.transport_details: 'Nach folgenden Modalitäten'
+form.costs.meal: 'Das Unternehmen übernimmt die Verpflegungskosten'
+form.costs.meal_details: 'Nach folgenden Modalitäten'
+form.costs.accommodation: 'Das Unternehmen übernimmt die Unterkunftskosten'
+form.costs.accommodation_details: 'Nach folgenden Modalitäten'
+form.costs.gratification: 'Das Unternehmen zahlt eine Vergütung'
+form.costs.gratification_details: 'Nach folgenden Modalitäten'
+form.activities.planned: 'Geplante Berufstätigkeiten'
+form.choice.yes: JA
+form.choice.no: NEIN
+validation.siret_format: 'SIRET muss 14 Ziffern enthalten'
+validation.phone_format: 'Ungültiges Telefonformat'
+validation.email_format: "Bitte geben Sie eine gültige E-Mail-Adresse ein"
+validation.hours_range: 'Stunden müssen zwischen 0 und 23 liegen'
+validation.minutes_range: 'Minuten müssen zwischen 0 und 59 liegen'
+email.company_info_completed_subject: 'Unternehmensinformationen für Ihr Praktikum gesammelt'
+email.company_info_completed_title: 'Unternehmensinformationen Empfangen'
+email.greeting: 'Hallo %name%,'
+email.company_info_completed_message: 'Das Gastunternehmen hat die erforderlichen Informationen zur Erstellung Ihrer Praktikumsvereinbarung ausgefüllt.'
+email.next_steps: 'Wir werden nun mit der Erstellung der Praktikumsvereinbarung fortfahren, die Ihnen in Kürze zugesandt wird.'
+email.footer: 'Mit freundlichen Grüßen, Das pädagogische Team'
+reset_password.title: 'Passwort zurücksetzen'
+reset_password.forgot_password: 'Passwort vergessen?'
+reset_password.no_problem: 'Kein Problem, wir helfen Ihnen beim Zurücksetzen'
+reset_password.email_label: E-Mail-Adresse
+reset_password.email_placeholder: ihre.email@beispiel.com
+reset_password.send_reset_link: 'Zurücksetzungslink senden'
+reset_password.back_to_login: 'Zurück zur Anmeldung'
+reset_password.need_help: 'Brauchen Sie Hilfe? Kontaktieren Sie'
+reset_password.support: 'den Support'
+reset_password.info_message: 'Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts.'
+reset_password.reset_title: 'Neues Passwort'
+reset_password.reset_subtitle: 'Wählen Sie ein starkes und sicheres Passwort'
+reset_password.password_requirements: 'Passwortanforderungen:'
+reset_password.requirement_length: 'Mindestens 12 Zeichen'
+reset_password.requirement_case: 'Ein Groß- und Kleinbuchstabe'
+reset_password.requirement_number: 'Mindestens eine Ziffer'
+reset_password.requirement_special: 'Mindestens ein Sonderzeichen (@$!%*?&)'
+reset_password.new_password: 'Neues Passwort'
+reset_password.confirm_password: 'Passwort bestätigen'
+reset_password.reset_button: 'Passwort zurücksetzen'
+reset_password.security_note: 'Nach dem Zurücksetzen Ihres Passworts werden Sie automatisch angemeldet und können auf Ihr Konto zugreifen.'
+reset_password.check_email_title: 'E-Mail gesendet!'
+reset_password.check_email_subtitle: 'Überprüfen Sie Ihren Posteingang'
+reset_password.success_message: 'Wenn ein Konto mit Ihrer E-Mail-Adresse existiert, wurde eine E-Mail mit einem Link zum Zurücksetzen Ihres Passworts gesendet.'
+reset_password.link_expires: 'Dieser Link läuft ab in'
+reset_password.next_steps: 'Nächste Schritte:'
+reset_password.step_1: 'Überprüfen Sie Ihren Posteingang'
+reset_password.step_2: 'Klicken Sie auf den Zurücksetzungslink in der E-Mail'
+reset_password.step_3: 'Erstellen Sie Ihr neues Passwort'
+reset_password.spam_warning: 'Keine E-Mail erhalten? Überprüfen Sie Ihren Spam-Ordner oder'
+reset_password.try_again: 'versuchen Sie es erneut'
+reset_password.resend_email: 'E-Mail erneut senden'
+email.collection_request_subject: __email.collection_request_subject
+email.collection_request_title: __email.collection_request_title
+email.collection_greeting: __email.collection_greeting
+email.collection_message: __email.collection_message
+email.collection_button: __email.collection_button
+email.important: __email.important
+email.collection_expiration: __email.collection_expiration
+email.collection_help: __email.collection_help

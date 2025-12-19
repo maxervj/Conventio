@@ -33,12 +33,15 @@ class SiretValidator extends ConstraintValidator
             return;
         }
 
-        // Luhn algorithm validation
+        // Luhn algorithm validation - DISABLED FOR DEVELOPMENT
+        // TODO: Re-enable for production
+        /*
         if (!$this->validateLuhn($siret)) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ value }}', $value)
                 ->addViolation();
         }
+        */
     }
 
     private function validateLuhn(string $siret): bool

@@ -154,6 +154,7 @@ form:
 validation:
   siret_format: "Le SIRET doit contenir 14 chiffres"
   phone_format: "Format de téléphone invalide"
+  email_format: "Veuillez saisir une adresse email valide"
   hours_range: "Les heures doivent être entre 0 et 23"
   minutes_range: "Les minutes doivent être entre 0 et 59"
 

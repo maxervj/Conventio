@@ -1,202 +1,174 @@
-company_info:
-  title: "Formulario de Recopilación de Información para Convenio de Prácticas"
-  subtitle: "Por favor, complete la información sobre su empresa"
-  organization_info: "Información de la Organización"
-  company_name: "Nombre de la Organización"
-  address: "Dirección"
-  address_complement: "Complemento de Dirección"
-  postal_code: "Código Postal"
-  city: "Ciudad"
-  country: "País"
-  responsible_lastname: "Apellido del Responsable de la Empresa"
-  responsible_firstname: "Nombre del Responsable"
-  responsible_function: "Función del Responsable"
-  landline_phone: "Teléfono Fijo"
-  mobile_phone: "Teléfono Móvil"
-  email: "Correo Electrónico"
-  email_note: "Atención: firmante del convenio"
-  website: "Sitio Web"
-  siret: "SIRET"
-  insurer_name: "Nombre de la Aseguradora"
-  insurer_reference: "Referencia del Contrato de Seguro"
-
-  internship_location: "Lugar de Recepción del Pasante (si es diferente)"
-  internship_address: "Dirección"
-  internship_postal_code: "Código Postal"
-  internship_city: "Ciudad"
-  internship_country: "País"
-  internship_phone: "Teléfono"
-
-  supervisor_info: "Tutor de Prácticas"
-  supervisor_lastname: "Apellido"
-  supervisor_firstname: "Nombre"
-  supervisor_function: "Función"
-  supervisor_phone: "Teléfono"
-  supervisor_email: "Correo Electrónico"
-
-  questionnaire: "Cuestionario"
-  has_travel: "El estudiante deberá realizar desplazamientos durante el horario de trabajo"
-
-  cost_coverage: "Participación en los Gastos del Pasante y Gratificación"
-  covers_transport: "La empresa cubre los gastos de transporte"
-  transport_details: "Según las siguientes condiciones"
-  covers_meals: "La empresa cubre los gastos de restauración"
-  meal_details: "Según las siguientes condiciones"
-  covers_accommodation: "La empresa cubre los gastos de alojamiento"
-  accommodation_details: "Según las siguientes condiciones"
-  provides_gratification: "La empresa proporcionará eventualmente una gratificación"
-  gratification_details: "Según las siguientes condiciones"
-
-  work_schedule: "Horario de Trabajo"
-  monday: "Lunes"
-  tuesday: "Martes"
-  wednesday: "Miércoles"
-  thursday: "Jueves"
-  friday: "Viernes"
-  saturday: "Sábado"
-  sunday: "Domingo"
-  morning_start: "Inicio Mañana"
-  morning_end: "Fin Mañana"
-  afternoon_start: "Inicio Tarde"
-  afternoon_end: "Fin Tarde"
-  weekly_total: "Total Semanal"
-  hours: "horas"
-
-  planned_activities: "Actividades Previstas en el Entorno Profesional"
-  activities_description: "Descripción de las actividades previstas en el entorno profesional"
-
-  submit: "Enviar"
-  modify: "Modificar"
-  confirm_submit: "Confirmar Envío para Establecimiento del Convenio"
-
-  confirmation_title: "Resumen de Información"
-  confirmation_message: "Por favor, revise la información ingresada antes de la validación definitiva."
-
-  success_title: "Recopilación de Información Completada con Éxito"
-  success_message: "Gracias por tomarse el tiempo de completar este formulario. Toda la información ha sido registrada con éxito y transmitida al estudiante."
-  success_thanks: "Gracias de nuevo por acoger a un pasante de nuestro instituto."
-  next_steps: "Próximos Pasos"
-  convention_info: "La información que ha proporcionado será revisada por un profesor supervisor. Una vez validada, el estudiante preparará el convenio de prácticas y se lo enviará para firma electrónica."
-  step_1: "Revisión de Información"
-  step_1_desc: "Un profesor supervisor revisará la información proporcionada"
-  step_2: "Preparación del Convenio"
-  step_2_desc: "El estudiante preparará el convenio de prácticas con su información"
-  step_3: "Firma Electrónica"
-  step_3_desc: "Recibirá el convenio para firmar electrónicamente"
-
-  error_expired: "Este enlace ha caducado."
-  error_completed: "Este formulario ya ha sido completado."
-  error_invalid: "Enlace inválido."
-
-  yes: "Sí"
-  no: "No"
-  required: "Campo obligatorio"
-  at_least_one_phone: "Se requiere al menos un número de teléfono"
-  morning: "Mañana"
-  afternoon: "Tarde"
-  day: "Día"
-
-form:
-  company:
-    name: "Nombre de la Organización"
-    address: "Dirección"
-    address_complement: "Complemento de Dirección"
-    postal_code: "Código Postal"
-    city: "Ciudad"
-    country: "País"
-    website: "Sitio Web"
-    siret: "SIRET"
-    insurer_name: "Nombre de la Aseguradora"
-    insurer_reference: "Referencia del Contrato de Seguro"
-
-  responsible:
-    last_name: "Apellido del Responsable de la Empresa"
-    first_name: "Nombre del Responsable"
-    function: "Función del Responsable"
-    landline_phone: "Teléfono Fijo"
-    mobile_phone: "Teléfono Móvil"
-    email: "Correo Electrónico (Firmante del Convenio)"
-
-  internship_location:
-    address: "Dirección"
-    postal_code: "Código Postal"
-    city: "Ciudad"
-    country: "País"
-    phone: "Teléfono"
-
-  supervisor:
-    last_name: "Apellido"
-    first_name: "Nombre"
-    function: "Función"
-    phone: "Teléfono"
-    email: "Correo Electrónico"
-
-  travel:
-    has_travel: "El estudiante deberá realizar desplazamientos durante el horario de trabajo"
-
-  costs:
-    transport: "La empresa cubre los gastos de transporte"
-    transport_details: "Según las siguientes condiciones"
-    meal: "La empresa cubre los gastos de restauración"
-    meal_details: "Según las siguientes condiciones"
-    accommodation: "La empresa cubre los gastos de alojamiento"
-    accommodation_details: "Según las siguientes condiciones"
-    gratification: "La empresa proporcionará una gratificación"
-    gratification_details: "Según las siguientes condiciones"
-
-  activities:
-    planned: "Actividades Previstas en el Entorno Profesional"
-
-  choice:
-    yes: "SÍ"
-    no: "NO"
-
-validation:
-  siret_format: "El SIRET debe contener 14 dígitos"
-  phone_format: "Formato de teléfono inválido"
-  hours_range: "Las horas deben estar entre 0 y 23"
-  minutes_range: "Los minutos deben estar entre 0 y 59"
-
-email:
-  company_info_completed_subject: "Información de la empresa recopilada para sus prácticas"
-  company_info_completed_title: "Información de la Empresa Recibida"
-  greeting: "Hola %name%,"
-  company_info_completed_message: "La empresa de acogida ha completado la información necesaria para establecer su convenio de prácticas."
-  next_steps: "Ahora procederemos a establecer el convenio de prácticas que se le enviará en breve."
-  footer: "Atentamente, El equipo pedagógico"
-
-reset_password:
-  title: "Restablecimiento de contraseña"
-  forgot_password: "¿Olvidó su contraseña?"
-  no_problem: "No hay problema, le ayudaremos a restablecerla"
-  email_label: "Dirección de correo electrónico"
-  email_placeholder: "su.correo@ejemplo.com"
-  send_reset_link: "Enviar enlace de restablecimiento"
-  back_to_login: "Volver al inicio de sesión"
-  need_help: "¿Necesita ayuda? Contacte"
-  support: "soporte"
-  info_message: "Ingrese su dirección de correo electrónico y le enviaremos un enlace para restablecer su contraseña."
-
-  reset_title: "Nueva contraseña"
-  reset_subtitle: "Elija una contraseña fuerte y segura"
-  password_requirements: "Requisitos de la contraseña:"
-  requirement_length: "Al menos 12 caracteres"
-  requirement_case: "Una letra mayúscula y minúscula"
-  requirement_number: "Al menos un dígito"
-  requirement_special: "Al menos un carácter especial (@$!%*?&)"
-  new_password: "Nueva contraseña"
-  confirm_password: "Confirmar contraseña"
-  reset_button: "Restablecer contraseña"
-  security_note: "Después de restablecer su contraseña, se conectará automáticamente y podrá acceder a su cuenta."
-
-  check_email_title: "¡Correo enviado!"
-  check_email_subtitle: "Verifique su bandeja de entrada"
-  success_message: "Si existe una cuenta que coincida con su correo electrónico, se ha enviado un correo con un enlace para restablecer su contraseña."
-  link_expires: "Este enlace expirará en"
-  next_steps: "Próximos pasos:"
-  step_1: "Verifique su bandeja de entrada"
-  step_2: "Haga clic en el enlace de restablecimiento en el correo"
-  step_3: "Cree su nueva contraseña"
-  spam_warning: "¿No recibió el correo? Revise su carpeta de spam o"
-  try_again: "intente de nuevo"
-  resend_email: "Reenviar correo"
+company_info.title: 'Formulario de Recopilación de Información para Convenio de Prácticas'
+company_info.subtitle: 'Por favor, complete la información sobre su empresa'
+company_info.organization_info: 'Información de la Organización'
+company_info.company_name: 'Nombre de la Organización'
+company_info.address: Dirección
+company_info.address_complement: 'Complemento de Dirección'
+company_info.postal_code: 'Código Postal'
+company_info.city: Ciudad
+company_info.country: País
+company_info.responsible_lastname: 'Apellido del Responsable de la Empresa'
+company_info.responsible_firstname: 'Nombre del Responsable'
+company_info.responsible_function: 'Función del Responsable'
+company_info.landline_phone: 'Teléfono Fijo'
+company_info.mobile_phone: 'Teléfono Móvil'
+company_info.email: 'Correo Electrónico'
+company_info.email_note: 'Atención: firmante del convenio'
+company_info.website: 'Sitio Web'
+company_info.siret: SIRET
+company_info.insurer_name: 'Nombre de la Aseguradora'
+company_info.insurer_reference: 'Referencia del Contrato de Seguro'
+company_info.internship_location: 'Lugar de Recepción del Pasante (si es diferente)'
+company_info.internship_address: Dirección
+company_info.internship_postal_code: 'Código Postal'
+company_info.internship_city: Ciudad
+company_info.internship_country: País
+company_info.internship_phone: Teléfono
+company_info.supervisor_info: 'Tutor de Prácticas'
+company_info.supervisor_lastname: Apellido
+company_info.supervisor_firstname: Nombre
+company_info.supervisor_function: Función
+company_info.supervisor_phone: Teléfono
+company_info.supervisor_email: 'Correo Electrónico'
+company_info.questionnaire: Cuestionario
+company_info.has_travel: 'El estudiante deberá realizar desplazamientos durante el horario de trabajo'
+company_info.cost_coverage: 'Participación en los Gastos del Pasante y Gratificación'
+company_info.covers_transport: 'La empresa cubre los gastos de transporte'
+company_info.transport_details: 'Según las siguientes condiciones'
+company_info.covers_meals: 'La empresa cubre los gastos de restauración'
+company_info.meal_details: 'Según las siguientes condiciones'
+company_info.covers_accommodation: 'La empresa cubre los gastos de alojamiento'
+company_info.accommodation_details: 'Según las siguientes condiciones'
+company_info.provides_gratification: 'La empresa proporcionará eventualmente una gratificación'
+company_info.gratification_details: 'Según las siguientes condiciones'
+company_info.work_schedule: 'Horario de Trabajo'
+company_info.monday: Lunes
+company_info.tuesday: Martes
+company_info.wednesday: Miércoles
+company_info.thursday: Jueves
+company_info.friday: Viernes
+company_info.saturday: Sábado
+company_info.sunday: Domingo
+company_info.morning_start: 'Inicio Mañana'
+company_info.morning_end: 'Fin Mañana'
+company_info.afternoon_start: 'Inicio Tarde'
+company_info.afternoon_end: 'Fin Tarde'
+company_info.weekly_total: 'Total Semanal'
+company_info.hours: horas
+company_info.planned_activities: 'Actividades Previstas en el Entorno Profesional'
+company_info.activities_description: 'Descripción de las actividades previstas en el entorno profesional'
+company_info.submit: Enviar
+company_info.modify: Modificar
+company_info.confirm_submit: 'Confirmar Envío para Establecimiento del Convenio'
+company_info.confirmation_title: 'Resumen de Información'
+company_info.confirmation_message: 'Por favor, revise la información ingresada antes de la validación definitiva.'
+company_info.success_title: 'Recopilación de Información Completada con Éxito'
+company_info.success_message: 'Gracias por tomarse el tiempo de completar este formulario. Toda la información ha sido registrada con éxito y transmitida al estudiante.'
+company_info.success_thanks: 'Gracias de nuevo por acoger a un pasante de nuestro instituto.'
+company_info.next_steps: 'Próximos Pasos'
+company_info.convention_info: 'La información que ha proporcionado será revisada por un profesor supervisor. Una vez validada, el estudiante preparará el convenio de prácticas y se lo enviará para firma electrónica.'
+company_info.step_1: 'Revisión de Información'
+company_info.step_1_desc: 'Un profesor supervisor revisará la información proporcionada'
+company_info.step_2: 'Preparación del Convenio'
+company_info.step_2_desc: 'El estudiante preparará el convenio de prácticas con su información'
+company_info.step_3: 'Firma Electrónica'
+company_info.step_3_desc: 'Recibirá el convenio para firmar electrónicamente'
+company_info.error_expired: 'Este enlace ha caducado.'
+company_info.error_completed: 'Este formulario ya ha sido completado.'
+company_info.error_invalid: 'Enlace inválido.'
+company_info.yes: Sí
+company_info.no: 'No'
+company_info.required: 'Campo obligatorio'
+company_info.at_least_one_phone: 'Se requiere al menos un número de teléfono'
+company_info.morning: Mañana
+company_info.afternoon: Tarde
+company_info.day: Día
+form.company.name: 'Nombre de la Organización'
+form.company.address: Dirección
+form.company.address_complement: 'Complemento de Dirección'
+form.company.postal_code: 'Código Postal'
+form.company.city: Ciudad
+form.company.country: País
+form.company.website: 'Sitio Web'
+form.company.siret: SIRET
+form.company.insurer_name: 'Nombre de la Aseguradora'
+form.company.insurer_reference: 'Referencia del Contrato de Seguro'
+form.responsible.last_name: 'Apellido del Responsable de la Empresa'
+form.responsible.first_name: 'Nombre del Responsable'
+form.responsible.function: 'Función del Responsable'
+form.responsible.landline_phone: 'Teléfono Fijo'
+form.responsible.mobile_phone: 'Teléfono Móvil'
+form.responsible.email: 'Correo Electrónico (Firmante del Convenio)'
+form.internship_location.address: Dirección
+form.internship_location.postal_code: 'Código Postal'
+form.internship_location.city: Ciudad
+form.internship_location.country: País
+form.internship_location.phone: Teléfono
+form.supervisor.last_name: Apellido
+form.supervisor.first_name: Nombre
+form.supervisor.function: Función
+form.supervisor.phone: Teléfono
+form.supervisor.email: 'Correo Electrónico'
+form.travel.has_travel: 'El estudiante deberá realizar desplazamientos durante el horario de trabajo'
+form.costs.transport: 'La empresa cubre los gastos de transporte'
+form.costs.transport_details: 'Según las siguientes condiciones'
+form.costs.meal: 'La empresa cubre los gastos de restauración'
+form.costs.meal_details: 'Según las siguientes condiciones'
+form.costs.accommodation: 'La empresa cubre los gastos de alojamiento'
+form.costs.accommodation_details: 'Según las siguientes condiciones'
+form.costs.gratification: 'La empresa proporcionará una gratificación'
+form.costs.gratification_details: 'Según las siguientes condiciones'
+form.activities.planned: 'Actividades Previstas en el Entorno Profesional'
+form.choice.yes: SÍ
+form.choice.no: 'NO'
+validation.siret_format: 'El SIRET debe contener 14 dígitos'
+validation.phone_format: 'Formato de teléfono inválido'
+validation.email_format: "Por favor, introduzca una dirección de correo electrónico válida"
+validation.hours_range: 'Las horas deben estar entre 0 y 23'
+validation.minutes_range: 'Los minutos deben estar entre 0 y 59'
+email.company_info_completed_subject: 'Información de la empresa recopilada para sus prácticas'
+email.company_info_completed_title: 'Información de la Empresa Recibida'
+email.greeting: 'Hola %name%,'
+email.company_info_completed_message: 'La empresa de acogida ha completado la información necesaria para establecer su convenio de prácticas.'
+email.next_steps: 'Ahora procederemos a establecer el convenio de prácticas que se le enviará en breve.'
+email.footer: 'Atentamente, El equipo pedagógico'
+reset_password.title: 'Restablecimiento de contraseña'
+reset_password.forgot_password: '¿Olvidó su contraseña?'
+reset_password.no_problem: 'No hay problema, le ayudaremos a restablecerla'
+reset_password.email_label: 'Dirección de correo electrónico'
+reset_password.email_placeholder: su.correo@ejemplo.com
+reset_password.send_reset_link: 'Enviar enlace de restablecimiento'
+reset_password.back_to_login: 'Volver al inicio de sesión'
+reset_password.need_help: '¿Necesita ayuda? Contacte'
+reset_password.support: soporte
+reset_password.info_message: 'Ingrese su dirección de correo electrónico y le enviaremos un enlace para restablecer su contraseña.'
+reset_password.reset_title: 'Nueva contraseña'
+reset_password.reset_subtitle: 'Elija una contraseña fuerte y segura'
+reset_password.password_requirements: 'Requisitos de la contraseña:'
+reset_password.requirement_length: 'Al menos 12 caracteres'
+reset_password.requirement_case: 'Una letra mayúscula y minúscula'
+reset_password.requirement_number: 'Al menos un dígito'
+reset_password.requirement_special: 'Al menos un carácter especial (@$!%*?&)'
+reset_password.new_password: 'Nueva contraseña'
+reset_password.confirm_password: 'Confirmar contraseña'
+reset_password.reset_button: 'Restablecer contraseña'
+reset_password.security_note: 'Después de restablecer su contraseña, se conectará automáticamente y podrá acceder a su cuenta.'
+reset_password.check_email_title: '¡Correo enviado!'
+reset_password.check_email_subtitle: 'Verifique su bandeja de entrada'
+reset_password.success_message: 'Si existe una cuenta que coincida con su correo electrónico, se ha enviado un correo con un enlace para restablecer su contraseña.'
+reset_password.link_expires: 'Este enlace expirará en'
+reset_password.next_steps: 'Próximos pasos:'
+reset_password.step_1: 'Verifique su bandeja de entrada'
+reset_password.step_2: 'Haga clic en el enlace de restablecimiento en el correo'
+reset_password.step_3: 'Cree su nueva contraseña'
+reset_password.spam_warning: '¿No recibió el correo? Revise su carpeta de spam o'
+reset_password.try_again: 'intente de nuevo'
+reset_password.resend_email: 'Reenviar correo'
+email.collection_request_subject: __email.collection_request_subject
+email.collection_request_title: __email.collection_request_title
+email.collection_greeting: __email.collection_greeting
+email.collection_message: __email.collection_message
+email.collection_button: __email.collection_button
+email.important: __email.important
+email.collection_expiration: __email.collection_expiration
+email.collection_help: __email.collection_help
