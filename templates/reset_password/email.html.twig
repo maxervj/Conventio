@@ -1,9 +1,77 @@
-<h1>Hi!</h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Réinitialisez votre mot de passe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #0d6efd;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 0 0 5px 5px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #0d6efd;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>Réinitialisation du mot de passe - Conventio</h1>
+</div>
+<div class="content">
+    <p>Bonjour,</p>
 
-<p>To reset your password, please visit the following link</p>
+    <p>Vous avez demandé à réinitialiser votre mot de passe sur la plateforme Conventio.</p>
 
-<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+    <p>Pour réinitialiser votre mot de passe, cliquez sur le bouton ci-dessous :</p>
 
-<p>This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
+    <div style="text-align: center;">
+        <a href="{{ url('app_reset_password', { token: resetToken.token }) }}" class="button">
+            Réinitialiser mon mot de passe
+        </a>
+    </div>
 
-<p>Cheers!</p>
+    <p>Si le bouton ne fonctionne pas, copiez/collez ce lien dans votre navigateur&nbsp;:</p>
+    <p style="word-break: break-all; background-color: white; padding: 10px; border-left: 3px solid #0d6efd;">
+        {{ url('app_reset_password', { token: resetToken.token }) }}
+    </p>
+
+    <p><strong>Attention :</strong> Ce lien est à usage unique et expirera {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
+
+    <p>Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet e-mail.</p>
+
+    <p>Cordialement,<br>
+        L'équipe Conventio</p>
+</div>
+<div class="footer">
+    <p>Cet e-mail a été envoyé automatiquement, merci de ne pas y répondre.</p>
+</div>
+</body>
+</html>

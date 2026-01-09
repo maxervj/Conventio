@@ -118,17 +118,22 @@ class ProfessorRegistrationFormType extends AbstractType
                 ],
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
             ])
-            ->add('Level', EntityType::class, [
+            ->add('taughtLevels', EntityType::class, [
                 'class' => Level::class,
-                'choice_label' => 'LevelName', // ou le champ à afficher
+                'choice_label' => 'LevelName',
+                'label' => 'Classes que vous enseignez *',
                 'multiple' => true,
-                'expanded' => true, // cases à cocher
-                'label' => 'Les classes que vous enseignerez *',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez sélectionner au moins une classe',
-                    ]),
-                ],
+                'expanded' => true,
+                'required' => false,
+                'help' => 'Sélectionnez toutes les classes dans lesquelles vous enseignez',
+            ])
+            ->add('referentLevel', EntityType::class, [
+                'class' => Level::class,
+                'choice_label' => 'LevelName',
+                'label' => 'Classe dont vous êtes référent',
+                'required' => false,
+                'placeholder' => 'Sélectionnez une classe (optionnel)',
+                'help' => 'Si vous êtes professeur référent d\'une classe, sélectionnez-la ici',
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'label' => 'Accepter les CGU',

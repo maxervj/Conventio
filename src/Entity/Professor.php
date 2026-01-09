@@ -13,82 +13,83 @@ class Professor extends User
     /**
      * @var Collection<int, Level>
      */
-    #[ORM\ManyToMany(targetEntity: Level::class)]
-    private Collection $Level;
+    #[ORM\ManyToMany(targetEntity: Level::class, inversedBy: 'teachers')]
+    #[ORM\JoinTable(name: 'professor_taught_levels')]
+    private Collection $taughtLevels;
+
+    #[ORM\ManyToOne(targetEntity: Level::class, inversedBy: 'referentProfessors')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Level $referentLevel = null;
+
+    /**
+     * @var Collection<int, Formation>
+     */
+    #[ORM\ManyToMany(targetEntity: Formation::class, inversedBy: 'professors')]
+    #[ORM\JoinTable(name: 'professor_formation')]
+    private Collection $formations;
 
     public function __construct()
     {
-        $this->Level = new ArrayCollection();
+        $this->taughtLevels = new ArrayCollection();
+        $this->formations = new ArrayCollection();
     }
-
-    // TODO: Décommenter quand l'entité Contract sera créée
-    // /**
-    //  * @var Collection<int, Contract>
-    //  */
-    // #[ORM\OneToMany(targetEntity: Contract::class, mappedBy: 'coordinator')]
-    // private Collection $coordinatedContracts;
-
-    // public function __construct()
-    // {
-    //     $this->coordinatedContracts = new ArrayCollection();
-    // }
-
-    // /**
-    //  * @return Collection<int, Contract>
-    //  */
-    // public function getCoordinatedContracts(): Collection
-    // {
-    //     return $this->coordinatedContracts;
-    // }
-
-    // public function addCoordinatedContract(Contract $contract): static
-    // {
-    //     if (!$this->coordinatedContracts->contains($contract)) {
-    //         $this->coordinatedContracts->add($contract);
-    //         $contract->setCoordinator($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeCoordinatedContract(Contract $contract): static
-    // {
-    //     if ($this->coordinatedContracts->removeElement($contract)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($contract->getCoordinator() === $this) {
-    //             $contract->setCoordinator(null);
-    //         }
-    //     }
-
-    //     return $this;
-    // }
 
     /**
      * @return Collection<int, Level>
      */
-    public function getLevel(): Collection
+    public function getTaughtLevels(): Collection
     {
-        return $this->Level;
+        return $this->taughtLevels;
     }
 
-    public function setLevel(Collection $Level): self
+    public function addTaughtLevel(Level $level): static
     {
-        $this->Level = $Level;
-        return $this;
-    }
-
-    public function addLevel(Level $level): static
-    {
-        if (!$this->Level->contains($level)) {
-            $this->Level->add($level);
+        if (!$this->taughtLevels->contains($level)) {
+            $this->taughtLevels->add($level);
         }
 
         return $this;
     }
 
-    public function removeLevel(Level $level): static
+    public function removeTaughtLevel(Level $level): static
     {
-        $this->Level->removeElement($level);
+        $this->taughtLevels->removeElement($level);
+
+        return $this;
+    }
+
+    public function getReferentLevel(): ?Level
+    {
+        return $this->referentLevel;
+    }
+
+    public function setReferentLevel(?Level $referentLevel): static
+    {
+        $this->referentLevel = $referentLevel;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Formation>
+     */
+    public function getFormations(): Collection
+    {
+        return $this->formations;
+    }
+
+    public function addFormation(Formation $formation): static
+    {
+        if (!$this->formations->contains($formation)) {
+            $this->formations->add($formation);
+        }
+
+        return $this;
+    }
+
+    public function removeFormation(Formation $formation): static
+    {
+        $this->formations->removeElement($formation);
 
         return $this;
     }

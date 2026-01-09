@@ -97,7 +97,7 @@ class RegistrationFormType extends AbstractType
                             'max' => 4096,
                         ]),
                         new PasswordStrength([
-                            'minScore' => PasswordStrength::STRENGTH_WEAK,
+                            'minScore' => PasswordStrength::STRENGTH_MEDIUM,
                             'message' => 'Le mot de passe est trop faible. Veuillez utiliser un mot de passe plus robuste avec des lettres majuscules, minuscules, chiffres et caractères spéciaux.',
                         ]),
                         new NotCompromisedPassword([
@@ -118,11 +118,18 @@ class RegistrationFormType extends AbstractType
                 ],
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
             ])
-            ->add('level', EntityType::class, [
+            ->add('levels', EntityType::class, [
                 'class' => Level::class,
-
                 'choice_label' => 'LevelName',
-                'label' => 'Niveau',
+                'label' => 'Classe BTS *',
+                'multiple' => true,
+                'expanded' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez sélectionner au moins une classe',
+                    ]),
+                ],
+                'help' => 'Sélectionnez votre/vos classe(s) de BTS',
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'label' => 'Accepter les CGU',

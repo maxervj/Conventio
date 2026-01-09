@@ -186,23 +186,37 @@
                         {{ form_errors(registrationForm.plainPassword.second) }}
                     </div>
 
-                <div>
-                    {{ form_label(registrationForm.level, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                            </svg>
+                    {# Classes BTS - Only for students and professors #}
+                    {% if registrationForm.levels is defined %}
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                            {{ form_label(registrationForm.levels, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-3'}}) }}
+                            <div class="space-y-2">
+                                {{ form_widget(registrationForm.levels) }}
+                            </div>
+                            <p class="mt-2 text-xs text-gray-600">{{ form_help(registrationForm.levels) }}</p>
+                            {{ form_errors(registrationForm.levels) }}
                         </div>
-                        {{ form_widget(registrationForm.level, {'attr': {'class': 'block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 appearance-none'}}) }}
-                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                            </svg>
+                    {% endif %}
+
+                    {% if registrationForm.taughtLevels is defined %}
+                        <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                            {{ form_label(registrationForm.taughtLevels, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-3'}}) }}
+                            <div class="space-y-2">
+                                {{ form_widget(registrationForm.taughtLevels) }}
+                            </div>
+                            <p class="mt-2 text-xs text-gray-600">{{ form_help(registrationForm.taughtLevels) }}</p>
+                            {{ form_errors(registrationForm.taughtLevels) }}
                         </div>
-                    </div>
-                    {{ form_errors(registrationForm.level) }}
-                </div>
+                    {% endif %}
+
+                    {% if registrationForm.referentLevel is defined %}
+                        <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
+                            {{ form_label(registrationForm.referentLevel, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-2'}}) }}
+                            {{ form_widget(registrationForm.referentLevel, {'attr': {'class': 'block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition duration-200'}}) }}
+                            <p class="mt-2 text-xs text-gray-600">{{ form_help(registrationForm.referentLevel) }}</p>
+                            {{ form_errors(registrationForm.referentLevel) }}
+                        </div>
+                    {% endif %}
 
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <div class="flex items-start">
@@ -246,6 +260,45 @@
         </div>
     </div>
 </div>
+
+<style>
+/* Style pour les checkboxes de classes */
+input[type="checkbox"] {
+    height: 1rem;
+    width: 1rem;
+    color: rgb(37 99 235);
+    border-radius: 0.25rem;
+    border-width: 1px;
+    border-color: rgb(209 213 219);
+}
+
+input[type="checkbox"]:focus {
+    --tw-ring-color: rgb(59 130 246 / 0.5);
+    --tw-ring-offset-width: 2px;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.form-check:hover {
+    background-color: rgb(255 255 255 / 0.5);
+}
+
+.form-check label {
+    margin-left: 0.5rem;
+    font-size: 0.875rem;
+    color: rgb(55 65 81);
+    cursor: pointer;
+    font-weight: 500;
+}
+</style>
 
 <script>
 function togglePasswordField(buttonElement, iconId) {
