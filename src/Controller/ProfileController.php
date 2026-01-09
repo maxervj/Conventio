@@ -20,6 +20,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 class ProfileController extends AbstractController
 {
+    //Todo: Bug un student à l'indication montrant quels classe il enseigne
     #[Route('', name: 'app_profile')]
     public function index(EntityManagerInterface $entityManager): Response
     {

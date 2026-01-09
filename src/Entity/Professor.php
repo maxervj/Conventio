@@ -17,13 +17,21 @@ class Professor extends User
     #[ORM\JoinTable(name: 'professor_taught_levels')]
     private Collection $taughtLevels;
 
-    #[ORM\ManyToOne(targetEntity: Level::class, inversedBy: 'referentProfessor')]
+    #[ORM\ManyToOne(targetEntity: Level::class, inversedBy: 'referentProfessors')]
     #[ORM\JoinColumn(nullable: true)]
     private ?Level $referentLevel = null;
+
+    /**
+     * @var Collection<int, Formation>
+     */
+    #[ORM\ManyToMany(targetEntity: Formation::class, inversedBy: 'professors')]
+    #[ORM\JoinTable(name: 'professor_formation')]
+    private Collection $formations;
 
     public function __construct()
     {
         $this->taughtLevels = new ArrayCollection();
+        $this->formations = new ArrayCollection();
     }
 
     /**
@@ -58,6 +66,30 @@ class Professor extends User
     public function setReferentLevel(?Level $referentLevel): static
     {
         $this->referentLevel = $referentLevel;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Formation>
+     */
+    public function getFormations(): Collection
+    {
+        return $this->formations;
+    }
+
+    public function addFormation(Formation $formation): static
+    {
+        if (!$this->formations->contains($formation)) {
+            $this->formations->add($formation);
+        }
+
+        return $this;
+    }
+
+    public function removeFormation(Formation $formation): static
+    {
+        $this->formations->removeElement($formation);
 
         return $this;
     }
