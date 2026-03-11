@@ -26,5 +26,21 @@ services:
         arguments:
             $appSecret: '%env(APP_SECRET)%'
 
+    # Service Yousign
+    App\Service\YousignService:
+        arguments:
+            $apiKey: '%env(YOUSIGN_API_KEY)%'
+            $sandbox: '%env(bool:YOUSIGN_SANDBOX)%'
+
+    # Webhook Yousign
+    App\Controller\YousignWebhookController:
+        arguments:
+            $webhookSecret: '%env(YOUSIGN_WEBHOOK_SECRET)%'
+
+    # Commandes Yousign
+    App\Command\YousignSendSignatureCommand:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
