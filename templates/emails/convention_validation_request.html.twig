@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demande de validation de convention</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f3f4f6; margin: 0; padding: 0; }
+        .wrapper { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+        .header { background: linear-gradient(135deg, #6366f1, #8b5cf6); padding: 36px 32px; text-align: center; }
+        .header h1 { color: #ffffff; margin: 0; font-size: 22px; font-weight: 700; }
+        .header p { color: #c4b5fd; margin: 8px 0 0; font-size: 14px; }
+        .body { padding: 32px; }
+        .greeting { font-size: 16px; color: #1f2937; margin-bottom: 16px; }
+        .text { font-size: 14px; color: #4b5563; line-height: 1.7; margin-bottom: 16px; }
+        .info-box { background: #f5f3ff; border-left: 4px solid #7c3aed; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0; }
+        .info-box p { margin: 0 0 6px; font-size: 14px; color: #374151; }
+        .info-box p:last-child { margin-bottom: 0; }
+        .info-box strong { color: #5b21b6; }
+        .cta { text-align: center; margin: 28px 0; }
+        .cta a { display: inline-block; background: linear-gradient(135deg, #6366f1, #7c3aed); color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px; font-size: 15px; font-weight: 600; }
+        .footer { background: #f9fafb; border-top: 1px solid #e5e7eb; padding: 20px 32px; text-align: center; font-size: 12px; color: #9ca3af; }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div class="header">
+        <h1>Demande de validation de convention</h1>
+        <p>Un étudiant vous soumet sa convention de stage pour validation</p>
+    </div>
+
+    <div class="body">
+        <p class="greeting">Bonjour {{ professor.firstName }} {{ professor.lastName }},</p>
+
+        <p class="text">
+            L'étudiant(e) <strong>{{ convention.student.firstName }} {{ convention.student.lastName }}</strong>
+            vous soumet sa convention de stage pour validation. En tant que professeur référent, votre approbation est nécessaire pour que la convention puisse être établie.
+        </p>
+
+        <div class="info-box">
+            <p><strong>Étudiant(e) :</strong> {{ convention.student.firstName }} {{ convention.student.lastName }}</p>
+            {% if convention.companyInfo %}
+                <p><strong>Entreprise :</strong> {{ convention.companyInfo.companyName }}</p>
+                {% if convention.companyInfo.city %}
+                    <p><strong>Lieu :</strong> {{ convention.companyInfo.city }}{% if convention.companyInfo.country %}, {{ convention.companyInfo.country }}{% endif %}</p>
+                {% endif %}
+                {% if convention.companyInfo.internshipStartDate and convention.companyInfo.internshipEndDate %}
+                    <p><strong>Période :</strong> {{ convention.companyInfo.internshipStartDate|date('d/m/Y') }} → {{ convention.companyInfo.internshipEndDate|date('d/m/Y') }}</p>
+                {% endif %}
+                {% if convention.companyInfo.supervisorLastName %}
+                    <p><strong>Maître de stage :</strong> {{ convention.companyInfo.supervisorFirstName }} {{ convention.companyInfo.supervisorLastName }}</p>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <p class="text">
+            Cliquez sur le bouton ci-dessous pour accéder directement à la convention et la valider :
+        </p>
+
+        <div class="cta">
+            <a href="{{ conventionUrl }}">Voir et valider la convention</a>
+        </div>
+
+        <p class="text" style="font-size: 12px; color: #9ca3af;">
+            Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :<br>
+            <a href="{{ conventionUrl }}" style="color: #7c3aed; word-break: break-all;">{{ conventionUrl }}</a>
+        </p>
+    </div>
+
+    <div class="footer">
+        <p>Conventio — Gestion des conventions de stage</p>
+        <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
+    </div>
+</div>
+</body>
+</html>

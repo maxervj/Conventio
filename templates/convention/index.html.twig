@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Conventions - Conventio{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto">
+
+        {# Header #}
+        <div class="mb-8 flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-extrabold text-gray-900">
+                    {% if role == 'professor' %}Conventions à valider{% else %}Mes Conventions{% endif %}
+                </h1>
+                <p class="mt-1 text-sm text-gray-500">
+                    {% if role == 'professor' %}
+                        Liste des conventions dont vous êtes professeur référent
+                    {% else %}
+                        Suivez l'avancement de vos conventions de stage
+                    {% endif %}
+                </p>
+            </div>
+            <div class="flex-shrink-0">
+                <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        {# Flash messages #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-6 p-4 rounded-xl border-l-4 {{ label == 'error' ? 'bg-red-50 border-red-500 text-red-700' : 'bg-green-50 border-green-500 text-green-700' }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {% if conventions|length == 0 %}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
+                <div class="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-1">Aucune convention</h3>
+                <p class="text-sm text-gray-500">
+                    {% if role == 'professor' %}
+                        Aucune convention ne vous a été assignée en tant que référent pour l'instant.
+                    {% else %}
+                        Vous n'avez pas encore de convention de stage.
+                    {% endif %}
+                </p>
+            </div>
+        {% else %}
+            <div class="space-y-4">
+                {% for convention in conventions %}
+                    {% set statusLabel = {
+                        'draft': 'Brouillon',
+                        'pending_validation': 'En attente de validation',
+                        'validated': 'Validée',
+                        'pending_signature': 'En attente de signature',
+                        'signed': 'Signée',
+                        'completed': 'Complétée',
+                        'cancelled': 'Annulée'
+                    } %}
+                    {% set statusColor = {
+                        'draft': 'bg-gray-100 text-gray-700',
+                        'pending_validation': 'bg-amber-100 text-amber-700',
+                        'validated': 'bg-green-100 text-green-700',
+                        'pending_signature': 'bg-blue-100 text-blue-700',
+                        'signed': 'bg-indigo-100 text-indigo-700',
+                        'completed': 'bg-purple-100 text-purple-700',
+                        'cancelled': 'bg-red-100 text-red-700'
+                    } %}
+
+                    <a href="{{ path('convention_show', {id: convention.id}) }}"
+                       class="block bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:border-indigo-200 transition-all duration-200 group">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-900 group-hover:text-indigo-700 transition-colors">
+                                        {% if role == 'professor' %}
+                                            {{ convention.student.firstName }} {{ convention.student.lastName }}
+                                        {% else %}
+                                            Convention de stage
+                                        {% endif %}
+                                    </p>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <p class="text-xs text-gray-500">Créée le {{ convention.createdAt|date('d/m/Y') }}</p>
+                                        {% if convention.companyInfo and convention.companyInfo.companyName %}
+                                            <span class="text-gray-300">•</span>
+                                            <p class="text-xs text-gray-500">{{ convention.companyInfo.companyName }}</p>
+                                        {% endif %}
+                                        {% if role == 'student' and convention.referentProfessor %}
+                                            <span class="text-gray-300">•</span>
+                                            <p class="text-xs text-gray-500">Référent : {{ convention.referentProfessor.firstName }} {{ convention.referentProfessor.lastName }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3">
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold {{ statusColor[convention.status] ?? 'bg-gray-100 text-gray-700' }}">
+                                    {{ statusLabel[convention.status] ?? convention.status }}
+                                </span>
+                                {% if role == 'professor' and convention.isPendingValidation() %}
+                                    <span class="flex items-center gap-1 text-xs font-medium text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
+                                        <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
+                                        Action requise
+                                    </span>
+                                {% endif %}
+                                <svg class="w-4 h-4 text-gray-400 group-hover:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
