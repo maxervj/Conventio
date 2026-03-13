@@ -30,6 +30,9 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $isVerified = false;
+
     /**
      * @var list<string> The user roles
      */
@@ -136,6 +139,18 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }

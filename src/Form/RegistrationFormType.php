@@ -97,7 +97,7 @@ class RegistrationFormType extends AbstractType
                             'max' => 4096,
                         ]),
                         new PasswordStrength([
-                            'minScore' => PasswordStrength::STRENGTH_MEDIUM,
+                            'minScore' => PasswordStrength::STRENGTH_WEAK,
                             'message' => 'Le mot de passe est trop faible. Veuillez utiliser un mot de passe plus robuste avec des lettres majuscules, minuscules, chiffres et caractères spéciaux.',
                         ]),
                         new NotCompromisedPassword([
@@ -122,8 +122,8 @@ class RegistrationFormType extends AbstractType
                 'class' => Level::class,
                 'choice_label' => 'LevelName',
                 'label' => 'Classe BTS *',
-                'multiple' => true,
-                'expanded' => true,
+                'multiple' => false,
+                'expanded' => false,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez sélectionner au moins une classe',

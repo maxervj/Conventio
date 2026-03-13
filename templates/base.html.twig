@@ -154,7 +154,9 @@
                         <div class="flex items-center gap-3 border-l border-gray-200 pl-4">
                             <div class="hidden sm:flex items-center gap-2">
                                 <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                                    {{ app.user.firstName|first|upper }}{{ app.user.lastName|first|upper }}
+                                    <a href="{{ path('app_profile') }}" class="flex items-center justify-center w-full h-full text-center focus:outline-none">
+                                        {{ app.user.firstName|first|upper }}{{ app.user.lastName|first|upper }}
+                                    </a>
                                 </div>
                                 <div class="text-left">
                                     <p class="text-sm font-semibold text-gray-900">{{ app.user.firstName }} {{ app.user.lastName }}</p>
