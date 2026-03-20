@@ -126,6 +126,12 @@
                                     </svg>
                                     <span>Accueil</span>
                                 </a>
+                                <a href="{{ path('admin_convention_list') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9v2m0-6v2m0-6v2"/>
+                                    </svg>
+                                    <span>Demandes en cours</span>
+                                </a>
                                 <a href="{{ path('app_signature_index') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 flex items-center gap-2">
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
@@ -245,6 +251,11 @@
                     {% elseif app.user is instanceof('App\\Entity\\Tutor') %}
                         <a href="{{ path('app_home') }}" class="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition">Accueil</a>
                         <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition">Mes stagiaires</a>
+                    {% elseif app.user and is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_home') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">Accueil</a>
+                        <a href="{{ path('admin_convention_list') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">Demandes en cours</a>
+                        <a href="{{ path('app_signature_index') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">Information de signature</a>
+                        <a href="{{ path('app_formation_index') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">Formation</a>
                     {% endif %}
                 </div>
             </div>

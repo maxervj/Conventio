@@ -55,4 +55,21 @@ class ConventionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Trouve les conventions validées groupées par formation et étudiant
+     * Retourne un tableau groupé par formation
+     */
+    public function findValidatedGroupedByFormation(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->innerJoin('c.student', 's')
+            ->leftJoin('s.formation', 'f')
+            ->andWhere('c.status = :status')
+            ->setParameter('status', 'validated')
+            ->orderBy('s.firstName', 'ASC')
+            ->addOrderBy('s.lastName', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }
