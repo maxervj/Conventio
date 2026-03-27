@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Convention;
 use App\Repository\ConventionRepository;
+use App\Service\ConventionPdfService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensiolabs\GotenbergBundle\GotenbergPdfInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -57,20 +58,27 @@ final class ConventionController extends AbstractController
     }
 
     #[Route('/{id}/pdf', name: 'admin_convention_generate_pdf', methods: ['GET'])]
-    public function generatePdf(Convention $convention, GotenbergPdfInterface $gotenberg): Response
+    public function generatePdf(Convention $convention, ConventionPdfService $pdfService): Response
     {
         // Vérifier que la convention est validée
         if (!$convention->isValidated()) {
             throw $this->createNotFoundException('Cette convention n\'est pas disponible pour génération PDF.');
         }
 
-        // Générer le PDF via Gotenberg
-        return $gotenberg->html()
-            ->content('convention/pdf.html.twig', [
-                'convention' => $convention,
-            ])
-            ->generate()
-            ->stream();
+        try {
+            $pdfContent = $pdfService->generateConventionPdf($convention);
+
+            return new Response(
+                $pdfContent,
+                Response::HTTP_OK,
+                [
+                    'Content-Type' => 'application/pdf',
+                    'Content-Disposition' => 'inline; filename="convention_' . $convention->getId() . '.pdf"',
+                ]
+            );
+        } catch (\Exception $e) {
+            throw $this->createAccessDeniedException('Erreur lors de la génération du PDF : ' . $e->getMessage());
+        }
     }
 
     #[Route('/{id}/refuse', name: 'admin_convention_refuse', methods: ['POST'])]
@@ -115,7 +123,7 @@ final class ConventionController extends AbstractController
         Convention $convention,
         Request $request,
         EntityManagerInterface $entityManager,
-        GotenbergPdfInterface $gotenberg
+        ConventionPdfService $pdfService
     ): Response {
         // Vérifier que la convention est validée
         if (!$convention->isValidated()) {
@@ -130,13 +138,9 @@ final class ConventionController extends AbstractController
 
         // Générer le PDF
         try {
-            $pdf = $gotenberg->html()
-                ->content('convention/pdf.html.twig', [
-                    'convention' => $convention,
-                ])
-                ->generate();
+            $pdfContent = $pdfService->generateConventionPdf($convention);
 
-            // Sauvegarder le PDF (à adapter selon votre système de fichiers)
+            // Sauvegarder le PDF
             $filename = 'convention_' . $convention->getId() . '_' . time() . '.pdf';
             $filepath = 'uploads/conventions/' . $filename;
 
@@ -146,13 +150,13 @@ final class ConventionController extends AbstractController
             }
 
             // Sauvegarder le PDF
-            file_put_contents($filepath, $pdf->getContent());
+            file_put_contents($filepath, $pdfContent);
 
             // Mettre à jour la convention
             $convention->setStatus('signed');
             $convention->setSignedAt(new \DateTime());
             $convention->setDocumentPath($filepath);
-            $convention->setValidationNotes('Approuvé par admin le ' . (new \DateTime())->format('d/m/Y H:i'));
+            $convention->setValidationNotes('Approuvé par DDF le ' . (new \DateTime())->format('d/m/Y H:i'));
 
             $entityManager->flush();
 
