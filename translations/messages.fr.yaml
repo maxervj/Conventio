@@ -96,6 +96,26 @@ company_info:
   afternoon: "Après-midi"
   day: "Jour"
 
+  success_received: "Informations bien reçues !"
+  success_transmitted: "Vos informations ont été transmises avec succès à l'établissement."
+  success_transmitted_company: "Les informations de %company% ont été transmises avec succès."
+  summary_title: "Récapitulatif de votre soumission"
+  company: "Entreprise"
+  designated_supervisor: "Tuteur désigné"
+  concerned_student: "Étudiant concerné"
+  submitted_on: "Soumis le"
+  what_happens_next: "Que se passe-t-il maintenant ?"
+  next_steps_description: "L'établissement va vérifier et valider les informations transmises. Elles seront intégrées à la convention de stage de l'étudiant. Vous n'avez rien d'autre à faire."
+  step_notified_title: "Notification envoyée à l'étudiant"
+  step_notified_desc: "L'étudiant a été informé que vous avez complété le formulaire."
+  step_validation_title: "Validation par l'établissement"
+  step_validation_desc: "L'équipe pédagogique va vérifier et intégrer vos informations."
+  step_finalized_title: "Convention de stage finalisée"
+  step_finalized_desc: "La convention sera générée et envoyée pour signature."
+  thanks_collaboration: "Merci pour votre collaboration."
+  form_errors_message: "Le formulaire contient des erreurs. Veuillez les corriger avant de continuer."
+  specify_details: "Précisez les détails..."
+
 form:
   company:
     name: "Nom de l'organisme"

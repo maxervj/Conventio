@@ -83,6 +83,25 @@ company_info.at_least_one_phone: 'Se requiere al menos un número de teléfono'
 company_info.morning: Mañana
 company_info.afternoon: Tarde
 company_info.day: Día
+company_info.success_received: '¡Información recibida!'
+company_info.success_transmitted: 'Su información ha sido transmitida con éxito al establecimiento.'
+company_info.success_transmitted_company: 'La información de %company% ha sido transmitida con éxito.'
+company_info.summary_title: 'Resumen de su envío'
+company_info.company: Empresa
+company_info.designated_supervisor: 'Tutor designado'
+company_info.concerned_student: 'Estudiante correspondiente'
+company_info.submitted_on: 'Enviado el'
+company_info.what_happens_next: '¿Qué pasa ahora?'
+company_info.next_steps_description: 'El establecimiento verificará y validará la información transmitida. Será integrada en el convenio de prácticas del estudiante. No tiene que hacer nada más.'
+company_info.step_notified_title: 'Notificación enviada al estudiante'
+company_info.step_notified_desc: 'El estudiante ha sido informado de que usted ha completado el formulario.'
+company_info.step_validation_title: 'Validación por el establecimiento'
+company_info.step_validation_desc: 'El equipo pedagógico verificará e integrará su información.'
+company_info.step_finalized_title: 'Convenio de prácticas finalizado'
+company_info.step_finalized_desc: 'El convenio será generado y enviado para firma.'
+company_info.thanks_collaboration: 'Gracias por su colaboración.'
+company_info.form_errors_message: 'El formulario contiene errores. Por favor, corríjalos antes de continuar.'
+company_info.specify_details: 'Especifique los detalles...'
 form.company.name: 'Nombre de la Organización'
 form.company.address: Dirección
 form.company.address_complement: 'Complemento de Dirección'
@@ -164,11 +183,11 @@ reset_password.step_3: 'Cree su nueva contraseña'
 reset_password.spam_warning: '¿No recibió el correo? Revise su carpeta de spam o'
 reset_password.try_again: 'intente de nuevo'
 reset_password.resend_email: 'Reenviar correo'
-email.collection_request_subject: __email.collection_request_subject
-email.collection_request_title: __email.collection_request_title
-email.collection_greeting: __email.collection_greeting
-email.collection_message: __email.collection_message
-email.collection_button: __email.collection_button
-email.important: __email.important
-email.collection_expiration: __email.collection_expiration
-email.collection_help: __email.collection_help
+email.collection_request_subject: 'Solicitud de información para convenio de prácticas'
+email.collection_request_title: 'Formulario de Recopilación de Información'
+email.collection_greeting: 'Estimado/a señor/a,'
+email.collection_message: 'Gracias por acoger a %student% en prácticas en su organización. Para preparar el convenio de prácticas, le invitamos a completar el formulario en línea haciendo clic en el botón de abajo.'
+email.collection_button: 'Acceder al formulario'
+email.important: 'Importante:'
+email.collection_expiration: 'Este enlace expira el %date%. Después de esta fecha, deberá contactar al establecimiento.'
+email.collection_help: 'El formulario tarda aproximadamente 15 minutos en completarse. Podrá revisar su información antes de la validación final.'
