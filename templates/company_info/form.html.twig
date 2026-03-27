@@ -49,6 +49,21 @@
                 </div>
             {% endfor %}
 
+            {# Erreurs globales du formulaire (validation échouée) #}
+            {% if form is defined and form.vars.submitted and not form.vars.valid %}
+                <div class="bg-red-50 border-l-4 border-red-600 p-5 mb-6 rounded-r-xl shadow">
+                    <div class="flex items-start gap-3">
+                        <svg class="h-6 w-6 text-red-500 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                        </svg>
+                        <div>
+                            <p class="font-semibold text-red-800 mb-1">Le formulaire contient des erreurs. Veuillez les corriger avant de continuer.</p>
+                            {{ form_errors(form) }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
             {{ form_start(form, {'attr': {'class': 'space-y-8'}}) }}
 
             {# Organization Information #}

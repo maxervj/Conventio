@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Convention;
+use App\Entity\Professor;
 use App\Entity\Student;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -25,6 +26,19 @@ class ConventionRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->andWhere('c.student = :student')
             ->setParameter('student', $student)
+            ->orderBy('c.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Trouve toutes les conventions dont le professeur est référent
+     */
+    public function findByReferentProfessor(Professor $professor): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.referentProfessor = :professor')
+            ->setParameter('professor', $professor)
             ->orderBy('c.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
