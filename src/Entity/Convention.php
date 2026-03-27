@@ -75,10 +75,54 @@ class Convention
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $rejectionReason = null;
 
+    // Yousign
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $yousignRequestId = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $yousignDocumentId = null;
+
+    // draft | ongoing | done | expired | cancelled
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    private ?string $yousignStatus = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->status = 'draft';
+    }
+
+    public function getYousignRequestId(): ?string
+    {
+        return $this->yousignRequestId;
+    }
+
+    public function setYousignRequestId(?string $yousignRequestId): static
+    {
+        $this->yousignRequestId = $yousignRequestId;
+        return $this;
+    }
+
+    public function getYousignDocumentId(): ?string
+    {
+        return $this->yousignDocumentId;
+    }
+
+    public function setYousignDocumentId(?string $yousignDocumentId): static
+    {
+        $this->yousignDocumentId = $yousignDocumentId;
+        return $this;
+    }
+
+    public function getYousignStatus(): ?string
+    {
+        return $this->yousignStatus;
+    }
+
+    public function setYousignStatus(?string $yousignStatus): static
+    {
+        $this->yousignStatus = $yousignStatus;
+        return $this;
     }
 
     // Getters and setters
@@ -309,6 +353,16 @@ class Convention
     public function isCompleted(): bool
     {
         return $this->status === 'completed';
+    }
+
+    public function isPendingSignature(): bool
+    {
+        return $this->status === 'pending_signature';
+    }
+
+    public function isCancelled(): bool
+    {
+        return $this->status === 'cancelled';
     }
 
     public function isFullySigned(): bool
