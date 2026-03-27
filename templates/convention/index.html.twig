@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes conventions — Conventio{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">
+                {% if role == 'professor' %}
+                    Conventions à valider
+                {% else %}
+                    Mes conventions de stage
+                {% endif %}
+            </h1>
+            <p class="mt-2 text-sm text-gray-600">
+                {% if role == 'professor' %}
+                    Gérez les conventions de stage dont vous êtes référent·e
+                {% else %}
+                    Suivez vos conventions de stage
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- Flash messages -->
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-4 rounded-lg {% if type == 'success' %}bg-green-50 border border-green-200 text-green-800{% elseif type == 'error' %}bg-red-50 border border-red-200 text-red-800{% else %}bg-blue-50 border border-blue-200 text-blue-800{% endif %} p-4">
+                    <p class="text-sm font-medium">{{ message }}</p>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <!-- Conventions List -->
+        {% if conventions is empty %}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-6 py-12 text-center">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    <p class="mt-4 text-sm text-gray-500">
+                        {% if role == 'professor' %}
+                            Aucune convention à valider pour le moment
+                        {% else %}
+                            Vous n'avez pas encore de convention de stage
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        {% else %}
+            <!-- Status Tabs -->
+            <div class="mb-6 border-b border-gray-200">
+                <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                    {% set statusLabels = {
+                        'draft': 'Brouillon',
+                        'pending_validation': 'En attente de validation',
+                        'validated': 'Validée',
+                        'pending_signature': 'En attente de signature',
+                        'signed': 'Signée',
+                        'completed': 'Complétée',
+                        'cancelled': 'Annulée'
+                    } %}
+
+                    {% set existingStatuses = [] %}
+                    {% for convention in conventions %}
+                        {% if convention.status not in existingStatuses %}
+                            {% set existingStatuses = existingStatuses|merge([convention.status]) %}
+                        {% endif %}
+                    {% endfor %}
+
+                    <a href="#all" class="py-2 px-1 border-b-2 border-indigo-500 font-medium text-sm text-indigo-600 whitespace-nowrap">
+                        Toutes <span class="ml-2 bg-indigo-100 text-indigo-700 py-0.5 px-2.5 rounded-full text-xs font-semibold">{{ conventions|length }}</span>
+                    </a>
+
+                    {% for status in existingStatuses %}
+                        {% set statusConventions = conventions|filter(c => c.status == status) %}
+                        <a href="#{{ status }}" class="py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap">
+                            {{ statusLabels[status]|default(status) }} <span class="ml-2 bg-gray-100 text-gray-700 py-0.5 px-2.5 rounded-full text-xs font-semibold">{{ statusConventions|length }}</span>
+                        </a>
+                    {% endfor %}
+                </nav>
+            </div>
+
+            <!-- Conventions Grid -->
+            <div class="space-y-4">
+                {% for convention in conventions %}
+                    {% set statusLabel = {
+                        'draft': 'Brouillon',
+                        'pending_validation': 'En attente de validation',
+                        'validated': 'Validée',
+                        'pending_signature': 'En attente de signature',
+                        'signed': 'Signée',
+                        'completed': 'Complétée',
+                        'cancelled': 'Annulée'
+                    } %}
+                    {% set statusColor = {
+                        'draft': 'bg-gray-100 text-gray-700',
+                        'pending_validation': 'bg-amber-100 text-amber-700',
+                        'validated': 'bg-green-100 text-green-700',
+                        'pending_signature': 'bg-blue-100 text-blue-700',
+                        'signed': 'bg-indigo-100 text-indigo-700',
+                        'completed': 'bg-purple-100 text-purple-700',
+                        'cancelled': 'bg-red-100 text-red-700'
+                    } %}
+
+                    <a href="{{ path('convention_show', {id: convention.id}) }}"
+                       class="block bg-white rounded-2xl shadow-sm border border-gray-100 hover:border-indigo-300 hover:shadow-md transition-all duration-200 overflow-hidden group">
+                        <div class="px-6 py-5">
+                            <div class="flex items-center justify-between">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <h3 class="text-lg font-semibold text-gray-900 group-hover:text-indigo-700 transition-colors">
+                                            {% if role == 'professor' %}
+                                                {{ convention.student.firstName }} {{ convention.student.lastName }}
+                                            {% else %}
+                                                Convention de stage
+                                            {% endif %}
+                                        </h3>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ statusColor[convention.status]|default('bg-gray-100 text-gray-700') }}">
+                                            {{ statusLabel[convention.status]|default(convention.status) }}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center gap-3 text-sm text-gray-500">
+                                        <span>Créée le {{ convention.createdAt|date('d/m/Y') }}</span>
+                                        {% if convention.companyInfo and convention.companyInfo.companyName %}
+                                            <span class="text-gray-300">•</span>
+                                            <span>{{ convention.companyInfo.companyName }}</span>
+                                        {% endif %}
+                                        {% if role == 'student' and convention.referentProfessor %}
+                                            <span class="text-gray-300">•</span>
+                                            <span>Référent : {{ convention.referentProfessor.firstName }} {{ convention.referentProfessor.lastName }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

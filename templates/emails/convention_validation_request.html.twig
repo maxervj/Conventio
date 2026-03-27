@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            line-height: 1.6;
+            color: #374151;
+            background-color: #f3f4f6;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 40px 20px;
+        }
+        .info-box {
+            background-color: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .info-box p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+        .cta {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .cta a {
+            display: inline-block;
+            background-color: #7c3aed;
+            color: white;
+            padding: 12px 28px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .cta a:hover {
+            background-color: #6d28d9;
+        }
+        .text {
+            font-size: 14px;
+            margin: 15px 0;
+        }
+        .footer {
+            background-color: #f9fafb;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+            font-size: 12px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="header">
+        <h1>Demande de validation</h1>
+        <p>Une nouvelle convention attend votre validation</p>
+    </div>
+
+    <div class="content">
+        <p class="text">Bonjour {{ professor.firstName }},</p>
+
+        <p class="text">
+            L'étudiant(e) <strong>{{ convention.student.firstName }} {{ convention.student.lastName }}</strong>
+            vous soumet sa convention de stage pour validation. En tant que professeur référent, votre approbation est nécessaire pour que la convention puisse être établie.
+        </p>
+
+        <div class="info-box">
+            <p><strong>Étudiant(e) :</strong> {{ convention.student.firstName }} {{ convention.student.lastName }}</p>
+            {% if convention.companyInfo %}
+                <p><strong>Entreprise :</strong> {{ convention.companyInfo.companyName }}</p>
+                {% if convention.companyInfo.city %}
+                    <p><strong>Lieu :</strong> {{ convention.companyInfo.city }}{% if convention.companyInfo.country %}, {{ convention.companyInfo.country }}{% endif %}</p>
+                {% endif %}
+                {% if convention.companyInfo.internshipStartDate and convention.companyInfo.internshipEndDate %}
+                    <p><strong>Période :</strong> {{ convention.companyInfo.internshipStartDate|date('d/m/Y') }} → {{ convention.companyInfo.internshipEndDate|date('d/m/Y') }}</p>
+                {% endif %}
+                {% if convention.companyInfo.supervisorLastName %}
+                    <p><strong>Maître de stage :</strong> {{ convention.companyInfo.supervisorFirstName }} {{ convention.companyInfo.supervisorLastName }}</p>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <p class="text">
+            Cliquez sur le bouton ci-dessous pour accéder directement à la convention et la valider :
+        </p>
+
+        <div class="cta">
+            <a href="{{ conventionUrl }}">Voir et valider la convention</a>
+        </div>
+
+        <p class="text" style="font-size: 12px; color: #9ca3af;">
+            Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :<br>
+            <a href="{{ conventionUrl }}" style="color: #7c3aed; word-break: break-all;">{{ conventionUrl }}</a>
+        </p>
+    </div>
+
+    <div class="footer">
+        <p>Conventio — Gestion des conventions de stage</p>
+        <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
+    </div>
+</div>
+</body>
+</html>
+
