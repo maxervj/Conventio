@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\InternshipCompanyInfoRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: InternshipCompanyInfoRepository::class)]
 #[ORM\Table(name: 'company_info_collection')]
@@ -89,15 +88,7 @@ class InternshipCompanyInfo
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $website = null;
 
-    #[ORM\Column(type: 'string', length: 14, nullable: true)]
-    #[Assert\Length(
-        exactly: 14,
-        exactMessage: 'Le SIRET doit contenir exactement {{ limit }} caractères'
-    )]
-    #[Assert\Regex(
-        pattern: '/^\d{14}$/',
-        message: 'Le SIRET doit contenir uniquement des chiffres'
-    )]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $siret = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -412,7 +403,7 @@ class InternshipCompanyInfo
 
     public function setSiret(string $siret): static
     {
-        $this->siret = $siret;
+        $this->siret = preg_replace('/\s+/', '', $siret);
         return $this;
     }
 

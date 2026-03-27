@@ -131,12 +131,8 @@ class InternshipCompanyInfoFormType extends AbstractType
             ])
             ->add('siret', TextType::class, [
                 'label' => 'form.company.siret',
-                'required' => true,
+                'required' => false,
                 'attr' => ['class' => 'form-control', 'placeholder' => '123 456 789 01234'],
-                'constraints' => [
-                    new Assert\NotBlank(['message' => 'This field is required']),
-
-                ],
             ])
             ->add('insurerName', TextType::class, [
                 'label' => 'form.company.insurer_name',
@@ -326,6 +322,7 @@ class InternshipCompanyInfoFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => InternshipCompanyInfo::class,
             'translation_domain' => 'messages',
+            'csrf_protection' => false, // Sécurité assurée par le token unique dans l'URL
         ]);
     }
 
