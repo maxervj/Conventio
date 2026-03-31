@@ -106,10 +106,8 @@ final class ConventionController extends AbstractController
             return $this->redirectToRoute('admin_convention_show', ['id' => $convention->getId()]);
         }
 
-        // Mettre à jour la convention
-        $convention->setStatus('refused');
+        // Mettre à jour la convention : enregistrer uniquement la raison du refus
         $convention->setRejectionReason($rejectionReason);
-        $convention->setValidatedAt(new \DateTime());
 
         $entityManager->flush();
 
