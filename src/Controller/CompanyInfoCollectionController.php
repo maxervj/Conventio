@@ -86,16 +86,19 @@ class CompanyInfoCollectionController extends AbstractController
             $this->entityManager->persist($companyInfo);
             $this->entityManager->flush();
 
-            // Envoi de l'email (les exceptions seront loggées dans la méthode)
+            // Envoi de l'email
+            $emailError = null;
             try {
                 $this->sendCollectionRequestEmail($companyInfo);
-                $this->addFlash('success', 'Votre demande de collecte d\'informations a été envoyée avec succès à ' . $companyInfo->getContactEmail());
             } catch (\Exception $e) {
-                $this->addFlash('error', 'La demande a été créée mais l\'email n\'a pas pu être envoyé. Erreur: ' . $e->getMessage());
+                $emailError = $e->getMessage();
             }
 
-            // Redirige pour éviter la resoumission du formulaire
-            return $this->redirectToRoute('student_request_company_info');
+            // Redirige vers la page de confirmation de l'envoi
+            return $this->redirectToRoute('student_request_success', [
+                'contactEmail' => $companyInfo->getContactEmail(),
+                'emailError' => $emailError,
+            ]);
 
         }
         // Affiche le formulaire de demande
@@ -104,6 +107,17 @@ class CompanyInfoCollectionController extends AbstractController
         ]);
 
 
+    }
+
+    // Page de confirmation après envoi de la demande
+    #[Route('/student/request-success', name: 'student_request_success', methods: ['GET'])]
+    #[IsGranted('ROLE_STUDENT')]
+    public function requestSuccess(Request $request): Response
+    {
+        return $this->render('company_info/request_success.html.twig', [
+            'contactEmail' => $request->query->get('contactEmail'),
+            'emailError' => $request->query->get('emailError'),
+        ]);
     }
 
     // Formulaire de collecte d'informations auprès de l'entreprise
@@ -140,6 +154,10 @@ class CompanyInfoCollectionController extends AbstractController
                     'error' => 'error_expired'
                 ]);
             }
+
+            // Token trouvé mais findValidToken n'a pas retourné de résultat (ex: expiresAt null)
+            // On utilise directement l'entité existante
+            $companyInfo = $existingInfo;
         }
 
         // Check if confirmation step
@@ -244,9 +262,40 @@ class CompanyInfoCollectionController extends AbstractController
         }
 
         return $this->render('company_info/success.html.twig', [
-            'locale' => $locale
+            'locale' => $locale,
+            'companyInfo' => $companyInfo,
         ]);
     }
+
+    /*#[Route('/teacher/company-infos', name: 'teacher_company_infos', methods: ['GET'])]
+    #[IsGranted('ROLE_PROFESSOR')]
+    public function listForProfessor(): Response
+    {
+        $companyInfos = $this->companyInfoRepository->findBy(
+            ['isCompleted' => true], // On affiche les collectes complétées
+            ['createdAt' => 'DESC']
+        );
+
+        return $this->render('teacher/company_infos.html.twig', [
+            'companyInfos' => $companyInfos,
+        ]);
+    }
+
+    #[Route('/teacher/company-info/{id}/validate', name: 'teacher_company_info_validate', methods: ['POST'])]
+    #[IsGranted('ROLE_PROFESSOR')]
+    public function validate(int $id): Response
+    {
+        $companyInfo = $this->companyInfoRepository->find($id);
+        if (!$companyInfo) {
+            throw $this->createNotFoundException('Collecte non trouvée.');
+        }
+
+        // Ici, tu pourras plus tard ajouter la logique de validation (ex : setIsValidatedByTeacher(true))
+
+        $this->addFlash('success', 'Validation enregistrée (simulation).');
+        return $this->redirectToRoute('teacher_company_infos');
+    }*/
+
     // Envoie une notification par email à l'étudiant une fois les informations soumises
     private function sendNotificationToStudent(InternshipCompanyInfo $companyInfo): void
     {

@@ -117,7 +117,7 @@
                             <h3 class="text-lg font-bold text-gray-900 mb-4">Conventions à gérer</h3>
                             <div class="space-y-3">
                                 {% for convention in conventions %}
-                                    <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition duration-200">
+                                    <a href="{{ path('convention_show', {id: convention.id}) }}" class="block border border-gray-200 rounded-lg p-4 hover:bg-gray-50 hover:border-purple-300 transition duration-200">
                                         <div class="flex items-center justify-between">
                                             <div>
                                                 <p class="text-sm font-medium text-gray-900">
@@ -136,7 +136,7 @@
                                                 {{ convention.status }}
                                             </span>
                                         </div>
-                                    </div>
+                                    </a>
                                 {% endfor %}
                             </div>
                         </div>
@@ -162,7 +162,7 @@
                             <h3 class="text-lg font-bold text-gray-900 mb-4">Mes Conventions</h3>
                             <div class="space-y-3">
                                 {% for convention in conventions %}
-                                    <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition duration-200">
+                                    <a href="{{ path('convention_show', {id: convention.id}) }}" class="block border border-gray-200 rounded-lg p-4 hover:bg-gray-50 hover:border-blue-300 transition duration-200">
                                         <div class="flex items-center justify-between">
                                             <div>
                                                 <p class="text-sm font-medium text-gray-900">
@@ -181,7 +181,7 @@
                                                 {{ convention.status }}
                                             </span>
                                         </div>
-                                    </div>
+                                    </a>
                                 {% endfor %}
                             </div>
                         </div>

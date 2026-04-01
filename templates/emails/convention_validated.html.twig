@@ -3,101 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre convention a été validée</title>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-            line-height: 1.6;
-            color: #374151;
-            background-color: #f3f4f6;
-        }
-        .email-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .content {
-            padding: 40px 20px;
-        }
-        .info-box {
-            background-color: #f0f9ff;
-            border-left: 4px solid #3b82f6;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-        .info-box p {
-            margin: 8px 0;
-            font-size: 14px;
-        }
-        .cta {
-            text-align: center;
-            margin: 30px 0;
-        }
-        .cta a {
-            display: inline-block;
-            background-color: #10b981;
-            color: white;
-            padding: 12px 28px;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        .cta a:hover {
-            background-color: #059669;
-        }
-        .text {
-            font-size: 14px;
-            margin: 15px 0;
-        }
-        .footer {
-            background-color: #f9fafb;
-            padding: 20px;
-            text-align: center;
-            border-top: 1px solid #e5e7eb;
-            font-size: 12px;
-            color: #6b7280;
-        }
+        body { font-family: Arial, sans-serif; background-color: #f3f4f6; margin: 0; padding: 0; }
+        .wrapper { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+        .header { background: linear-gradient(135deg, #10b981, #059669); padding: 36px 32px; text-align: center; }
+        .header-icon { width: 56px; height: 56px; background: rgba(255,255,255,0.2); border-radius: 50%; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; }
+        .header h1 { color: #ffffff; margin: 0; font-size: 22px; font-weight: 700; }
+        .header p { color: #a7f3d0; margin: 8px 0 0; font-size: 14px; }
+        .body { padding: 32px; }
+        .greeting { font-size: 16px; color: #1f2937; margin-bottom: 16px; }
+        .text { font-size: 14px; color: #4b5563; line-height: 1.7; margin-bottom: 16px; }
+        .success-box { background: #ecfdf5; border: 1px solid #6ee7b7; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: center; }
+        .success-box p { margin: 0; font-size: 15px; font-weight: 600; color: #065f46; }
+        .success-box .sub { font-size: 13px; color: #059669; font-weight: 400; margin-top: 6px; }
+        .info-box { background: #f0fdf4; border-left: 4px solid #10b981; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0; }
+        .info-box p { margin: 0 0 6px; font-size: 14px; color: #374151; }
+        .info-box p:last-child { margin-bottom: 0; }
+        .info-box strong { color: #065f46; }
+        .cta { text-align: center; margin: 28px 0; }
+        .cta a { display: inline-block; background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px; font-size: 15px; font-weight: 600; }
+        .footer { background: #f9fafb; border-top: 1px solid #e5e7eb; padding: 20px 32px; text-align: center; font-size: 12px; color: #9ca3af; }
     </style>
 </head>
 <body>
-<div class="email-container">
+<div class="wrapper">
     <div class="header">
-        <h1>✓ Convention validée</h1>
-        <p>Votre convention de stage a été approuvée !</p>
+        <h1>Convention validée !</h1>
+        <p>Votre convention de stage a été approuvée par votre professeur référent</p>
     </div>
 
-    <div class="content">
-        <p class="text">Bonjour {{ student.firstName }},</p>
+    <div class="body">
+        <p class="greeting">Bonjour {{ student.firstName }} {{ student.lastName }},</p>
+
+        <div class="success-box">
+            <p>✅ Votre convention de stage a été validée</p>
+            <p class="sub">
+                Par {{ convention.referentProfessor ? convention.referentProfessor.firstName ~ ' ' ~ convention.referentProfessor.lastName : 'votre professeur référent' }}
+                le {{ convention.validatedAt|date('d/m/Y à H:i') }}
+            </p>
+        </div>
 
         <p class="text">
-            Bonne nouvelle ! Votre professeur référent,
-            <strong>{{ convention.referentProfessor.firstName }} {{ convention.referentProfessor.lastName }}</strong>,
-            a validé votre convention de stage.
+            Félicitations ! Votre professeur référent a approuvé votre convention de stage. Voici un récapitulatif :
         </p>
 
-        <p class="text">
-            Vous pouvez désormais passer à l'étape suivante du processus de signature. Accédez à votre convention pour voir les prochaines étapes.
-        </p>
-
-        <div class="info-box">
-            <p><strong>Détails de votre convention :</strong></p>
-            <p><strong>Étudiant :</strong> {{ student.firstName }} {{ student.lastName }}</p>
-            {% if convention.companyInfo %}
+        {% if convention.companyInfo %}
+            <div class="info-box">
                 <p><strong>Entreprise :</strong> {{ convention.companyInfo.companyName }}</p>
                 {% if convention.companyInfo.city %}
                     <p><strong>Lieu :</strong> {{ convention.companyInfo.city }}{% if convention.companyInfo.country %}, {{ convention.companyInfo.country }}{% endif %}</p>
@@ -105,27 +57,23 @@
                 {% if convention.companyInfo.internshipStartDate and convention.companyInfo.internshipEndDate %}
                     <p><strong>Période :</strong> {{ convention.companyInfo.internshipStartDate|date('d/m/Y') }} → {{ convention.companyInfo.internshipEndDate|date('d/m/Y') }}</p>
                 {% endif %}
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
 
         <p class="text">
-            Accédez à votre convention en cliquant sur le bouton ci-dessous :
+            Vous pouvez consulter le détail de votre convention en cliquant sur le bouton ci-dessous.
+            La prochaine étape sera la génération et la signature de la convention.
         </p>
 
         <div class="cta">
-            <a href="{{ conventionUrl }}">Voir ma convention validée</a>
+            <a href="{{ conventionUrl }}">Voir ma convention</a>
         </div>
-
-        <p class="text" style="font-size: 12px; color: #9ca3af;">
-            Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :<br>
-            <a href="{{ conventionUrl }}" style="color: #3b82f6; word-break: break-all;">{{ conventionUrl }}</a>
-        </p>
     </div>
 
     <div class="footer">
         <p>Conventio — Gestion des conventions de stage</p>
+        <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
     </div>
 </div>
 </body>
 </html>
-

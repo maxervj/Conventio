@@ -13,25 +13,6 @@
     <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
 
     {% block stylesheets %}{% endblock %}
-    {% block javascripts %}
-        {% block importmap %}{{ importmap('app') }}{% endblock %}
-
-        {# Scripts #}
-            <script>
-                // Toggle mobile menu
-                document.addEventListener('DOMContentLoaded', function() {
-                    const mobileMenuButton = document.getElementById('mobile-menu-button');
-                    const mobileMenu = document.getElementById('mobile-menu');
-
-                    if (mobileMenuButton && mobileMenu) {
-                        mobileMenuButton.addEventListener('click', function() {
-                            mobileMenu.classList.toggle('hidden');
-                        });
-                    }
-                });
-            </script>
-
-    {% endblock %}
 </head>
 <body class="bg-gray-50">
     {# Navigation principale #}
@@ -71,6 +52,12 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                                     </svg>
                                     <span>Nouvelle demande</span>
+                                </a>
+                                <a href="{{ path('convention_index') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                    <span>Mes conventions</span>
                                 </a>
                             </div>
                         {% endif %}
@@ -125,6 +112,12 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                                     </svg>
                                     <span>Accueil</span>
+                                </a>
+                                <a href="{{ path('admin_convention_list') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9v2m0-6v2m0-6v2"/>
+                                    </svg>
+                                    <span>Demandes en cours</span>
                                 </a>
                                 <a href="{{ path('app_signature_index') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 flex items-center gap-2">
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -182,6 +175,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                                     </svg>
                                 </button>
+                            </form>
 
                                 {# Menu déroulant #}
                                 <div id="user-menu" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
@@ -198,15 +192,16 @@
                                             </svg>
                                             Changer mon mot de passe
                                         </a>
-                                        <div class="border-t border-gray-100 my-1"></div>
+                                    </div>
+                                    <div class="border-t border-gray-100 my-1">
                                         <form action="{{ path('app_logout') }}" method="post">
                                             <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
-                                            <button type="submit" class="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition duration-200">
-                                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                                                </svg>
-                                                Déconnexion
-                                            </button>
+                                                <button type="submit" class="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition duration-200">
+                                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                                    </svg>
+                                                    Déconnexion
+                                                </button>
                                         </form>
                                     </div>
                                 </div>
@@ -238,13 +233,24 @@
                             </svg>
                             Nouvelle demande
                         </a>
+                        <a href="{{ path('convention_index') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">
+                            <svg class="inline h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Mes conventions
+                        </a>
                     {% elseif app.user is instanceof('App\\Entity\\Professor') %}
                         <a href="{{ path('app_home') }}" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition">Accueil</a>
                         <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition">Mes étudiants</a>
-                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition">Conventions</a>
+                        <a href="{{ path('convention_index') }}" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition">Conventions</a>
                     {% elseif app.user is instanceof('App\\Entity\\Tutor') %}
                         <a href="{{ path('app_home') }}" class="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition">Accueil</a>
                         <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition">Mes stagiaires</a>
+                    {% elseif app.user and is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_home') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">Accueil</a>
+                        <a href="{{ path('admin_convention_list') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">Demandes en cours</a>
+                        <a href="{{ path('app_signature_index') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">Information de signature</a>
+                        <a href="{{ path('app_formation_index') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">Formation</a>
                     {% endif %}
                 </div>
             </div>
@@ -294,5 +300,40 @@
             </div>
         </div>
     </footer>
+
+    {# Scripts #}
+    {% block javascripts %}
+        <script>
+            // Toggle mobile menu
+            document.addEventListener('DOMContentLoaded', function() {
+                const mobileMenuButton = document.getElementById('mobile-menu-button');
+                const mobileMenu = document.getElementById('mobile-menu');
+
+                if (mobileMenuButton && mobileMenu) {
+                    mobileMenuButton.addEventListener('click', function() {
+                        mobileMenu.classList.toggle('hidden');
+                    });
+                }
+
+                // Toggle user menu
+                const userMenuButton = document.getElementById('user-menu-button');
+                const userMenu = document.getElementById('user-menu');
+
+                if (userMenuButton && userMenu) {
+                    userMenuButton.addEventListener('click', function(event) {
+                        event.stopPropagation();
+                        userMenu.classList.toggle('hidden');
+                    });
+
+                    // Close menu when clicking outside
+                    document.addEventListener('click', function(event) {
+                        if (!userMenu.contains(event.target) && !userMenuButton.contains(event.target)) {
+                            userMenu.classList.add('hidden');
+                        }
+                    });
+                }
+            });
+        </script>
+    {% endblock %}
 </body>
 </html>
