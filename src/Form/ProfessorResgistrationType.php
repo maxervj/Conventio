@@ -23,8 +23,9 @@ use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
 use Symfony\Component\Validator\Constraints\PasswordStrength;
 use Symfony\Component\Validator\Constraints\Regex;
 
-class ProfessorRegistrationFormType extends AbstractType
+class ProfessorResgistrationType extends AbstractType
 {
+
     private ParameterBagInterface $params;
 
     public function __construct(ParameterBagInterface $params)
@@ -34,7 +35,7 @@ class ProfessorRegistrationFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $allowedDomains = $this->params->get('app.allowed_email_domains')['professor'];
+        $allowedDomains = $this->params->get('app.allowed_email_domains');
 
         $builder
             ->add('lastName', TextType::class, [
@@ -60,23 +61,21 @@ class ProfessorRegistrationFormType extends AbstractType
                 ],
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Email académique *',
+                'label' => 'Email *',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Veuillez saisir votre email académique',
+                        'message' => 'Veuillez saisir votre email',
                     ]),
                     new Email([
                         'message' => 'L\'adresse email {{ value }} n\'est pas valide.',
-                        'mode' => 'html5',
                     ]),
                     new AllowedEmailDomain(
                         allowedDomains: $allowedDomains
                     ),
                 ],
                 'attr' => [
-                    'placeholder' => 'Email académique (ex: prenom.nom@ac-academie.fr)',
+                    'placeholder' => 'Email',
                 ],
-                'help' => 'Vous devez utiliser votre adresse email académique professionnelle',
             ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
@@ -118,22 +117,17 @@ class ProfessorRegistrationFormType extends AbstractType
                 ],
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
             ])
-            ->add('taughtLevels', EntityType::class, [
+            ->add('Level', EntityType::class, [
                 'class' => Level::class,
-                'choice_label' => 'LevelName',
-                'label' => 'Classes que vous enseignez *',
+                'choice_label' => 'LevelName', // ou le champ à afficher
                 'multiple' => true,
-                'expanded' => true,
-                'required' => false,
-                'help' => 'Sélectionnez toutes les classes dans lesquelles vous enseignez',
-            ])
-            ->add('referentLevel', EntityType::class, [
-                'class' => Level::class,
-                'choice_label' => 'LevelName',
-                'label' => 'Classe dont vous êtes référent',
-                'required' => false,
-                'placeholder' => 'Sélectionnez une classe (optionnel)',
-                'help' => 'Si vous êtes professeur référent d\'une classe, sélectionnez-la ici',
+                'expanded' => true, // cases à cocher
+                'label' => 'Les classes que vous enseignerez *',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez sélectionner au moins une classe',
+                    ]),
+                ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'label' => 'Accepter les CGU',

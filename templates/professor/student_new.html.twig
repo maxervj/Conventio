@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un étudiant — Conventio{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto">
+        <!-- Back link -->
+        <a href="{{ path('professor_my_students') }}" class="inline-flex items-center gap-2 text-sm font-medium text-indigo-600 hover:text-indigo-500 mb-6 group">
+            <svg class="h-4 w-4 transition group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Retour à mes étudiants
+        </a>
+
+        <!-- Flash messages -->
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-4 rounded-lg {% if type == 'success' %}bg-green-50 border border-green-200 text-green-800{% elseif type == 'error' %}bg-red-50 border border-red-200 text-red-800{% else %}bg-blue-50 border border-blue-200 text-blue-800{% endif %} p-4">
+                    <p class="text-sm font-medium">{{ message }}</p>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {% if availableStudents|length > 0 %}
+            <!-- Form Card -->
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <!-- Header -->
+            <div class="px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600">
+                <h1 class="text-2xl font-bold text-white">Ajouter un étudiant</h1>
+                <p class="text-indigo-100 text-sm mt-1">Sélectionnez un étudiant à ajouter à vos niveaux</p>
+            </div>
+
+                <!-- Form -->
+                <div class="px-6 py-8">
+                    <form method="POST" action="{{ path('professor_student_new') }}" class="space-y-6">
+                        <!-- Sélectionner étudiant -->
+                        <div>
+                            <label for="student" class="block text-sm font-medium text-gray-700 mb-3">
+                                Sélectionner un étudiant <span class="text-red-500">*</span>
+                            </label>
+                            <div class="space-y-2 max-h-96 overflow-y-auto border border-gray-200 rounded-lg p-4 bg-gray-50">
+                                {% for student in availableStudents %}
+                                    <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-indigo-50 transition-colors">
+                                        <input type="radio" name="student" value="{{ student.id }}" required
+                                               class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                        <div class="ml-3 flex-1">
+                                            <p class="text-sm font-medium text-gray-900">{{ student.firstName }} {{ student.lastName }}</p>
+                                            <p class="text-xs text-gray-500">{{ student.email }}</p>
+                                            {% if student.levels|length > 0 %}
+                                                <p class="text-xs text-blue-600 mt-1">Niveaux: {{ student.levels|map(l => l.levelName)|join(', ') }}</p>
+                                            {% else %}
+                                                <p class="text-xs text-orange-600 mt-1">Aucun niveau assigné</p>
+                                            {% endif %}
+                                        </div>
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Assigner à un niveau -->
+                        <div>
+                            <label for="level" class="block text-sm font-medium text-gray-700 mb-2">
+                                Assigner au niveau <span class="text-red-500">*</span>
+                            </label>
+                            {% if levels|length > 0 %}
+                                <select id="level" name="level" required
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                                    <option value="">Sélectionnez un niveau</option>
+                                    {% for level in levels %}
+                                        <option value="{{ level.id }}">
+                                            {{ level.levelName }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            {% else %}
+                                <p class="text-sm text-red-600">Vous n'enseignez aucun niveau</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Info Box -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <p class="text-sm text-blue-800">
+                                <strong>Info:</strong> Vous allez assigner cet étudiant à l'un de vos niveaux. L'étudiant verra ce niveau dans son profil.
+                            </p>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="flex gap-3 pt-4">
+                            <button type="submit" class="flex-1 px-4 py-2 bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg transition-colors font-medium">
+                                Ajouter l'étudiant
+                            </button>
+                            <a href="{{ path('professor_my_students') }}" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors font-medium text-center">
+                                Annuler
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <!-- No students available -->
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                <div class="px-6 py-12 text-center">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                    </svg>
+                    <h3 class="mt-4 text-lg font-medium text-gray-900">Aucun étudiant disponible</h3>
+                    <p class="mt-2 text-sm text-gray-500">Tous les étudiants sont déjà assignés à vos niveaux</p>
+                    <a href="{{ path('professor_my_students') }}" class="mt-4 inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium">
+                        Retour à mes étudiants
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Help Card -->
+        <div class="mt-6 bg-gray-50 rounded-2xl border border-gray-200 p-6">
+            <h3 class="font-semibold text-gray-900 mb-3">💡 Comment ça fonctionne ?</h3>
+            <ul class="space-y-2 text-sm text-gray-600">
+                <li>✓ Vous sélectionnez un étudiant de la liste</li>
+                <li>✓ Vous choisissez l'un de vos niveaux</li>
+                <li>✓ L'étudiant est automatiquement assigné à ce niveau</li>
+                <li>✓ L'étudiant apparaîtra dans votre liste "Mes étudiants"</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+

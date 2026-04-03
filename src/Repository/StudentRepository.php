@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Student;
+use App\Entity\Level;
+use App\Entity\Formation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +16,20 @@ class StudentRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Student::class);
+    }
+
+    /**
+     * Trouve tous les étudiants d'une formation
+     */
+    public function findByFormation(Formation $formation): array
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.formation = :formation')
+            ->setParameter('formation', $formation)
+            ->orderBy('s.lastName', 'ASC')
+            ->addOrderBy('s.firstName', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     //    /**
