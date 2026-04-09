@@ -170,6 +170,8 @@ class CompanyInfoCollectionController extends AbstractController
             // Gère les horaires de travail séparément
             $workSchedule = $request->request->all('work_schedule');
             if ($workSchedule) {
+                // Calcule les totaux pour chaque jour
+                $workSchedule = $this->calculateWorkScheduleTotals($workSchedule);
                 $companyInfo->setWorkSchedule($workSchedule);
             }
 
@@ -264,6 +266,30 @@ class CompanyInfoCollectionController extends AbstractController
         return $this->render('company_info/success.html.twig', [
             'locale' => $locale,
             'companyInfo' => $companyInfo,
+        ]);
+    }
+
+    // Affichage de la collecte complétée en mode lecture seule
+    #[Route('/company-info/{token}/view', name: 'company_info_view', methods: ['GET'])]
+    public function view(string $token, Request $request): Response
+    {
+        $locale = $request->query->get('lang', 'fr');
+        $request->setLocale($locale);
+        $request->getSession()->set('_locale', $locale);
+
+        $companyInfo = $this->companyInfoRepository->findByToken($token);
+
+        if (!$companyInfo) {
+            return $this->render('company_info/error.html.twig', [
+                'error' => 'error_invalid'
+            ]);
+        }
+
+        // Afficher même si le formulaire n'est pas complété (pour consultation)
+        return $this->render('company_info/view.html.twig', [
+            'companyInfo' => $companyInfo,
+            'token' => $token,
+            'locale' => $locale
         ]);
     }
 
@@ -373,5 +399,44 @@ class CompanyInfoCollectionController extends AbstractController
 
         // Envoyer l'email et laisser l'exception remonter si ça échoue
         $this->mailer->send($email);
+    }
+
+    // Calcule les totaux des horaires de travail
+    private function calculateWorkScheduleTotals(array $workSchedule): array
+    {
+        foreach ($workSchedule as $day => &$schedule) {
+            if (is_array($schedule)) {
+                // Convertir les valeurs en entiers
+                $morningStartH = (int)($schedule['morning_start_h'] ?? 0);
+                $morningStartM = (int)($schedule['morning_start_m'] ?? 0);
+                $morningEndH = (int)($schedule['morning_end_h'] ?? 0);
+                $morningEndM = (int)($schedule['morning_end_m'] ?? 0);
+
+                $afternoonStartH = (int)($schedule['afternoon_start_h'] ?? 0);
+                $afternoonStartM = (int)($schedule['afternoon_start_m'] ?? 0);
+                $afternoonEndH = (int)($schedule['afternoon_end_h'] ?? 0);
+                $afternoonEndM = (int)($schedule['afternoon_end_m'] ?? 0);
+
+                // Calculer la durée du matin en minutes
+                $morningStartMinutes = $morningStartH * 60 + $morningStartM;
+                $morningEndMinutes = $morningEndH * 60 + $morningEndM;
+                $morningDuration = max(0, $morningEndMinutes - $morningStartMinutes);
+
+                // Calculer la durée de l'après-midi en minutes
+                $afternoonStartMinutes = $afternoonStartH * 60 + $afternoonStartM;
+                $afternoonEndMinutes = $afternoonEndH * 60 + $afternoonEndM;
+                $afternoonDuration = max(0, $afternoonEndMinutes - $afternoonStartMinutes);
+
+                // Total en minutes et conversion en heures:minutes
+                $totalMinutes = $morningDuration + $afternoonDuration;
+                $hours = intdiv($totalMinutes, 60);
+                $minutes = $totalMinutes % 60;
+
+                // Ajouter le total formaté
+                $schedule['total'] = sprintf('%d:%02d', $hours, $minutes);
+            }
+        }
+
+        return $workSchedule;
     }
 }

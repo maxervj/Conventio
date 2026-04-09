@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Professor;
 use App\Entity\Student;
 use App\Entity\Level;
+use App\Entity\InternshipCompanyInfo;
 use App\Repository\StudentRepository;
 use App\Repository\LevelRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -186,6 +187,43 @@ class ProfessorStudentController extends AbstractController
         }
 
         return $this->redirectToRoute('professor_my_students');
+    }
+
+    /**
+     * Afficher les collectes (InternshipCompanyInfo) complétées d'un étudiant
+     */
+    #[Route('/students/{id}/collections', name: 'professor_student_collections', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function showCollections(Student $student): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof Professor) {
+            throw $this->createAccessDeniedException();
+        }
+
+        // Vérifier que l'étudiant est dans l'un des niveaux du professeur
+        $isStudentOfProfessor = false;
+        foreach ($user->getTaughtLevels() as $level) {
+            if ($student->getLevels()->contains($level)) {
+                $isStudentOfProfessor = true;
+                break;
+            }
+        }
+
+        if (!$isStudentOfProfessor) {
+            throw $this->createAccessDeniedException('Cet étudiant ne fait pas partie de vos niveaux.');
+        }
+
+        // Récupérer les collectes complétées de cet étudiant
+        $collections = $this->entityManager
+            ->getRepository(InternshipCompanyInfo::class)
+            ->findBy(['student' => $student, 'isCompleted' => true], ['completedAt' => 'DESC']);
+
+        return $this->render('professor/student_collections.html.twig', [
+            'student' => $student,
+            'professor' => $user,
+            'collections' => $collections,
+        ]);
     }
 }
 
