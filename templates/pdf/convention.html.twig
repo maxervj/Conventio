@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convention de stage — {{ convention.student.firstName }} {{ convention.student.lastName }}</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; font-size: 11px; color: #1a1a1a; background: #fff; }
+
+        .header {
+            background: #1e3a5f;
+            color: white;
+            padding: 20px 30px;
+            margin-bottom: 20px;
+        }
+        .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
+        .header h1 { font-size: 22px; font-weight: bold; }
+        .header .subtitle { font-size: 12px; margin-top: 4px; opacity: 0.85; }
+        .header .ref { font-size: 10px; opacity: 0.7; margin-top: 2px; }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .status-draft { background: #e5e7eb; color: #374151; }
+        .status-pending { background: #fef9c3; color: #854d0e; }
+        .status-validated { background: #dbeafe; color: #1d4ed8; }
+        .status-signed { background: #dcfce7; color: #166534; }
+        .status-completed { background: #f0fdf4; color: #14532d; border: 1px solid #86efac; }
+
+        .content { padding: 0 30px 30px; }
+
+        .section {
+            margin-bottom: 18px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .section-title {
+            background: #1e3a5f;
+            color: white;
+            padding: 8px 14px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .section-body { padding: 12px 14px; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+        .field { margin-bottom: 8px; }
+        .field-label { font-size: 9px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 2px; }
+        .field-value { font-size: 11px; color: #111827; font-weight: 500; }
+        .field-value.empty { color: #9ca3af; font-style: italic; font-weight: normal; }
+
+        .divider { height: 1px; background: #e5e7eb; margin: 10px 0; }
+
+        .signature-block {
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 12px;
+            background: #f9fafb;
+        }
+        .signature-block h4 { font-size: 11px; font-weight: bold; color: #374151; margin-bottom: 8px; }
+        .sig-signed { color: #16a34a; font-weight: bold; }
+        .sig-pending { color: #9ca3af; font-style: italic; }
+
+        .stamp-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 10px;
+            margin-top: 10px;
+            height: 70px;
+        }
+
+        .bool-yes { color: #16a34a; font-weight: bold; }
+        .bool-no { color: #9ca3af; }
+
+        .table { width: 100%; border-collapse: collapse; font-size: 10px; }
+        .table th { background: #f3f4f6; padding: 6px 8px; text-align: left; border: 1px solid #e5e7eb; color: #374151; font-size: 9px; }
+        .table td { padding: 5px 8px; border: 1px solid #e5e7eb; }
+
+        .legal-box {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 14px;
+            font-size: 9px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding: 14px 30px;
+            border-top: 2px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            font-size: 9px;
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-top">
+        <div style="display:flex; align-items:center; gap:14px;">
+            <img src="lyceegabrielfaure_logo.jpg" alt="Lycée Gabriel Fauré" style="height:50px; filter:brightness(0) invert(1);">
+            <div>
+                <h1>Convention de Stage</h1>
+                <p class="subtitle">{{ convention.student.firstName }} {{ convention.student.lastName }}</p>
+                {% if convention.companyInfo %}
+                    <p class="ref">{{ convention.companyInfo.companyName }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <div style="text-align:right; margin-top:4px;">
+            {% if convention.status == 'draft' %}
+                <span class="status-badge status-draft">Brouillon</span>
+            {% elseif convention.status == 'pending_validation' %}
+                <span class="status-badge status-pending">En attente de validation</span>
+            {% elseif convention.status == 'validated' %}
+                <span class="status-badge status-validated">Validée</span>
+            {% elseif convention.status == 'signed' %}
+                <span class="status-badge status-signed">Signée</span>
+            {% elseif convention.status == 'completed' %}
+                <span class="status-badge status-completed">Complétée</span>
+            {% endif %}
+            <br><span style="font-size:9px; opacity:0.7; margin-top:4px; display:block;">Réf. #{{ convention.id }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+
+    {# --- Mentions légales / intro --- #}
+    <div class="legal-box">
+        La présente convention est établie conformément aux dispositions légales et réglementaires
+        relatives aux stages en milieu professionnel. Elle fixe les engagements respectifs de
+        l'établissement d'enseignement, de l'étudiant et de l'organisme d'accueil.
+    </div>
+
+    {# --- Parties à la convention --- #}
+    <div class="section">
+        <div class="section-title">Parties à la convention</div>
+        <div class="section-body">
+            <div class="grid-2">
+                {# Étudiant #}
+                <div>
+                    <p style="font-weight:bold; font-size:11px; margin-bottom:8px; color:#1e3a5f;">L'Étudiant(e)</p>
+                    <div class="field">
+                        <div class="field-label">Nom et prénom</div>
+                        <div class="field-value">{{ convention.student.firstName }} {{ convention.student.lastName }}</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Email établissement</div>
+                        <div class="field-value">{{ convention.student.email }}</div>
+                    </div>
+                    {% if convention.student.personalEmail %}
+                    <div class="field">
+                        <div class="field-label">Email personnel</div>
+                        <div class="field-value">{{ convention.student.personalEmail }}</div>
+                    </div>
+                    {% endif %}
+                    {% if convention.student.birthDate %}
+                    <div class="field">
+                        <div class="field-label">Date de naissance</div>
+                        <div class="field-value">{{ convention.student.birthDate|date('d/m/Y') }}</div>
+                    </div>
+                    {% endif %}
+                    {% if convention.student.levels is not empty %}
+                    <div class="field">
+                        <div class="field-label">Formation</div>
+                        <div class="field-value">
+                            {% for level in convention.student.levels %}
+                                {{ level.levelName }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {# Professeur référent #}
+                <div>
+                    <p style="font-weight:bold; font-size:11px; margin-bottom:8px; color:#1e3a5f;">Le Professeur référent</p>
+                    {% if convention.referentProfessor %}
+                        <div class="field">
+                            <div class="field-label">Nom et prénom</div>
+                            <div class="field-value">{{ convention.referentProfessor.firstName }} {{ convention.referentProfessor.lastName }}</div>
+                        </div>
+                        <div class="field">
+                            <div class="field-label">Email</div>
+                            <div class="field-value">{{ convention.referentProfessor.email }}</div>
+                        </div>
+                    {% else %}
+                        <div class="field-value empty">Non désigné</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# --- Entreprise d'accueil --- #}
+    {% if convention.companyInfo %}
+    {% set info = convention.companyInfo %}
+    <div class="section">
+        <div class="section-title">Organisme d'accueil</div>
+        <div class="section-body">
+            <div class="grid-2">
+                <div>
+                    <div class="field">
+                        <div class="field-label">Raison sociale</div>
+                        <div class="field-value">{{ info.companyName }}</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">SIRET</div>
+                        <div class="field-value">{{ info.siret ?: '-' }}</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Adresse</div>
+                        <div class="field-value">
+                            {{ info.address }}
+                            {% if info.addressComplement %}<br>{{ info.addressComplement }}{% endif %}
+                            <br>{{ info.postalCode }} {{ info.city }}
+                            {% if info.country %}, {{ info.country }}{% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="field">
+                        <div class="field-label">Téléphone</div>
+                        <div class="field-value">{{ info.landlinePhone ?: info.mobilePhone ?: '-' }}</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Email</div>
+                        <div class="field-value">{{ info.email ?: '-' }}</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Site web</div>
+                        <div class="field-value">{{ info.website ?: '-' }}</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Assureur / Référence</div>
+                        <div class="field-value">{{ info.insurerName ?: '-' }} {% if info.insurerReference %}/ {{ info.insurerReference }}{% endif %}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="grid-2">
+                <div>
+                    <p style="font-weight:bold; font-size:10px; color:#374151; margin-bottom:6px;">Responsable</p>
+                    <div class="field">
+                        <div class="field-label">Nom et prénom</div>
+                        <div class="field-value">{{ info.responsibleFirstName }} {{ info.responsibleLastName }}</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Fonction</div>
+                        <div class="field-value">{{ info.responsibleFunction ?: '-' }}</div>
+                    </div>
+                </div>
+                <div>
+                    <p style="font-weight:bold; font-size:10px; color:#374151; margin-bottom:6px;">Maître de stage</p>
+                    <div class="field">
+                        <div class="field-label">Nom et prénom</div>
+                        <div class="field-value">{{ info.supervisorFirstName }} {{ info.supervisorLastName }}</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Fonction</div>
+                        <div class="field-value">{{ info.supervisorFunction ?: '-' }}</div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Téléphone / Email</div>
+                        <div class="field-value">{{ info.supervisorPhone ?: '-' }} / {{ info.supervisorEmail ?: '-' }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# --- Modalités du stage --- #}
+    <div class="section">
+        <div class="section-title">Modalités du stage</div>
+        <div class="section-body">
+            <div class="grid-3">
+                <div>
+                    <div class="field">
+                        <div class="field-label">Date de début</div>
+                        <div class="field-value">{{ info.internshipStartDate ? info.internshipStartDate|date('d/m/Y') : '-' }}</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="field">
+                        <div class="field-label">Date de fin</div>
+                        <div class="field-value">{{ info.internshipEndDate ? info.internshipEndDate|date('d/m/Y') : '-' }}</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="field">
+                        <div class="field-label">Déplacements professionnels</div>
+                        <div class="field-value {{ info.hasTravel ? 'bool-yes' : 'bool-no' }}">{{ info.hasTravel ? 'Oui' : 'Non' }}</div>
+                    </div>
+                </div>
+            </div>
+
+            {% if info.internshipAddress %}
+            <div class="divider"></div>
+            <div class="field">
+                <div class="field-label">Lieu de stage (si différent du siège)</div>
+                <div class="field-value">{{ info.internshipAddress }}, {{ info.internshipPostalCode }} {{ info.internshipCity }}{% if info.internshipCountry %}, {{ info.internshipCountry }}{% endif %}</div>
+            </div>
+            {% endif %}
+
+            <div class="divider"></div>
+            <div class="grid-2">
+                <div>
+                    <div class="field">
+                        <div class="field-label">Transport</div>
+                        <div class="field-value {{ info.coversTransportCosts ? 'bool-yes' : 'bool-no' }}">
+                            {{ info.coversTransportCosts ? 'Pris en charge' : 'Non pris en charge' }}
+                            {% if info.coversTransportCosts and info.transportCostsDetails %} — {{ info.transportCostsDetails }}{% endif %}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Repas</div>
+                        <div class="field-value {{ info.coversMealCosts ? 'bool-yes' : 'bool-no' }}">
+                            {{ info.coversMealCosts ? 'Pris en charge' : 'Non pris en charge' }}
+                            {% if info.coversMealCosts and info.mealCostsDetails %} — {{ info.mealCostsDetails }}{% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="field">
+                        <div class="field-label">Hébergement</div>
+                        <div class="field-value {{ info.coversAccommodationCosts ? 'bool-yes' : 'bool-no' }}">
+                            {{ info.coversAccommodationCosts ? 'Pris en charge' : 'Non pris en charge' }}
+                            {% if info.coversAccommodationCosts and info.accommodationCostsDetails %} — {{ info.accommodationCostsDetails }}{% endif %}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="field-label">Gratification</div>
+                        <div class="field-value {{ info.providesGratification ? 'bool-yes' : 'bool-no' }}">
+                            {{ info.providesGratification ? 'Oui' : 'Non' }}
+                            {% if info.providesGratification and info.gratificationDetails %} — {{ info.gratificationDetails }}{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if info.plannedActivities %}
+            <div class="divider"></div>
+            <div class="field">
+                <div class="field-label">Activités professionnelles prévues</div>
+                <div class="field-value" style="font-weight:normal; line-height:1.6;">{{ info.plannedActivities }}</div>
+            </div>
+            {% endif %}
+
+            {% if info.workSchedule %}
+            <div class="divider"></div>
+            <div class="field-label" style="margin-bottom:6px;">Horaires de travail</div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Jour</th>
+                        <th>Matin début</th>
+                        <th>Matin fin</th>
+                        <th>Après-midi début</th>
+                        <th>Après-midi fin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set days = {'monday': 'Lundi', 'tuesday': 'Mardi', 'wednesday': 'Mercredi', 'thursday': 'Jeudi', 'friday': 'Vendredi', 'saturday': 'Samedi'} %}
+                    {% for dayKey, dayLabel in days %}
+                        {% if info.workSchedule[dayKey] is defined %}
+                        {% set schedule = info.workSchedule[dayKey] %}
+                        <tr>
+                            <td><strong>{{ dayLabel }}</strong></td>
+                            <td>{{ schedule.morning_start ?? '-' }}</td>
+                            <td>{{ schedule.morning_end ?? '-' }}</td>
+                            <td>{{ schedule.afternoon_start ?? '-' }}</td>
+                            <td>{{ schedule.afternoon_end ?? '-' }}</td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    {# --- Signatures --- #}
+    <div class="section">
+        <div class="section-title">Signatures électroniques</div>
+        <div class="section-body">
+            <div class="grid-3">
+                {# Étudiant #}
+                <div class="signature-block">
+                    <h4>L'Étudiant(e)</h4>
+                    <p style="font-size:10px; color:#374151; margin-bottom:8px;">{{ convention.student.firstName }} {{ convention.student.lastName }}</p>
+                    {% if convention.studentSignedAt %}
+                        <p class="sig-signed">&#10003; Signé le {{ convention.studentSignedAt|date('d/m/Y à H:i') }}</p>
+                    {% else %}
+                        <p class="sig-pending">En attente de signature</p>
+                        <div class="stamp-area">Signature</div>
+                    {% endif %}
+                </div>
+
+                {# Entreprise #}
+                <div class="signature-block">
+                    <h4>L'Entreprise</h4>
+                    {% if convention.companyInfo %}
+                        <p style="font-size:10px; color:#374151; margin-bottom:8px;">{{ convention.companyInfo.companyName }}</p>
+                    {% endif %}
+                    {% if convention.companySignedAt %}
+                        <p class="sig-signed">&#10003; Signé le {{ convention.companySignedAt|date('d/m/Y à H:i') }}</p>
+                    {% else %}
+                        <p class="sig-pending">En attente de signature</p>
+                        <div class="stamp-area">Signature &amp; Cachet</div>
+                    {% endif %}
+                </div>
+
+                {# Établissement #}
+                <div class="signature-block">
+                    <h4>L'Établissement</h4>
+                    <p style="font-size:10px; color:#374151; margin-bottom:8px;">Direction</p>
+                    {% if convention.schoolSignedAt %}
+                        <p class="sig-signed">&#10003; Signé le {{ convention.schoolSignedAt|date('d/m/Y à H:i') }}</p>
+                    {% else %}
+                        <p class="sig-pending">En attente de signature</p>
+                        <div class="stamp-area">Signature &amp; Cachet</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if convention.validationNotes %}
+            <div style="margin-top:12px; padding:10px; background:#eff6ff; border-left:3px solid #3b82f6; border-radius:4px;">
+                <p style="font-size:9px; font-weight:bold; color:#1d4ed8; margin-bottom:4px;">Notes de validation</p>
+                <p style="font-size:10px; color:#374151;">{{ convention.validationNotes }}</p>
+            </div>
+            {% endif %}
+
+            {% if convention.rejectionReason %}
+            <div style="margin-top:12px; padding:10px; background:#fef2f2; border-left:3px solid #ef4444; border-radius:4px;">
+                <p style="font-size:9px; font-weight:bold; color:#dc2626; margin-bottom:4px;">Motif de rejet</p>
+                <p style="font-size:10px; color:#374151;">{{ convention.rejectionReason }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {# --- Historique --- #}
+    <div class="section">
+        <div class="section-title">Historique de la convention</div>
+        <div class="section-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Étape</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Création</td>
+                        <td>{{ convention.createdAt|date('d/m/Y à H:i') }}</td>
+                    </tr>
+                    {% if convention.validatedAt %}
+                    <tr>
+                        <td>Validation</td>
+                        <td>{{ convention.validatedAt|date('d/m/Y à H:i') }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if convention.signedAt %}
+                    <tr>
+                        <td>Signature</td>
+                        <td>{{ convention.signedAt|date('d/m/Y à H:i') }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if convention.completedAt %}
+                    <tr>
+                        <td>Complétion</td>
+                        <td>{{ convention.completedAt|date('d/m/Y à H:i') }}</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    <span>Conventio — Système de gestion des conventions de stage</span>
+    <span>Généré le {{ "now"|date('d/m/Y à H:i') }}</span>
+</div>
+
+</body>
+</html>

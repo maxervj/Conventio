@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Collecte des informations — {{ companyInfo.companyName }}</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
+            color: #000;
+            background: #fff;
+            padding: 10mm 12mm;
+        }
+
+        /* ── En-tête ── */
+        .doc-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+        .doc-header img { height: 55px; }
+        .doc-header-center { flex: 1; text-align: center; }
+        .doc-title {
+            font-size: 16pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .doc-subtitle {
+            font-size: 9pt;
+            margin-top: 3px;
+            color: #333;
+        }
+
+        /* ── Ligne coordonnateur ── */
+        .coord-line {
+            margin: 6px 0 4px;
+            font-size: 10pt;
+        }
+        .coord-line .label { font-weight: bold; color: #c00; }
+
+        /* ── Dates ── */
+        .dates-line {
+            font-size: 11pt;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        /* ── Avertissement rouge ── */
+        .warning-red {
+            font-size: 12pt;
+            font-weight: bold;
+            color: #c00;
+            text-align: center;
+            border: 2px solid #c00;
+            padding: 5px 10px;
+            margin: 6px 0 8px;
+            line-height: 1.4;
+        }
+
+        /* ── Séparateur ── */
+        hr { border: none; border-top: 1px solid #000; margin: 6px 0; }
+
+        /* ── Tableaux de données ── */
+        table.form-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            margin-bottom: 6px;
+        }
+        table.form-table td, table.form-table th {
+            border: 1px solid #000;
+            padding: 3px 5px;
+            vertical-align: top;
+        }
+        table.form-table .section-header {
+            background: #d0d0d0;
+            font-weight: bold;
+            font-size: 10pt;
+            padding: 4px 6px;
+        }
+        table.form-table .field-label {
+            font-weight: bold;
+            white-space: nowrap;
+            width: 36%;
+            background: #f5f5f5;
+        }
+        table.form-table .field-value {
+            width: 64%;
+        }
+
+        /* ── Cases à cocher ── */
+        .checkbox-row { margin: 2px 0; }
+        .cb { display: inline-block; width: 12px; height: 12px; border: 1px solid #000; margin-right: 3px; text-align: center; line-height: 12px; font-size: 9pt; vertical-align: middle; }
+        .cb-checked { background: #000; color: #fff; font-weight: bold; }
+        .cb-unchecked { background: #fff; }
+        .oui-non span { margin-right: 12px; }
+
+        /* ── Section titre (tableau horaires, pédagogie) ── */
+        .section-title {
+            background: #bbb;
+            font-weight: bold;
+            font-size: 10pt;
+            padding: 3px 6px;
+            border: 1px solid #000;
+            margin-top: 6px;
+        }
+
+        /* ── Horaires ── */
+        table.horaires {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9pt;
+            margin-top: 2px;
+        }
+        table.horaires th, table.horaires td {
+            border: 1px solid #000;
+            padding: 3px 5px;
+            text-align: center;
+        }
+        table.horaires th { background: #ddd; font-weight: bold; }
+        table.horaires td.day { text-align: left; font-weight: bold; background: #f5f5f5; }
+
+        /* ── Note ── */
+        .note-box {
+            border: 1px solid #000;
+            padding: 4px 6px;
+            font-size: 8.5pt;
+            background: #fffbe6;
+            margin: 4px 0;
+            line-height: 1.4;
+        }
+        .note-red { color: #c00; font-weight: bold; font-size: 9pt; }
+
+        /* ── Avertissement ALL CAPS ── */
+        .all-required {
+            text-align: center;
+            font-weight: bold;
+            font-size: 10pt;
+            color: #c00;
+            border: 2px solid #c00;
+            padding: 4px;
+            margin: 6px 0;
+        }
+
+        /* ── Pédagogie ── */
+        .peda-item { margin: 4px 0; font-size: 9.5pt; }
+        .peda-item .peda-label { font-weight: bold; }
+        .peda-content {
+            border: 1px solid #ccc;
+            min-height: 30px;
+            padding: 4px 6px;
+            margin-top: 2px;
+            background: #fafafa;
+            font-size: 9pt;
+            line-height: 1.5;
+        }
+
+        /* ── Bandeau de statut ── */
+        .status-banner {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin: 6px 0;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 10pt;
+            font-weight: bold;
+        }
+        .status-pending  { background: #fff8e1; border: 1.5px solid #f9a825; color: #795100; }
+        .status-done     { background: #e8f5e9; border: 1.5px solid #2e7d32; color: #1b5e20; }
+        .status-validated{ background: #e3f2fd; border: 1.5px solid #1565c0; color: #0d3c7a; }
+
+        /* ── Tampon ── */
+        .stamp {
+            position: absolute;
+            right: 18mm;
+            top: 28mm;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 4px solid currentColor;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: bold;
+            font-size: 10pt;
+            opacity: 0.82;
+            transform: rotate(-15deg);
+            line-height: 1.2;
+            padding: 6px;
+        }
+        .stamp-validated { color: #1565c0; border-color: #1565c0; }
+        .stamp-completed { color: #2e7d32; border-color: #2e7d32; }
+        body { position: relative; }
+    </style>
+</head>
+<body>
+
+{% set isValidated = convention is not null and convention.status in ['validated', 'signed', 'completed'] %}
+{% set isCompleted = companyInfo.isCompleted %}
+
+{# ════════════════ TAMPON (coin haut droit) ════════════════ #}
+{% if isValidated %}
+    <div class="stamp stamp-validated">VALIDÉE<br>PAR LE<br>PROFESSEUR</div>
+{% elseif isCompleted %}
+    <div class="stamp stamp-completed">COMPLÉTÉE<br>PAR<br>L'ENTREPRISE</div>
+{% endif %}
+
+{# ════════════════ EN-TÊTE ════════════════ #}
+<div class="doc-header">
+    <img src="lyceegabrielfaure_logo.jpg" alt="Lycée Gabriel Fauré">
+    <div class="doc-header-center">
+        <div class="doc-title">Accueil Étudiant en Entreprise</div>
+        <div class="doc-subtitle">Collecte des informations nécessaires à la rédaction de la convention.</div>
+    </div>
+    <div style="width:80px;"></div>
+</div>
+
+{# ════════════════ BANDEAU STATUT ════════════════ #}
+{% if isValidated %}
+    <div class="status-banner status-validated">
+        &#10003;&nbsp; Collecte complétée et validée par le professeur référent
+        {% if convention.referentProfessor %}
+            — {{ convention.referentProfessor.firstName }} {{ convention.referentProfessor.lastName }}
+        {% endif %}
+        {% if convention.validatedAt %}
+            &nbsp;({{ convention.validatedAt|date('d/m/Y') }})
+        {% endif %}
+    </div>
+{% elseif isCompleted %}
+    <div class="status-banner status-done">
+        &#10003;&nbsp; Informations complétées par l'entreprise le {{ companyInfo.completedAt|date('d/m/Y à H:i') }}
+        — En attente de validation par le professeur
+    </div>
+{% else %}
+    <div class="status-banner status-pending">
+        &#9679;&nbsp; En attente de complétion par l'entreprise
+        {% if companyInfo.expiresAt %} (expire le {{ companyInfo.expiresAt|date('d/m/Y') }}){% endif %}
+    </div>
+{% endif %}
+
+<hr>
+
+{# ════════════════ PROF COORDONNATEUR + DATES ════════════════ #}
+<div class="coord-line">
+    <span class="label">Professeur coordonnateur&nbsp;:</span>
+    {% if convention and convention.referentProfessor %}
+        <strong>{{ convention.referentProfessor.firstName }} {{ convention.referentProfessor.lastName }}</strong>
+    {% else %}
+        <span style="display:inline-block; border-bottom:1px solid #000; min-width:220px;">&nbsp;</span>
+    {% endif %}
+</div>
+
+<div class="dates-line">
+    Dates de stage&nbsp;:&nbsp; du&nbsp;
+    <strong>{{ companyInfo.internshipStartDate ? companyInfo.internshipStartDate|date('d/m/Y') : '_______________' }}</strong>
+    &nbsp;&nbsp;au&nbsp;
+    <strong>{{ companyInfo.internshipEndDate ? companyInfo.internshipEndDate|date('d/m/Y') : '_______________' }}</strong>
+</div>
+
+<div class="warning-red">
+    L'établissement pourra être amené à décaler les dates de stage<br>
+    si les documents ne sont pas traités dans les délais impartis.
+</div>
+
+{# ════════════════ ÉTUDIANT ════════════════ #}
+<table class="form-table">
+    <tr>
+        <td colspan="2" class="section-header">Étudiant(e)</td>
+    </tr>
+    <tr>
+        <td class="field-label">Nom &amp; Prénom&nbsp;:</td>
+        <td class="field-value"><strong>{{ companyInfo.student.lastName|upper }} {{ companyInfo.student.firstName }}</strong></td>
+    </tr>
+    <tr>
+        <td class="field-label">Portable&nbsp;:</td>
+        <td class="field-value">{{ companyInfo.student.email }}</td>
+    </tr>
+    <tr>
+        <td class="field-label">Mél&nbsp;:</td>
+        <td class="field-value">{{ companyInfo.student.email }}</td>
+    </tr>
+    <tr>
+        <td class="field-label">Classe&nbsp;:</td>
+        <td class="field-value">
+            {% if companyInfo.student.levels is not empty %}
+                {% for level in companyInfo.student.levels %}
+                    <strong>{{ level.levelName }}</strong>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            {% else %}
+                <em style="color:#999;">Non renseignée</em>
+            {% endif %}
+        </td>
+    </tr>
+</table>
+
+{# ════════════════ ORGANISME ════════════════ #}
+<table class="form-table">
+    <tr>
+        <td colspan="2" class="section-header">Organisme d'accueil</td>
+    </tr>
+    <tr>
+        <td class="field-label">Nom de l'organisme&nbsp;:</td>
+        <td class="field-value"><strong>{{ companyInfo.companyName }}</strong></td>
+    </tr>
+    <tr>
+        <td class="field-label">Siège social — Adresse&nbsp;:</td>
+        <td class="field-value">
+            {{ companyInfo.address ?: '—' }}
+            {% if companyInfo.addressComplement %}<br>{{ companyInfo.addressComplement }}{% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td class="field-label">CP / Ville / Pays&nbsp;:</td>
+        <td class="field-value">
+            {{ companyInfo.postalCode ?: '—' }} &nbsp; {{ companyInfo.city ?: '—' }}
+            {% if companyInfo.country %} &nbsp; / &nbsp; {{ companyInfo.country }}{% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td class="field-label">Nom du responsable&nbsp;:</td>
+        <td class="field-value">{{ companyInfo.responsibleLastName ? companyInfo.responsibleLastName|upper : '—' }}</td>
+    </tr>
+    <tr>
+        <td class="field-label">Prénom du responsable&nbsp;:</td>
+        <td class="field-value">{{ companyInfo.responsibleFirstName ?: '—' }}</td>
+    </tr>
+    <tr>
+        <td class="field-label">Fonction&nbsp;:</td>
+        <td class="field-value">{{ companyInfo.responsibleFunction ?: '—' }}</td>
+    </tr>
+    <tr>
+        <td class="field-label">Téléphone fixe / portable&nbsp;:</td>
+        <td class="field-value">
+            {% if companyInfo.landlinePhone %}fixe : {{ companyInfo.landlinePhone }}{% endif %}
+            {% if companyInfo.landlinePhone and companyInfo.mobilePhone %} &nbsp;|&nbsp; {% endif %}
+            {% if companyInfo.mobilePhone %}portable : {{ companyInfo.mobilePhone }}{% endif %}
+            {% if not companyInfo.landlinePhone and not companyInfo.mobilePhone %}—{% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td class="field-label">Mél&nbsp;:</td>
+        <td class="field-value">{{ companyInfo.email ?: '—' }}</td>
+    </tr>
+    <tr>
+        <td class="field-label">Site web&nbsp;:</td>
+        <td class="field-value">{{ companyInfo.website ?: '—' }}</td>
+    </tr>
+</table>
+
+{# ── Lieu d'accueil si différent ── #}
+<table class="form-table">
+    <tr>
+        <td colspan="2" class="section-header">
+            Lieu d'accueil du stagiaire
+            <span style="font-weight:normal; font-size:8.5pt;">(si différent du siège social)</span>
+        </td>
+    </tr>
+    <tr>
+        <td class="field-label">Adresse&nbsp;:</td>
+        <td class="field-value">
+            {% if companyInfo.internshipAddress %}
+                {{ companyInfo.internshipAddress }}<br>
+                {{ companyInfo.internshipPostalCode }} {{ companyInfo.internshipCity }}
+                {% if companyInfo.internshipCountry %} — {{ companyInfo.internshipCountry }}{% endif %}
+            {% else %}
+                <em style="color:#999;">Identique au siège social</em>
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td class="field-label">Téléphone fixe&nbsp;:</td>
+        <td class="field-value">{{ companyInfo.internshipPhone ?: '—' }}</td>
+    </tr>
+</table>
+
+{# ── SIRET + Assureur ── #}
+<table class="form-table">
+    <tr>
+        <td class="field-label" style="width:36%;">SIRET&nbsp;:</td>
+        <td class="field-value">
+            {% if companyInfo.siret %}
+                <strong style="letter-spacing:2px; font-size:11pt;">
+                    {{ companyInfo.siret|slice(0,3) }}&nbsp;
+                    {{ companyInfo.siret|slice(3,3) }}&nbsp;
+                    {{ companyInfo.siret|slice(6,3) }}&nbsp;
+                    {{ companyInfo.siret|slice(9,5) }}
+                </strong>
+            {% else %}
+                __ __ __&nbsp;&nbsp;__ __ __&nbsp;&nbsp;__ __ __&nbsp;&nbsp;__ __ __ __ __
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td class="field-label">Nom de l'assureur&nbsp;:</td>
+        <td class="field-value">{{ companyInfo.insurerName ?: '—' }}</td>
+    </tr>
+    <tr>
+        <td class="field-label">Réf. contrat assureur&nbsp;:</td>
+        <td class="field-value">{{ companyInfo.insurerReference ?: '—' }}</td>
+    </tr>
+</table>
+
+<div class="note-box">
+    Nous recommandons au responsable d'entreprise de vérifier que son assurance le protège lorsque la responsabilité de son entreprise ou celle d'un de ses salariés peut être engagée.<br>
+    De par sa signature le responsable de l'organisme s'engage :<br>
+    &bull; à accueillir l'étudiant au sein de ses locaux (l'étudiant n'est pas autorisé à rester à son domicile pour réaliser son projet).<br>
+    &bull; à permettre à l'étudiant l'accès à un poste informatique et à internet durant la durée du stage.
+</div>
+
+{# ── Maître de stage ── #}
+<table class="form-table">
+    <tr>
+        <td colspan="2" class="section-header">
+            Maître de stage
+            <span style="font-weight:normal; font-size:8.5pt;">(personne qui aura la responsabilité du stagiaire dans l'organisme)</span>
+        </td>
+    </tr>
+    <tr>
+        <td class="field-label">Nom&nbsp;:</td>
+        <td class="field-value">{{ companyInfo.supervisorLastName ? companyInfo.supervisorLastName|upper : '—' }}</td>
+    </tr>
+    <tr>
+        <td class="field-label">Prénom&nbsp;:</td>
+        <td class="field-value">{{ companyInfo.supervisorFirstName ?: '—' }}</td>
+    </tr>
+    <tr>
+        <td class="field-label">Fonction&nbsp;:</td>
+        <td class="field-value">{{ companyInfo.supervisorFunction ?: '—' }}</td>
+    </tr>
+    <tr>
+        <td class="field-label">Fixe / Portable&nbsp;:</td>
+        <td class="field-value">{{ companyInfo.supervisorPhone ?: '—' }}</td>
+    </tr>
+    <tr>
+        <td class="field-label">Mél&nbsp;:</td>
+        <td class="field-value">{{ companyInfo.supervisorEmail ?: '—' }}</td>
+    </tr>
+</table>
+
+<div class="all-required">
+    TOUTES LES RUBRIQUES DOIVENT ETRE RENSEIGNÉES<br>
+    AFIN DE POUVOIR ÉTABLIR LA CONVENTION
+</div>
+
+{# ════════════════ DÉPLACEMENTS ════════════════ #}
+<div style="margin: 5px 0; font-size:9.5pt; border:1px solid #ccc; padding:5px 7px;">
+    L'étudiant sera amené à effectuer des déplacements itinérants durant le temps de travail&nbsp;:
+    &nbsp;&nbsp;
+    <span class="oui-non">
+        <span>
+            <span class="cb {{ companyInfo.hasTravel ? 'cb-checked' : 'cb-unchecked' }}">{{ companyInfo.hasTravel ? '✓' : '&nbsp;' }}</span> OUI
+        </span>
+        <span>
+            <span class="cb {{ not companyInfo.hasTravel ? 'cb-checked' : 'cb-unchecked' }}">{{ not companyInfo.hasTravel ? '✓' : '&nbsp;' }}</span> NON
+        </span>
+    </span>
+    <br>
+    <span style="font-size:8.5pt; color:#555;">
+        L'établissement autorise le stagiaire à se déplacer selon les besoins du stage s'il est accompagné d'au moins une personne de l'organisme.
+    </span>
+</div>
+
+{# ════════════════ PARTICIPATION AUX FRAIS ════════════════ #}
+<div class="section-title">PARTICIPATION AUX FRAIS DU STAGIAIRE ET GRATIFICATION</div>
+<table class="form-table" style="margin-top:0;">
+    <tr>
+        <td style="width:70%; padding:4px 6px;">L'entreprise prend en charge les frais de <strong>transport</strong>&nbsp;:</td>
+        <td>
+            <span class="cb {{ companyInfo.coversTransportCosts ? 'cb-checked' : 'cb-unchecked' }}">{{ companyInfo.coversTransportCosts ? '✓' : '&nbsp;' }}</span> OUI &nbsp;
+            <span class="cb {{ not companyInfo.coversTransportCosts ? 'cb-checked' : 'cb-unchecked' }}">{{ not companyInfo.coversTransportCosts ? '✓' : '&nbsp;' }}</span> NON
+        </td>
+    </tr>
+    {% if companyInfo.coversTransportCosts %}
+    <tr>
+        <td colspan="2" style="padding:3px 6px; font-size:8.5pt;">
+            <em>Modalités&nbsp;:</em> {{ companyInfo.transportCostsDetails ?: '—' }}
+        </td>
+    </tr>
+    {% endif %}
+    <tr>
+        <td style="padding:4px 6px;">L'entreprise prend en charge les frais de <strong>restauration</strong>&nbsp;:</td>
+        <td>
+            <span class="cb {{ companyInfo.coversMealCosts ? 'cb-checked' : 'cb-unchecked' }}">{{ companyInfo.coversMealCosts ? '✓' : '&nbsp;' }}</span> OUI &nbsp;
+            <span class="cb {{ not companyInfo.coversMealCosts ? 'cb-checked' : 'cb-unchecked' }}">{{ not companyInfo.coversMealCosts ? '✓' : '&nbsp;' }}</span> NON
+        </td>
+    </tr>
+    {% if companyInfo.coversMealCosts %}
+    <tr>
+        <td colspan="2" style="padding:3px 6px; font-size:8.5pt;">
+            <em>Modalités&nbsp;:</em> {{ companyInfo.mealCostsDetails ?: '—' }}
+        </td>
+    </tr>
+    {% endif %}
+    <tr>
+        <td style="padding:4px 6px;">L'entreprise prend en charge les frais d'<strong>hébergement</strong>&nbsp;:</td>
+        <td>
+            <span class="cb {{ companyInfo.coversAccommodationCosts ? 'cb-checked' : 'cb-unchecked' }}">{{ companyInfo.coversAccommodationCosts ? '✓' : '&nbsp;' }}</span> OUI &nbsp;
+            <span class="cb {{ not companyInfo.coversAccommodationCosts ? 'cb-checked' : 'cb-unchecked' }}">{{ not companyInfo.coversAccommodationCosts ? '✓' : '&nbsp;' }}</span> NON
+        </td>
+    </tr>
+    {% if companyInfo.coversAccommodationCosts %}
+    <tr>
+        <td colspan="2" style="padding:3px 6px; font-size:8.5pt;">
+            <em>Modalités&nbsp;:</em> {{ companyInfo.accommodationCostsDetails ?: '—' }}
+        </td>
+    </tr>
+    {% endif %}
+    <tr>
+        <td style="padding:4px 6px;">L'entreprise versera éventuellement une <strong>gratification</strong>&nbsp;:</td>
+        <td>
+            <span class="cb {{ companyInfo.providesGratification ? 'cb-checked' : 'cb-unchecked' }}">{{ companyInfo.providesGratification ? '✓' : '&nbsp;' }}</span> OUI &nbsp;
+            <span class="cb {{ not companyInfo.providesGratification ? 'cb-checked' : 'cb-unchecked' }}">{{ not companyInfo.providesGratification ? '✓' : '&nbsp;' }}</span> NON
+        </td>
+    </tr>
+    {% if companyInfo.providesGratification %}
+    <tr>
+        <td colspan="2" style="padding:3px 6px; font-size:8.5pt;">
+            <em>Modalités&nbsp;:</em> {{ companyInfo.gratificationDetails ?: '—' }}
+        </td>
+    </tr>
+    {% endif %}
+</table>
+
+{# ════════════════ HORAIRES ════════════════ #}
+<div class="section-title">HORAIRES DE TRAVAIL</div>
+<div class="note-box" style="margin-top:0; border-top:none;">
+    <span class="note-red">Pour les élèves mineurs&nbsp;:</span> 35h/semaine et 8h/jour maximum, 30 min de pause au-delà de 4h30 consécutives.
+    Le dimanche est un jour de repos obligatoire (associé au samedi ou au lundi). Pause méridienne de 30 min obligatoire.
+</div>
+
+{% set days = [
+    {key: 'monday',    label: 'LUNDI'},
+    {key: 'tuesday',   label: 'MARDI'},
+    {key: 'wednesday', label: 'MERCREDI'},
+    {key: 'thursday',  label: 'JEUDI'},
+    {key: 'friday',    label: 'VENDREDI'},
+    {key: 'saturday',  label: 'SAMEDI'}
+] %}
+
+<table class="horaires">
+    <thead>
+        <tr>
+            <th style="width:14%;"></th>
+            <th style="width:22%;" colspan="2">Matin</th>
+            <th style="width:22%;" colspan="2">Après-midi</th>
+            <th style="width:12%;">Total / jour</th>
+        </tr>
+        <tr>
+            <th></th>
+            <th>De</th>
+            <th>À</th>
+            <th>De</th>
+            <th>À</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for day in days %}
+            {% set sched = companyInfo.workSchedule[day.key] ?? null %}
+            <tr>
+                <td class="day">{{ day.label }}</td>
+                <td>{{ sched and sched.morning_start is defined ? sched.morning_start : '—' }}</td>
+                <td>{{ sched and sched.morning_end is defined ? sched.morning_end : '—' }}</td>
+                <td>{{ sched and sched.afternoon_start is defined ? sched.afternoon_start : '—' }}</td>
+                <td>{{ sched and sched.afternoon_end is defined ? sched.afternoon_end : '—' }}</td>
+                <td>&nbsp;</td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="5" style="text-align:right; font-weight:bold; padding-right:8px; background:#f5f5f5;">
+                Total hebdomadaire&nbsp;: &nbsp;&nbsp;&nbsp; h
+                <span style="font-size:8pt; font-weight:normal;">(ne peut être inférieur à 35 h)</span>
+            </td>
+            <td style="background:#f5f5f5;">&nbsp;</td>
+        </tr>
+    </tbody>
+</table>
+
+{# ════════════════ MODALITÉS PÉDAGOGIQUES ════════════════ #}
+<div class="section-title" style="margin-top:8px;">MODALITÉS PÉDAGOGIQUES</div>
+
+<div class="peda-item">
+    <div class="peda-label">1° Modalités de concertation entre l'enseignant et le tuteur de l'entreprise&nbsp;:</div>
+    <div class="peda-content">
+        Contacts téléphoniques, méls et visite dans l'organisme par l'enseignant référent.
+    </div>
+</div>
+
+<div class="peda-item">
+    <div class="peda-label">2° Objectifs assignés au stage&nbsp;:</div>
+    <div class="peda-content">
+        Compléter la formation théorique par l'expérience des pratiques professionnelles.<br>
+        Acquérir les qualités relationnelles et les comportements professionnels propres aux exigences de l'emploi.
+    </div>
+</div>
+
+<div class="peda-item">
+    <div class="peda-label">3° Activités prévues en milieu professionnel <em>(à compléter obligatoirement)</em>&nbsp;:</div>
+    <div class="peda-content" style="min-height: 50px;">
+        {% if companyInfo.plannedActivities %}
+            {{ companyInfo.plannedActivities|nl2br }}
+        {% else %}
+            <span style="color:#aaa; font-style:italic;">Non renseignées</span>
+        {% endif %}
+    </div>
+</div>
+
+{# ════════════════ VALIDATION PROFESSEUR ════════════════ #}
+{% if isValidated %}
+<div style="margin-top:8px; border:2px solid #1565c0; border-radius:4px; padding:8px 10px; background:#e3f2fd;">
+    <div style="font-weight:bold; font-size:10pt; color:#1565c0; margin-bottom:4px;">
+        &#10003;&nbsp; Validée par le professeur référent
+    </div>
+    <table style="width:100%; font-size:9pt; border-collapse:collapse;">
+        <tr>
+            <td style="width:40%; padding:2px 0;"><strong>Professeur&nbsp;:</strong></td>
+            <td>
+                {% if convention.referentProfessor %}
+                    {{ convention.referentProfessor.firstName }} {{ convention.referentProfessor.lastName }}
+                    ({{ convention.referentProfessor.email }})
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+        </tr>
+        {% if convention.validatedAt %}
+        <tr>
+            <td style="padding:2px 0;"><strong>Date de validation&nbsp;:</strong></td>
+            <td>{{ convention.validatedAt|date('d/m/Y à H:i') }}</td>
+        </tr>
+        {% endif %}
+        {% if convention.validationNotes %}
+        <tr>
+            <td style="padding:2px 0; vertical-align:top;"><strong>Notes&nbsp;:</strong></td>
+            <td>{{ convention.validationNotes }}</td>
+        </tr>
+        {% endif %}
+    </table>
+</div>
+{% elseif isCompleted %}
+<div style="margin-top:8px; border:1.5px solid #f9a825; border-radius:4px; padding:6px 10px; background:#fff8e1; font-size:9pt; color:#795100;">
+    <strong>&#9888;&nbsp; En attente de validation</strong> — Cette collecte a été complétée par l'entreprise
+    le {{ companyInfo.completedAt|date('d/m/Y à H:i') }} et attend la validation du professeur référent.
+</div>
+{% endif %}
+
+{# ════════════════ SIGNATURE DU RESPONSABLE ════════════════ #}
+<div style="margin-top:10px; page-break-inside:avoid;">
+    <div class="section-title">CERTIFICATION ET SIGNATURE DU RESPONSABLE DE L'ORGANISME</div>
+    <div style="border:1px solid #000; border-top:none; padding:5px 8px; font-size:8.5pt; background:#fffbe6;">
+        Je soussigné(e), responsable de l'organisme d'accueil, certifie l'exactitude des informations fournies
+        dans ce document et m'engage à accueillir l'étudiant(e) dans les conditions décrites ci-dessus.
+    </div>
+    <div style="display:flex; gap:12px; margin-top:6px;">
+        <div style="flex:1; border:1px solid #000; padding:6px 8px; min-height:70px;">
+            <div style="font-weight:bold; font-size:8.5pt; text-align:center; margin-bottom:4px;">
+                Signature du responsable de l'organisme<br>
+                <span style="font-weight:normal; font-size:7.5pt; color:#555;">(Nom, prénom, fonction, date et signature)</span>
+            </div>
+            {#
+                Ancre Yousign Smart Anchor — texte blanc sur fond blanc.
+                Invisible visuellement mais présent dans le flux PDF détecté par Yousign.
+                Format : {{sN|field_type|width_px|height_px}} — ratio width/height ≈ 2,3
+            #}
+            <span style="color:#ffffff; background:#ffffff; font-size:6pt; display:block; line-height:1; white-space:nowrap; overflow:visible;">{{ '{{s1|signature|85|37}}' }}</span>
+            <div style="height:40px;"></div>
+        </div>
+        <div style="flex:1; border:1px solid #000; padding:6px 8px; min-height:70px;">
+            <div style="font-weight:bold; font-size:8.5pt; text-align:center; margin-bottom:4px;">
+                Cachet de l'organisme
+            </div>
+            <div style="height:50px;"></div>
+        </div>
+    </div>
+</div>
+
+{# ════════════════ PIED DE PAGE ════════════════ #}
+<div style="margin-top:10px; border-top:1px solid #ccc; padding-top:5px; display:flex; justify-content:space-between; font-size:8pt; color:#666;">
+    <span>Conventio — Lycée Gabriel Fauré</span>
+    <span>Document généré le {{ "now"|date('d/m/Y à H:i') }}</span>
+</div>
+
+</body>
+</html>
