@@ -151,38 +151,6 @@ email.greeting: 'Ciao %name%,'
 email.company_info_completed_message: "L'azienda ospitante ha completato le informazioni necessarie per stabilire la convenzione di tirocinio."
 email.next_steps: 'Procederemo ora a stabilire la convenzione di tirocinio che ti sarà inviata a breve.'
 email.footer: 'Cordiali saluti, Il team pedagogico'
-reset_password.title: 'Reimpostazione password'
-reset_password.forgot_password: 'Password dimenticata?'
-reset_password.no_problem: 'Nessun problema, ti aiuteremo a reimpostarla'
-reset_password.email_label: 'Indirizzo email'
-reset_password.email_placeholder: tua.email@esempio.com
-reset_password.send_reset_link: 'Invia link di reimpostazione'
-reset_password.back_to_login: 'Torna al login'
-reset_password.need_help: 'Hai bisogno di aiuto? Contatta'
-reset_password.support: 'il supporto'
-reset_password.info_message: 'Inserisci il tuo indirizzo email e ti invieremo un link per reimpostare la tua password.'
-reset_password.reset_title: 'Nuova password'
-reset_password.reset_subtitle: 'Scegli una password forte e sicura'
-reset_password.password_requirements: 'Requisiti della password:'
-reset_password.requirement_length: 'Almeno 12 caratteri'
-reset_password.requirement_case: 'Una lettera maiuscola e minuscola'
-reset_password.requirement_number: 'Almeno una cifra'
-reset_password.requirement_special: 'Almeno un carattere speciale (@$!%*?&)'
-reset_password.new_password: 'Nuova password'
-reset_password.confirm_password: 'Conferma password'
-reset_password.reset_button: 'Reimposta password'
-reset_password.security_note: 'Dopo aver reimpostato la password, sarai automaticamente connesso e potrai accedere al tuo account.'
-reset_password.check_email_title: 'Email inviata!'
-reset_password.check_email_subtitle: 'Controlla la tua casella di posta'
-reset_password.success_message: "Se esiste un account corrispondente alla tua email, è stata inviata un'email contenente un link per reimpostare la tua password."
-reset_password.link_expires: 'Questo link scadrà tra'
-reset_password.next_steps: 'Prossimi passi:'
-reset_password.step_1: 'Controlla la tua casella di posta'
-reset_password.step_2: "Clicca sul link di reimpostazione nell'email"
-reset_password.step_3: 'Crea la tua nuova password'
-reset_password.spam_warning: "Non hai ricevuto l'email? Controlla la cartella spam o"
-reset_password.try_again: riprova
-reset_password.resend_email: "Invia di nuovo l'email"
 email.collection_request_subject: 'Richiesta di informazioni per convenzione di tirocinio'
 email.collection_request_title: 'Modulo di Raccolta Informazioni'
 email.collection_greeting: 'Gentile Signora/Signore,'
