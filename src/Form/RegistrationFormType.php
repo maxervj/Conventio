@@ -124,6 +124,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Classe BTS *',
                 'multiple' => true,
                 'expanded' => true,
+                'by_reference' => false,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez sélectionner au moins une classe',

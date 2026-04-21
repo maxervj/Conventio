@@ -26,10 +26,22 @@ class ProfileController extends AbstractController
         $user = $this->getUser();
 
         $conventions = [];
+        $studentsByLevel = [];
+
         if ($user instanceof Professor) {
             $conventions = $entityManager->getRepository(Convention::class)->findBy([
                 'referentProfessor' => $user,
             ]);
+
+            foreach ($user->getTaughtLevels() as $level) {
+                $studentsInLevel = $level->getStudents()->toArray();
+                if (!empty($studentsInLevel)) {
+                    $studentsByLevel[] = [
+                        'level' => $level,
+                        'students' => $studentsInLevel,
+                    ];
+                }
+            }
         } elseif ($user instanceof Student) {
             $conventions = $entityManager->getRepository(Convention::class)->findBy([
                 'student' => $user,
@@ -39,6 +51,7 @@ class ProfileController extends AbstractController
         return $this->render('profile/index.html.twig', [
             'user' => $user,
             'conventions' => $conventions,
+            'studentsByLevel' => $studentsByLevel,
         ]);
     }
 
