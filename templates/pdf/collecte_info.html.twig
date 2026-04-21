@@ -565,16 +565,77 @@
             {% set sched = companyInfo.workSchedule[day.key] ?? null %}
             <tr>
                 <td class="day">{{ day.label }}</td>
-                <td>{{ sched and sched.morning_start is defined ? sched.morning_start : '—' }}</td>
-                <td>{{ sched and sched.morning_end is defined ? sched.morning_end : '—' }}</td>
-                <td>{{ sched and sched.afternoon_start is defined ? sched.afternoon_start : '—' }}</td>
-                <td>{{ sched and sched.afternoon_end is defined ? sched.afternoon_end : '—' }}</td>
-                <td>&nbsp;</td>
+                <td>
+                    {% if sched and sched.morning_start_h is defined %}
+                        {{ '%02d'|format(sched.morning_start_h) }}:{{ '%02d'|format(sched.morning_start_m|default(0)) }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+                <td>
+                    {% if sched and sched.morning_end_h is defined %}
+                        {{ '%02d'|format(sched.morning_end_h) }}:{{ '%02d'|format(sched.morning_end_m|default(0)) }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+                <td>
+                    {% if sched and sched.afternoon_start_h is defined %}
+                        {{ '%02d'|format(sched.afternoon_start_h) }}:{{ '%02d'|format(sched.afternoon_start_m|default(0)) }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+                <td>
+                    {% if sched and sched.afternoon_end_h is defined %}
+                        {{ '%02d'|format(sched.afternoon_end_h) }}:{{ '%02d'|format(sched.afternoon_end_m|default(0)) }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+                <td>
+                    {% if sched and sched.morning_start_h is defined and sched.morning_end_h is defined %}
+                        {% set morningStart = (sched.morning_start_h * 60) + (sched.morning_start_m|default(0)) %}
+                        {% set morningEnd = (sched.morning_end_h * 60) + (sched.morning_end_m|default(0)) %}
+                        {% set morningDuration = morningEnd - morningStart %}
+                    {% else %}
+                        {% set morningDuration = 0 %}
+                    {% endif %}
+                    {% if sched and sched.afternoon_start_h is defined and sched.afternoon_end_h is defined %}
+                        {% set afternoonStart = (sched.afternoon_start_h * 60) + (sched.afternoon_start_m|default(0)) %}
+                        {% set afternoonEnd = (sched.afternoon_end_h * 60) + (sched.afternoon_end_m|default(0)) %}
+                        {% set afternoonDuration = afternoonEnd - afternoonStart %}
+                    {% else %}
+                        {% set afternoonDuration = 0 %}
+                    {% endif %}
+                    {% set dayTotal = morningDuration + afternoonDuration %}
+                    {% if dayTotal > 0 %}
+                        {{ (dayTotal / 60)|round(0, 'floor') }}h {{ '%02d'|format((dayTotal % 60)|round(0, 'floor')) }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
         <tr>
             <td colspan="5" style="text-align:right; font-weight:bold; padding-right:8px; background:#f5f5f5;">
-                Total hebdomadaire&nbsp;: &nbsp;&nbsp;&nbsp; h
+                Total hebdomadaire&nbsp;: &nbsp;&nbsp;&nbsp;
+                {% set totalMinutes = 0 %}
+                {% set days_calc = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] %}
+                {% for day in days_calc %}
+                    {% set sched = companyInfo.workSchedule[day] ?? null %}
+                    {% if sched and sched.morning_start_h is defined and sched.morning_end_h is defined %}
+                        {% set morningStart = (sched.morning_start_h * 60) + (sched.morning_start_m|default(0)) %}
+                        {% set morningEnd = (sched.morning_end_h * 60) + (sched.morning_end_m|default(0)) %}
+                        {% set totalMinutes = totalMinutes + (morningEnd - morningStart) %}
+                    {% endif %}
+                    {% if sched and sched.afternoon_start_h is defined and sched.afternoon_end_h is defined %}
+                        {% set afternoonStart = (sched.afternoon_start_h * 60) + (sched.afternoon_start_m|default(0)) %}
+                        {% set afternoonEnd = (sched.afternoon_end_h * 60) + (sched.afternoon_end_m|default(0)) %}
+                        {% set totalMinutes = totalMinutes + (afternoonEnd - afternoonStart) %}
+                    {% endif %}
+                {% endfor %}
+                {{ (totalMinutes / 60)|round(0, 'floor') }}h {{ '%02d'|format((totalMinutes % 60)|round(0, 'floor')) }}
                 <span style="font-size:8pt; font-weight:normal;">(ne peut être inférieur à 35 h)</span>
             </td>
             <td style="background:#f5f5f5;">&nbsp;</td>

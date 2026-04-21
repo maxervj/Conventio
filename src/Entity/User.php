@@ -55,8 +55,6 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $googleAuthenticatorSecret = null;
 
-    #[ORM\Column]
-    private bool $isVerified = false;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $birthDate = null;
