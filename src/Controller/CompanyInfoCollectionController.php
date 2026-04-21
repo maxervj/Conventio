@@ -6,7 +6,9 @@ use App\Entity\InternshipCompanyInfo;
 use App\Entity\Student;
 use App\Form\CollectionRequestFormType;
 use App\Form\InternshipCompanyInfoFormType;
+use App\Repository\ConventionRepository;
 use App\Repository\InternshipCompanyInfoRepository;
+use App\Service\PdfGeneratorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,9 +25,11 @@ class CompanyInfoCollectionController extends AbstractController
     public function __construct(
         private EntityManagerInterface $entityManager,
         private InternshipCompanyInfoRepository $companyInfoRepository,
+        private ConventionRepository $conventionRepository,
         private MailerInterface $mailer,
         private TranslatorInterface $translator,
-        private UrlGeneratorInterface $urlGenerator
+        private UrlGeneratorInterface $urlGenerator,
+        private PdfGeneratorService $pdfGenerator,
     ) {}
 
     // Liste des collectes d'informations de l'étudiant
@@ -247,6 +251,46 @@ class CompanyInfoCollectionController extends AbstractController
             'locale' => $locale
         ]);
     }
+    /**
+     * L'étudiant télécharge le PDF de sa collecte d'informations (avec ancre de signature Yousign).
+     */
+    #[Route('/student/company-info/{id}/pdf', name: 'student_company_info_pdf', methods: ['GET'], requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_STUDENT')]
+    public function downloadPdfForStudent(InternshipCompanyInfo $companyInfo): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof Student || $companyInfo->getStudent() !== $user) {
+            throw $this->createAccessDeniedException('Vous n\'avez pas accès à ce document.');
+        }
+
+        $convention = $this->conventionRepository->findOneBy(['companyInfo' => $companyInfo]);
+
+        return $this->pdfGenerator->streamCollecteInfoPdf($companyInfo, $convention);
+    }
+
+    /**
+     * Téléchargement public du PDF de collecte via le token (accessible par l'entreprise).
+     * Disponible uniquement si la collecte est complétée.
+     */
+    #[Route('/company-info/{token}/pdf', name: 'company_info_pdf', methods: ['GET'])]
+    public function downloadPdfByToken(string $token): Response
+    {
+        $companyInfo = $this->companyInfoRepository->findByToken($token);
+
+        if (!$companyInfo) {
+            throw $this->createNotFoundException('Collecte d\'informations introuvable.');
+        }
+
+        if (!$companyInfo->isCompleted()) {
+            throw $this->createAccessDeniedException('Le PDF n\'est disponible qu\'après complétion du formulaire.');
+        }
+
+        $convention = $this->conventionRepository->findOneBy(['companyInfo' => $companyInfo]);
+
+        return $this->pdfGenerator->streamCollecteInfoPdf($companyInfo, $convention);
+    }
+
     // Page de succès après soumission
     #[Route('/company-info/{token}/success', name: 'company_info_success', methods: ['GET'])]
     public function success(string $token, Request $request): Response

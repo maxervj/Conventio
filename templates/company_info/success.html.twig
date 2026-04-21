@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informations envoyées avec succès</title>
+    <title>{{ 'company_info.success_received'|trans }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-br from-green-50 to-blue-50 min-h-screen flex items-center justify-center p-4">
     <div class="max-w-2xl w-full">
 
-        {# Bandeau flash de succès #}
+        {# Bandeau de succès #}
         <div class="bg-green-600 text-white rounded-2xl shadow-xl px-8 py-6 mb-6 flex items-center gap-5">
             <div class="flex-shrink-0 w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
                 <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -17,14 +17,14 @@
                 </svg>
             </div>
             <div>
-                <p class="text-2xl font-extrabold leading-tight">Informations bien reçues !</p>
+                <p class="text-2xl font-extrabold leading-tight">{{ 'company_info.success_received'|trans }}</p>
                 {% if companyInfo and companyInfo.companyName %}
                     <p class="text-green-100 mt-1 text-base">
-                        Les informations de <span class="font-semibold text-white">{{ companyInfo.companyName }}</span> ont été transmises avec succès.
+                        {{ 'company_info.success_transmitted_company'|trans({'%company%': companyInfo.companyName}) }}
                     </p>
                 {% else %}
                     <p class="text-green-100 mt-1 text-base">
-                        Vos informations ont été transmises avec succès à l'établissement.
+                        {{ 'company_info.success_transmitted'|trans }}
                     </p>
                 {% endif %}
             </div>
@@ -36,29 +36,29 @@
             {% if companyInfo %}
             {# Récapitulatif de la demande #}
             <div class="bg-gray-50 rounded-xl p-5 mb-6 border border-gray-200">
-                <h2 class="font-bold text-gray-700 text-sm uppercase tracking-wide mb-3">Récapitulatif de votre soumission</h2>
+                <h2 class="font-bold text-gray-700 text-sm uppercase tracking-wide mb-3">{{ 'company_info.summary_title'|trans }}</h2>
                 <div class="space-y-2 text-sm text-gray-600">
                     {% if companyInfo.companyName %}
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Entreprise</span>
+                        <span class="text-gray-500">{{ 'company_info.company'|trans }}</span>
                         <span class="font-medium text-gray-800">{{ companyInfo.companyName }}</span>
                     </div>
                     {% endif %}
                     {% if companyInfo.supervisorFirstName and companyInfo.supervisorLastName %}
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Tuteur désigné</span>
+                        <span class="text-gray-500">{{ 'company_info.designated_supervisor'|trans }}</span>
                         <span class="font-medium text-gray-800">{{ companyInfo.supervisorFirstName }} {{ companyInfo.supervisorLastName }}</span>
                     </div>
                     {% endif %}
                     {% if companyInfo.student %}
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Étudiant concerné</span>
+                        <span class="text-gray-500">{{ 'company_info.concerned_student'|trans }}</span>
                         <span class="font-medium text-gray-800">{{ companyInfo.student.firstName }} {{ companyInfo.student.lastName }}</span>
                     </div>
                     {% endif %}
                     {% if companyInfo.completedAt %}
                     <div class="flex justify-between">
-                        <span class="text-gray-500">Soumis le</span>
+                        <span class="text-gray-500">{{ 'company_info.submitted_on'|trans }}</span>
                         <span class="font-medium text-gray-800">{{ companyInfo.completedAt|date('d/m/Y à H:i') }}</span>
                     </div>
                     {% endif %}
@@ -73,9 +73,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     <div>
-                        <h3 class="font-bold text-amber-900 mb-1">Que se passe-t-il maintenant ?</h3>
+                        <h3 class="font-bold text-amber-900 mb-1">{{ 'company_info.what_happens_next'|trans }}</h3>
                         <p class="text-sm text-amber-800 leading-relaxed">
-                            L'établissement va vérifier et valider les informations transmises. Elles seront intégrées à la convention de stage de l'étudiant. Vous n'avez rien d'autre à faire.
+                            {{ 'company_info.next_steps_description'|trans }}
                         </p>
                     </div>
                 </div>
@@ -86,8 +86,8 @@
                 <div class="flex gap-4 items-center bg-blue-50 rounded-xl p-4">
                     <div class="flex-shrink-0 w-9 h-9 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-sm shadow">1</div>
                     <div>
-                        <p class="font-semibold text-gray-800 text-sm">Notification envoyée à l'étudiant</p>
-                        <p class="text-xs text-gray-500">L'étudiant a été informé que vous avez complété le formulaire.</p>
+                        <p class="font-semibold text-gray-800 text-sm">{{ 'company_info.step_notified_title'|trans }}</p>
+                        <p class="text-xs text-gray-500">{{ 'company_info.step_notified_desc'|trans }}</p>
                     </div>
                     <svg class="w-5 h-5 text-blue-500 ml-auto flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -96,8 +96,8 @@
                 <div class="flex gap-4 items-center bg-gray-50 rounded-xl p-4">
                     <div class="flex-shrink-0 w-9 h-9 bg-gray-400 text-white rounded-full flex items-center justify-center font-bold text-sm shadow">2</div>
                     <div>
-                        <p class="font-semibold text-gray-700 text-sm">Validation par l'établissement</p>
-                        <p class="text-xs text-gray-500">L'équipe pédagogique va vérifier et intégrer vos informations.</p>
+                        <p class="font-semibold text-gray-700 text-sm">{{ 'company_info.step_validation_title'|trans }}</p>
+                        <p class="text-xs text-gray-500">{{ 'company_info.step_validation_desc'|trans }}</p>
                     </div>
                     <svg class="w-5 h-5 text-gray-300 ml-auto flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -106,8 +106,8 @@
                 <div class="flex gap-4 items-center bg-gray-50 rounded-xl p-4">
                     <div class="flex-shrink-0 w-9 h-9 bg-gray-400 text-white rounded-full flex items-center justify-center font-bold text-sm shadow">3</div>
                     <div>
-                        <p class="font-semibold text-gray-700 text-sm">Convention de stage finalisée</p>
-                        <p class="text-xs text-gray-500">La convention sera générée et envoyée pour signature.</p>
+                        <p class="font-semibold text-gray-700 text-sm">{{ 'company_info.step_finalized_title'|trans }}</p>
+                        <p class="text-xs text-gray-500">{{ 'company_info.step_finalized_desc'|trans }}</p>
                     </div>
                     <svg class="w-5 h-5 text-gray-300 ml-auto flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -117,7 +117,7 @@
 
             {# Message de remerciement #}
             <div class="text-center pt-4 border-t border-gray-100">
-                <p class="text-gray-500 text-sm">Merci pour votre collaboration.</p>
+                <p class="text-gray-500 text-sm">{{ 'company_info.thanks_collaboration'|trans }}</p>
                 <p class="text-xs text-gray-400 mt-1">Conventio - Lycée Gabriel Fauré</p>
             </div>
         </div>

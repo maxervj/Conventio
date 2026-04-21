@@ -1,39 +1,84 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Level index{% endblock %}
+{% block title %}Gestion des classes{% endblock %}
 
 {% block body %}
-    <h1>Level index</h1>
+<div class="max-w-3xl mx-auto px-4 py-8">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Id_level</th>
-                <th>LevelCode</th>
-                <th>LevelName</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for level in levels %}
-            <tr>
-                <td>{{ level.id }}</td>
-                <td>{{ level.idLevel }}</td>
-                <td>{{ level.LevelCode }}</td>
-                <td>{{ level.LevelName }}</td>
-                <td>
-                    <a href="{{ path('app_level_show', {'id': level.id}) }}">show</a>
-                    <a href="{{ path('app_level_edit', {'id': level.id}) }}">edit</a>
-                </td>
-            </tr>
+    {# En-tête #}
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Gestion des classes</h1>
+            <p class="text-sm text-gray-500 mt-1">{{ levels|length }} classe{{ levels|length != 1 ? 's' : '' }} enregistrée{{ levels|length != 1 ? 's' : '' }}</p>
+        </div>
+        <a href="{{ path('app_level_new') }}"
+           class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg shadow hover:bg-blue-700 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Nouvelle classe
+        </a>
+    </div>
+
+    {# Flash messages #}
+    {% for message in app.flashes('success') %}
+        <div class="bg-green-50 border border-green-200 text-green-800 rounded-lg px-4 py-3 mb-6 flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {# Liste #}
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        {% if levels is empty %}
+            <div class="text-center py-16 text-gray-400">
+                <svg class="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                <p class="font-medium">Aucune classe enregistrée</p>
+                <p class="text-sm mt-1">Commencez par créer une classe.</p>
+            </div>
         {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_level_new') }}">Create new</a>
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Intitulé</th>
+                        <th class="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-100">
+                    {% for level in levels %}
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4 font-medium text-gray-900">{{ level.levelName }}</td>
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ path('app_level_edit', {'id': level.id}) }}"
+                                       class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                        </svg>
+                                        Modifier
+                                    </a>
+                                    <form method="post" action="{{ path('app_level_delete', {'id': level.id}) }}"
+                                          onsubmit="return confirm('Supprimer la classe « {{ level.levelName }} » ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ level.id) }}">
+                                        <button type="submit"
+                                                class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                            Supprimer
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

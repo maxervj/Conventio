@@ -83,6 +83,25 @@ company_info.at_least_one_phone: 'È richiesto almeno un numero di telefono'
 company_info.morning: Mattina
 company_info.afternoon: Pomeriggio
 company_info.day: Giorno
+company_info.success_received: 'Informazioni ricevute!'
+company_info.success_transmitted: 'Le sue informazioni sono state trasmesse con successo all''istituto.'
+company_info.success_transmitted_company: 'Le informazioni di %company% sono state trasmesse con successo.'
+company_info.summary_title: 'Riepilogo della sua presentazione'
+company_info.company: Azienda
+company_info.designated_supervisor: 'Tutor designato'
+company_info.concerned_student: 'Studente interessato'
+company_info.submitted_on: 'Inviato il'
+company_info.what_happens_next: 'Cosa succede adesso?'
+company_info.next_steps_description: "L'istituto verificherà e validerà le informazioni trasmesse. Saranno integrate nella convenzione di tirocinio dello studente. Non deve fare altro."
+company_info.step_notified_title: 'Notifica inviata allo studente'
+company_info.step_notified_desc: 'Lo studente è stato informato che ha completato il modulo.'
+company_info.step_validation_title: "Validazione da parte dell'istituto"
+company_info.step_validation_desc: 'Il team pedagogico verificherà e integrerà le sue informazioni.'
+company_info.step_finalized_title: 'Convenzione di tirocinio finalizzata'
+company_info.step_finalized_desc: 'La convenzione sarà generata e inviata per la firma.'
+company_info.thanks_collaboration: 'Grazie per la sua collaborazione.'
+company_info.form_errors_message: 'Il modulo contiene errori. Si prega di correggerli prima di continuare.'
+company_info.specify_details: 'Specificare i dettagli...'
 form.company.name: "Nome dell'Organizzazione"
 form.company.address: Indirizzo
 form.company.address_complement: 'Complemento Indirizzo'
@@ -132,43 +151,11 @@ email.greeting: 'Ciao %name%,'
 email.company_info_completed_message: "L'azienda ospitante ha completato le informazioni necessarie per stabilire la convenzione di tirocinio."
 email.next_steps: 'Procederemo ora a stabilire la convenzione di tirocinio che ti sarà inviata a breve.'
 email.footer: 'Cordiali saluti, Il team pedagogico'
-reset_password.title: 'Reimpostazione password'
-reset_password.forgot_password: 'Password dimenticata?'
-reset_password.no_problem: 'Nessun problema, ti aiuteremo a reimpostarla'
-reset_password.email_label: 'Indirizzo email'
-reset_password.email_placeholder: tua.email@esempio.com
-reset_password.send_reset_link: 'Invia link di reimpostazione'
-reset_password.back_to_login: 'Torna al login'
-reset_password.need_help: 'Hai bisogno di aiuto? Contatta'
-reset_password.support: 'il supporto'
-reset_password.info_message: 'Inserisci il tuo indirizzo email e ti invieremo un link per reimpostare la tua password.'
-reset_password.reset_title: 'Nuova password'
-reset_password.reset_subtitle: 'Scegli una password forte e sicura'
-reset_password.password_requirements: 'Requisiti della password:'
-reset_password.requirement_length: 'Almeno 12 caratteri'
-reset_password.requirement_case: 'Una lettera maiuscola e minuscola'
-reset_password.requirement_number: 'Almeno una cifra'
-reset_password.requirement_special: 'Almeno un carattere speciale (@$!%*?&)'
-reset_password.new_password: 'Nuova password'
-reset_password.confirm_password: 'Conferma password'
-reset_password.reset_button: 'Reimposta password'
-reset_password.security_note: 'Dopo aver reimpostato la password, sarai automaticamente connesso e potrai accedere al tuo account.'
-reset_password.check_email_title: 'Email inviata!'
-reset_password.check_email_subtitle: 'Controlla la tua casella di posta'
-reset_password.success_message: "Se esiste un account corrispondente alla tua email, è stata inviata un'email contenente un link per reimpostare la tua password."
-reset_password.link_expires: 'Questo link scadrà tra'
-reset_password.next_steps: 'Prossimi passi:'
-reset_password.step_1: 'Controlla la tua casella di posta'
-reset_password.step_2: "Clicca sul link di reimpostazione nell'email"
-reset_password.step_3: 'Crea la tua nuova password'
-reset_password.spam_warning: "Non hai ricevuto l'email? Controlla la cartella spam o"
-reset_password.try_again: riprova
-reset_password.resend_email: "Invia di nuovo l'email"
-email.collection_request_subject: __email.collection_request_subject
-email.collection_request_title: __email.collection_request_title
-email.collection_greeting: __email.collection_greeting
-email.collection_message: __email.collection_message
-email.collection_button: __email.collection_button
-email.important: __email.important
-email.collection_expiration: __email.collection_expiration
-email.collection_help: __email.collection_help
+email.collection_request_subject: 'Richiesta di informazioni per convenzione di tirocinio'
+email.collection_request_title: 'Modulo di Raccolta Informazioni'
+email.collection_greeting: 'Gentile Signora/Signore,'
+email.collection_message: 'Grazie per accogliere %student% in tirocinio nella sua organizzazione. Per preparare la convenzione di tirocinio, La invitiamo a compilare il modulo online cliccando sul pulsante qui sotto.'
+email.collection_button: 'Accedi al modulo'
+email.important: 'Importante:'
+email.collection_expiration: 'Questo link scade il %date%. Dopo questa data, dovrà contattare l''istituto.'
+email.collection_help: 'Il modulo richiede circa 15 minuti per essere completato. Potrà verificare le sue informazioni prima della convalida finale.'
