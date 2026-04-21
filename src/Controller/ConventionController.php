@@ -20,27 +20,33 @@ final class ConventionController extends AbstractController
     #[Route(name: 'admin_convention_list', methods: ['GET'])]
     public function list(ConventionRepository $conventionRepository): Response
     {
-        // Récupérer les conventions validées groupées par formation
-        $conventions = $conventionRepository->findValidatedGroupedByFormation();
+        // Récupérer les conventions validées
+        $conventions = $conventionRepository->findValidatedGroupedByLevel();
 
-        // Grouper par formation
-        $groupedByFormation = [];
+        // Grouper par Level
+        $groupedByLevel = [];
         foreach ($conventions as $convention) {
-            $formation = $convention->getStudent()->getFormation();
-            $formationName = $formation ? $formation->getLibelle() : 'Sans formation';
+            $student = $convention->getStudent();
+            $levels = $student ? $student->getLevels()->toArray() : [];
+            $levelName = 'Sans classe';
 
-            if (!isset($groupedByFormation[$formationName])) {
-                $groupedByFormation[$formationName] = [];
+            if (!empty($levels)) {
+                $firstLevel = $levels[0];
+                $levelName = $firstLevel->getLevelName() ?? ($firstLevel->getLevelCode() ?? 'Sans classe');
             }
 
-            $groupedByFormation[$formationName][] = $convention;
+            if (!isset($groupedByLevel[$levelName])) {
+                $groupedByLevel[$levelName] = [];
+            }
+
+            $groupedByLevel[$levelName][] = $convention;
         }
 
-        // Trier les formations alphabétiquement
-        ksort($groupedByFormation);
+        // Trier les classes alphabétiquement
+        ksort($groupedByLevel);
 
         return $this->render('convention/list.html.twig', [
-            'groupedByFormation' => $groupedByFormation,
+            'groupedByFormation' => $groupedByLevel,
         ]);
     }
 
