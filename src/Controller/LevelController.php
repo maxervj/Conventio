@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Level;
 use App\Form\LevelType;
+use App\Form\SelectionClasseType;
 use App\Repository\LevelRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

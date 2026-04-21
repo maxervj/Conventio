@@ -13,8 +13,6 @@ class Student extends User
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $personalEmail = null;
 
-    #[ORM\Column(type: 'boolean', options: ['default' => false])]
-    private bool $isVerified = false;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $verificationToken = null;
@@ -25,6 +23,10 @@ class Student extends User
     #[ORM\ManyToMany(targetEntity: Level::class, inversedBy: 'students')]
     #[ORM\JoinTable(name: 'student_level')]
     private Collection $levels;
+
+    #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'students')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Formation $formation = null;
 
     public function __construct()
     {
@@ -67,17 +69,6 @@ class Student extends User
         return $this;
     }
 
-    public function isVerified(): bool
-    {
-        return $this->isVerified;
-    }
-
-    public function setIsVerified(bool $isVerified): static
-    {
-        $this->isVerified = $isVerified;
-
-        return $this;
-    }
 
     public function getVerificationToken(): ?string
     {
@@ -87,6 +78,18 @@ class Student extends User
     public function setVerificationToken(?string $verificationToken): static
     {
         $this->verificationToken = $verificationToken;
+
+        return $this;
+    }
+
+    public function getFormation(): ?Formation
+    {
+        return $this->formation;
+    }
+
+    public function setFormation(?Formation $formation): static
+    {
+        $this->formation = $formation;
 
         return $this;
     }

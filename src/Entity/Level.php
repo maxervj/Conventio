@@ -18,11 +18,11 @@ class Level
     #[ORM\Column]
     private ?int $id_level = null;
 
-    #[ORM\Column]
-    private ?int $LevelCode = null;
+    #[ORM\Column(length: 255)]
+    private ?string $levelCode = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $LevelName = null;
+    private ?string $levelName = null;
 
     /**
      * @var Collection<int, Student>
@@ -66,26 +66,26 @@ class Level
         return $this;
     }
 
-    public function getLevelCode(): ?int
+    public function getLevelCode(): ?string
     {
-        return $this->LevelCode;
+        return $this->levelCode;
     }
 
-    public function setLevelCode(int $LevelCode): static
+    public function setLevelCode(string $levelCode): static
     {
-        $this->LevelCode = $LevelCode;
+        $this->levelCode = $levelCode;
 
         return $this;
     }
 
     public function getLevelName(): ?string
     {
-        return $this->LevelName;
+        return $this->levelName;
     }
 
-    public function setLevelName(string $LevelName): static
+    public function setLevelName(string $levelName): static
     {
-        $this->LevelName = $LevelName;
+        $this->levelName = $levelName;
 
         return $this;
     }
