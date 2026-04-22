@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Student;
 use App\Entity\Level;
-use App\Entity\Formation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,13 +18,14 @@ class StudentRepository extends ServiceEntityRepository
     }
 
     /**
-     * Trouve tous les étudiants d'une formation
+     * Trouve tous les étudiants d'un Level
      */
-    public function findByFormation(Formation $formation): array
+    public function findByLevel(Level $level): array
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.formation = :formation')
-            ->setParameter('formation', $formation)
+            ->innerJoin('s.levels', 'l')
+            ->andWhere('l = :level')
+            ->setParameter('level', $level)
             ->orderBy('s.lastName', 'ASC')
             ->addOrderBy('s.firstName', 'ASC')
             ->getQuery()
