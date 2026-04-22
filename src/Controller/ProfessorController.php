@@ -69,10 +69,26 @@ final class ProfessorController extends AbstractController
             throw $this->createAccessDeniedException('Vous n\'avez pas accès à cette convention.');
         }
 
+        // Use different template for professor referent
+        if ($user instanceof Professor && $convention->getReferentProfessor() === $user) {
+            return $this->render('convention/professor_show.html.twig', [
+                'convention' => $convention,
+            ]);
+        }
+
+        // Use different template for student
+        if ($user instanceof Student && $convention->getStudent() === $user) {
+            return $this->render('convention/student_show.html.twig', [
+                'convention' => $convention,
+            ]);
+        }
+
         return $this->render('convention/show.html.twig', [
             'convention' => $convention,
-            'isReferentProfessor' => $user instanceof Professor && $convention->getReferentProfessor() === $user,
-            'isStudent' => $user instanceof Student,
+            //'isReferentProfessor' => $user instanceof Professor && $convention->getReferentProfessor() === $user,
+            //'isStudent' => $user instanceof Student,
+            'isReferentProfessor' => false,
+            'isStudent' => false,
         ]);
     }
 

@@ -142,7 +142,11 @@
                                         </p>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <a href="{{ path('professor_student_show', {id: student.id}) }}" class="text-indigo-600 hover:text-indigo-900 transition-colors">Voir détail</a>
+                                        <div class="flex gap-2">
+                                            <a href="{{ path('professor_student_show', {id: student.id}) }}" class="text-indigo-600 hover:text-indigo-900 transition-colors">Voir détail</a>
+                                            <span class="text-gray-300">|</span>
+                                            <a href="{{ path('professor_student_collections', {id: student.id}) }}" class="text-green-600 hover:text-green-900 transition-colors">Collectes</a>
+                                        </div>
                                     </td>
                                 </tr>
                             {% endfor %}
