@@ -24,10 +24,6 @@ class Student extends User
     #[ORM\JoinTable(name: 'student_level')]
     private Collection $levels;
 
-    #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'students')]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Formation $formation = null;
-
     public function __construct()
     {
         $this->levels = new ArrayCollection();
@@ -69,7 +65,6 @@ class Student extends User
         return $this;
     }
 
-
     public function getVerificationToken(): ?string
     {
         return $this->verificationToken;
@@ -81,15 +76,18 @@ class Student extends User
 
         return $this;
     }
-
-    public function getFormation(): ?Formation
+    public function getLevel(): ?Level
     {
-        return $this->formation;
+        $levels = $this->getLevels()->toArray();
+        return $levels[0] ?? null;
     }
 
-    public function setFormation(?Formation $formation): static
+    public function setLevel(?Level $level): static
     {
-        $this->formation = $formation;
+        $this->levels = new ArrayCollection();
+        if ($level !== null) {
+            $this->levels->add($level);
+        }
 
         return $this;
     }

@@ -175,6 +175,6 @@ class Level
 
     public function __toString(): string
     {
-        return $this->LevelName ?? '';
+        return $this->levelName ?? '';
     }
 }

@@ -83,6 +83,25 @@ company_info.at_least_one_phone: 'Mindestens eine Telefonnummer ist erforderlich
 company_info.morning: Morgen
 company_info.afternoon: Nachmittag
 company_info.day: Tag
+company_info.success_received: 'Informationen erhalten!'
+company_info.success_transmitted: 'Ihre Informationen wurden erfolgreich an die Schule übermittelt.'
+company_info.success_transmitted_company: 'Die Informationen von %company% wurden erfolgreich übermittelt.'
+company_info.summary_title: 'Zusammenfassung Ihrer Einreichung'
+company_info.company: Unternehmen
+company_info.designated_supervisor: 'Bestimmter Betreuer'
+company_info.concerned_student: 'Betroffener Student'
+company_info.submitted_on: 'Eingereicht am'
+company_info.what_happens_next: 'Was passiert als nächstes?'
+company_info.next_steps_description: 'Die Schule wird die übermittelten Informationen prüfen und validieren. Sie werden in die Praktikumsvereinbarung des Studenten integriert. Sie müssen nichts weiter tun.'
+company_info.step_notified_title: 'Student benachrichtigt'
+company_info.step_notified_desc: 'Der Student wurde informiert, dass Sie das Formular ausgefüllt haben.'
+company_info.step_validation_title: 'Validierung durch die Schule'
+company_info.step_validation_desc: 'Das pädagogische Team wird Ihre Informationen prüfen und integrieren.'
+company_info.step_finalized_title: 'Praktikumsvereinbarung abgeschlossen'
+company_info.step_finalized_desc: 'Die Vereinbarung wird erstellt und zur Unterzeichnung übermittelt.'
+company_info.thanks_collaboration: 'Vielen Dank für Ihre Zusammenarbeit.'
+company_info.form_errors_message: 'Das Formular enthält Fehler. Bitte korrigieren Sie diese, bevor Sie fortfahren.'
+company_info.specify_details: 'Details angeben...'
 form.company.name: 'Name der Organisation'
 form.company.address: Adresse
 form.company.address_complement: Adresszusatz
@@ -132,43 +151,11 @@ email.greeting: 'Hallo %name%,'
 email.company_info_completed_message: 'Das Gastunternehmen hat die erforderlichen Informationen zur Erstellung Ihrer Praktikumsvereinbarung ausgefüllt.'
 email.next_steps: 'Wir werden nun mit der Erstellung der Praktikumsvereinbarung fortfahren, die Ihnen in Kürze zugesandt wird.'
 email.footer: 'Mit freundlichen Grüßen, Das pädagogische Team'
-reset_password.title: 'Passwort zurücksetzen'
-reset_password.forgot_password: 'Passwort vergessen?'
-reset_password.no_problem: 'Kein Problem, wir helfen Ihnen beim Zurücksetzen'
-reset_password.email_label: E-Mail-Adresse
-reset_password.email_placeholder: ihre.email@beispiel.com
-reset_password.send_reset_link: 'Zurücksetzungslink senden'
-reset_password.back_to_login: 'Zurück zur Anmeldung'
-reset_password.need_help: 'Brauchen Sie Hilfe? Kontaktieren Sie'
-reset_password.support: 'den Support'
-reset_password.info_message: 'Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts.'
-reset_password.reset_title: 'Neues Passwort'
-reset_password.reset_subtitle: 'Wählen Sie ein starkes und sicheres Passwort'
-reset_password.password_requirements: 'Passwortanforderungen:'
-reset_password.requirement_length: 'Mindestens 12 Zeichen'
-reset_password.requirement_case: 'Ein Groß- und Kleinbuchstabe'
-reset_password.requirement_number: 'Mindestens eine Ziffer'
-reset_password.requirement_special: 'Mindestens ein Sonderzeichen (@$!%*?&)'
-reset_password.new_password: 'Neues Passwort'
-reset_password.confirm_password: 'Passwort bestätigen'
-reset_password.reset_button: 'Passwort zurücksetzen'
-reset_password.security_note: 'Nach dem Zurücksetzen Ihres Passworts werden Sie automatisch angemeldet und können auf Ihr Konto zugreifen.'
-reset_password.check_email_title: 'E-Mail gesendet!'
-reset_password.check_email_subtitle: 'Überprüfen Sie Ihren Posteingang'
-reset_password.success_message: 'Wenn ein Konto mit Ihrer E-Mail-Adresse existiert, wurde eine E-Mail mit einem Link zum Zurücksetzen Ihres Passworts gesendet.'
-reset_password.link_expires: 'Dieser Link läuft ab in'
-reset_password.next_steps: 'Nächste Schritte:'
-reset_password.step_1: 'Überprüfen Sie Ihren Posteingang'
-reset_password.step_2: 'Klicken Sie auf den Zurücksetzungslink in der E-Mail'
-reset_password.step_3: 'Erstellen Sie Ihr neues Passwort'
-reset_password.spam_warning: 'Keine E-Mail erhalten? Überprüfen Sie Ihren Spam-Ordner oder'
-reset_password.try_again: 'versuchen Sie es erneut'
-reset_password.resend_email: 'E-Mail erneut senden'
-email.collection_request_subject: __email.collection_request_subject
-email.collection_request_title: __email.collection_request_title
-email.collection_greeting: __email.collection_greeting
-email.collection_message: __email.collection_message
-email.collection_button: __email.collection_button
-email.important: __email.important
-email.collection_expiration: __email.collection_expiration
-email.collection_help: __email.collection_help
+email.collection_request_subject: 'Informationsanfrage für Praktikumsvereinbarung'
+email.collection_request_title: Informationssammlungsformular
+email.collection_greeting: 'Sehr geehrte Damen und Herren,'
+email.collection_message: 'Vielen Dank, dass Sie %student% in Ihrem Unternehmen aufnehmen. Um die Praktikumsvereinbarung vorzubereiten, laden wir Sie ein, das Online-Formular auszufüllen, indem Sie auf die Schaltfläche unten klicken.'
+email.collection_button: 'Zum Formular'
+email.important: 'Wichtig:'
+email.collection_expiration: 'Dieser Link läuft am %date% ab. Nach diesem Datum müssen Sie die Schule kontaktieren.'
+email.collection_help: 'Das Formular dauert etwa 15 Minuten zum Ausfüllen. Sie können Ihre Informationen vor der endgültigen Bestätigung überprüfen.'
