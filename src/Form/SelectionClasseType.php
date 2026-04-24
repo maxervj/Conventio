@@ -18,7 +18,7 @@ class SelectionClasseType extends AbstractType
         $builder
             ->add('Level', EntityType::class, [
                 'class' => Level::class,
-                'choice_label' => 'LevelName',
+                'choice_label' => 'LevelCode',
                 'multiple' => true,
                 'expanded' => true,
                 'label' => 'Classes',

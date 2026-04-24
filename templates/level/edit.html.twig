@@ -23,6 +23,7 @@
             </div>
             <div>
                 <h1 class="text-xl font-bold text-gray-900">Modifier la classe</h1>
+                <p class="text-sm text-gray-500 mt-0.5">{{ level.levelCode }}</p>
                 <p class="text-sm text-gray-500 mt-0.5">{{ level.levelName }}</p>
             </div>
         </div>
@@ -38,7 +39,7 @@
                 <p class="text-xs text-red-600 mt-1">Cette action est irréversible. Les étudiants rattachés perdront cette classe.</p>
             </div>
             <form method="post" action="{{ path('app_level_delete', {'id': level.id}) }}"
-                  onsubmit="return confirm('Supprimer définitivement la classe « {{ level.levelName }} » ?');">
+                  onsubmit="return confirm('Supprimer définitivement la classe « {{ level.levelCode }} » ?');">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ level.id) }}">
                 <button type="submit"
                         class="inline-flex items-center gap-1.5 px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition flex-shrink-0">

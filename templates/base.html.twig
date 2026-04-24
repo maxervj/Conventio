@@ -119,7 +119,7 @@
                                     </svg>
                                     <span>Signature</span>
                                 </a>
-                                <a href="{{ path('convention_index') }}" class="px-4 py-2 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                <a href="{{ path('admin_convention_list') }}" class="px-4 py-2 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition duration-200 flex items-center gap-2">
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                                     </svg>
@@ -244,7 +244,7 @@
                         <a href="{{ path('app_home') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">Accueil</a>
                         <a href="{{ path('admin_convention_list') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">Demandes en cours</a>
                         <a href="{{ path('app_signature_index') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">Information de signature</a>
-                        <a href="{{ path('app_formation_index') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">Formation</a>
+                        <a href="{{ path('app_level_index') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">Formation</a>
                     {% endif %}
                     {% if is_granted('ROLE_ADMIN') %}
                         <div class="border-t border-gray-100 pt-2 mt-2">

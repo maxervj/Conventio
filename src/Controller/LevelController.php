@@ -33,9 +33,6 @@ final class LevelController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // id_level reflète LevelCode (champ requis non-nullable)
-            $level->setLevelCode(0);
-            $level->setIdLevel(0);
             $entityManager->persist($level);
             $entityManager->flush();
 
@@ -57,8 +54,6 @@ final class LevelController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $level->setLevelCode(0);
-            $level->setIdLevel(0);
             $entityManager->flush();
 
             $this->addFlash('success', 'La classe a été modifiée avec succès.');
