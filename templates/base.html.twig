@@ -127,8 +127,8 @@
 
                         {# User Info et Menu Profil #}
                         <div class="flex items-center gap-3 border-l border-gray-200 pl-4">
-                            <div class="relative">
-                                <button id="user-menu-button" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition duration-200">
+                            <div class="relative flex items-center">
+                                <a href="{{ path('app_profile') }}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition duration-200">
                                     <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                                         {{ app.user.firstName|first|upper }}{{ app.user.lastName|first|upper }}
                                     </div>
@@ -146,6 +146,8 @@
                                             {% endif %}
                                         </p>
                                     </div>
+                                </a>
+                                <button id="user-menu-button" class="p-1.5 rounded-lg hover:bg-gray-100 transition duration-200">
                                     <svg class="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                     </svg>
