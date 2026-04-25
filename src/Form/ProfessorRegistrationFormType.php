@@ -124,6 +124,7 @@ class ProfessorRegistrationFormType extends AbstractType
                 'label' => 'Classes que vous enseignez *',
                 'multiple' => true,
                 'expanded' => true,
+                'by_reference' => false,
                 'required' => false,
                 'help' => 'Sélectionnez toutes les classes dans lesquelles vous enseignez',
             ])

@@ -122,8 +122,9 @@ class RegistrationFormType extends AbstractType
                 'class' => Level::class,
                 'choice_label' => 'LevelName',
                 'label' => 'Classe BTS *',
-                'multiple' => false,
-                'expanded' => false,
+                'multiple' => true,
+                'expanded' => true,
+                'by_reference' => false,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez sélectionner au moins une classe',

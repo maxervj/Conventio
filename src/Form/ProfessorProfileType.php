@@ -20,6 +20,7 @@ class ProfessorProfileType extends AbstractType
                 'label' => 'Classes que vous enseignez',
                 'multiple' => true,
                 'expanded' => true,
+                'by_reference' => false,
                 'required' => false,
                 'help' => 'Sélectionnez les classes dans lesquelles vous enseignez',
             ])
@@ -28,7 +29,7 @@ class ProfessorProfileType extends AbstractType
                 'choice_label' => 'LevelName',
                 'label' => 'Classe dont vous êtes référent',
                 'required' => false,
-                'placeholder' => 'Aucune classe référente',
+                'placeholder' => 'Sélectionnez votre classe référente (optionnel)',
                 'help' => 'Sélectionnez la classe dont vous êtes le professeur référent',
             ])
         ;

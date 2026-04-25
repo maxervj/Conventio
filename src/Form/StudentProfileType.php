@@ -20,6 +20,7 @@ class StudentProfileType extends AbstractType
                 'label' => 'Mes classes',
                 'multiple' => true,
                 'expanded' => true,
+                'by_reference' => false,
                 'required' => false,
                 'help' => 'Sélectionnez vos classes',
             ])

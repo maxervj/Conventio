@@ -3,173 +3,253 @@
 namespace App\Controller;
 
 use App\Entity\Convention;
+use App\Entity\Professor;
+use App\Entity\Student;
 use App\Repository\ConventionRepository;
-use App\Service\ConventionPdfService;
+use App\Service\PdfGeneratorService;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensiolabs\GotenbergBundle\GotenbergPdfInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/conventions')]
-#[IsGranted('ROLE_ADMIN')]
-final class ConventionController extends AbstractController
+#[IsGranted('ROLE_USER')]
+class ConventionController extends AbstractController
 {
-    #[Route(name: 'admin_convention_list', methods: ['GET'])]
-    public function list(ConventionRepository $conventionRepository): Response
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private ConventionRepository $conventionRepository,
+        private MailerInterface $mailer,
+        private UrlGeneratorInterface $urlGenerator,
+        private PdfGeneratorService $pdfGenerator,
+    ) {}
+
+    /**
+     * Liste des conventions : admin → toutes, prof → les siennes, étudiant → les siennes.
+     */
+    #[Route('', name: 'convention_index', methods: ['GET'])]
+    public function index(): Response
     {
-        // Récupérer les conventions validées
-        $conventions = $conventionRepository->findValidatedGroupedByLevel();
+        $user = $this->getUser();
 
-        // Grouper par Level
-        $groupedByLevel = [];
-        foreach ($conventions as $convention) {
-            $student = $convention->getStudent();
-            $levels = $student ? $student->getLevels()->toArray() : [];
-            $levelName = 'Sans classe';
-
-            if (!empty($levels)) {
-                $firstLevel = $levels[0];
-                $levelName = $firstLevel->getLevelName() ?? ($firstLevel->getLevelCode() ?? 'Sans classe');
-            }
-
-            if (!isset($groupedByLevel[$levelName])) {
-                $groupedByLevel[$levelName] = [];
-            }
-
-            $groupedByLevel[$levelName][] = $convention;
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $conventions = $this->conventionRepository->findAllActiveForAdmin();
+            return $this->render('convention/list.html.twig', ['conventions' => $conventions]);
         }
 
-        // Trier les classes alphabétiquement
-        ksort($groupedByLevel);
+        if ($user instanceof Professor) {
+            $conventions = $this->conventionRepository->findByReferentProfessor($user);
+            return $this->render('convention/index.html.twig', ['conventions' => $conventions, 'role' => 'professor']);
+        }
 
-        return $this->render('convention/list.html.twig', [
-            'groupedByFormation' => $groupedByLevel,
-        ]);
+        if ($user instanceof Student) {
+            $conventions = $this->conventionRepository->findByStudent($user);
+            return $this->render('convention/index.html.twig', ['conventions' => $conventions, 'role' => 'student']);
+        }
+
+        throw $this->createAccessDeniedException();
     }
 
-    #[Route('/{id}', name: 'admin_convention_show', methods: ['GET'])]
+    /**
+     * Détail d'une convention.
+     */
+    #[Route('/{id}', name: 'convention_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(Convention $convention): Response
     {
-        // Vérifier que la convention est validée
-        if (!$convention->isValidated()) {
-            throw $this->createNotFoundException('Cette convention n\'est pas disponible pour validation.');
+        $user = $this->getUser();
+
+        if (!$this->isGranted('ROLE_ADMIN')
+            && !($user instanceof Student && $convention->getStudent() === $user)
+            && !($user instanceof Professor && $convention->getReferentProfessor() === $user)
+        ) {
+            throw $this->createAccessDeniedException('Vous n\'avez pas accès à cette convention.');
         }
 
         return $this->render('convention/show.html.twig', [
             'convention' => $convention,
+            'isReferentProfessor' => $user instanceof Professor && $convention->getReferentProfessor() === $user,
+            'isStudent' => $user instanceof Student && !$this->isGranted('ROLE_ADMIN'),
         ]);
     }
 
-    #[Route('/{id}/pdf', name: 'admin_convention_generate_pdf', methods: ['GET'])]
-    public function generatePdf(Convention $convention, ConventionPdfService $pdfService): Response
+    /**
+     * L'admin approuve la convention (passage en signed).
+     */
+    #[Route('/{id}/approve', name: 'convention_approve', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function approve(Convention $convention, Request $request): Response
     {
-        // Vérifier que la convention est validée
-        if (!$convention->isValidated()) {
-            throw $this->createNotFoundException('Cette convention n\'est pas disponible pour génération PDF.');
+        if (!$this->isCsrfTokenValid('approve_convention_' . $convention->getId(), $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Token CSRF invalide.');
         }
 
-        try {
-            $pdfContent = $pdfService->generateConventionPdf($convention);
+        if (!$convention->isValidated()) {
+            $this->addFlash('error', 'La convention doit être validée par le professeur avant l\'approbation de l\'établissement.');
+            return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
+        }
 
-            return new Response(
-                $pdfContent,
-                Response::HTTP_OK,
-                [
-                    'Content-Type' => 'application/pdf',
-                    'Content-Disposition' => 'inline; filename="convention_' . $convention->getId() . '.pdf"',
-                ]
-            );
+        $convention->setStatus('signed');
+        $convention->setSignedAt(new \DateTime());
+        $this->entityManager->flush();
+
+        $this->addFlash('success', 'La convention a été approuvée par l\'établissement.');
+        return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
+    }
+
+    /**
+     * Génère le PDF de la convention (admin uniquement).
+     */
+    #[Route('/{id}/pdf', name: 'convention_pdf', methods: ['GET'], requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function generatePdf(Convention $convention): Response
+    {
+        if ($convention->getStatus() === 'draft') {
+            $this->addFlash('error', 'Impossible de générer le PDF d\'une convention en brouillon.');
+            return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
+        }
+
+        return $this->pdfGenerator->streamConventionPdf($convention);
+    }
+
+    /**
+     * L'étudiant demande la validation de sa convention par le professeur référent.
+     */
+    #[Route('/{id}/request-validation', name: 'convention_request_validation', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_STUDENT')]
+    public function requestValidation(Convention $convention, Request $request): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof Student || $convention->getStudent() !== $user) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas demander la validation de cette convention.');
+        }
+
+        if (!$this->isCsrfTokenValid('request_validation_' . $convention->getId(), $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Token CSRF invalide.');
+        }
+
+        if (!$convention->isDraft()) {
+            $this->addFlash('error', 'Cette convention ne peut pas être soumise à validation dans son état actuel.');
+            return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
+        }
+
+        $professor = $convention->getReferentProfessor();
+        if (!$professor) {
+            $this->addFlash('error', 'Aucun professeur référent n\'est associé à cette convention. Veuillez contacter votre établissement.');
+            return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
+        }
+
+        $convention->setStatus('pending_validation');
+        $this->entityManager->flush();
+
+        // Envoyer un email au professeur référent
+        $this->sendValidationRequestEmail($convention);
+
+        $this->addFlash('success', 'Votre demande de validation a été envoyée à ' . $professor->getFirstName() . ' ' . $professor->getLastName() . '.');
+
+        return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
+    }
+
+    /**
+     * Le professeur référent valide la convention.
+     */
+    #[Route('/{id}/validate', name: 'convention_validate', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_PROFESSOR')]
+    public function validate(Convention $convention, Request $request): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof Professor || $convention->getReferentProfessor() !== $user) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas le professeur référent de cette convention.');
+        }
+
+        if (!$this->isCsrfTokenValid('validate_convention_' . $convention->getId(), $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Token CSRF invalide.');
+        }
+
+        if (!$convention->isPendingValidation()) {
+            $this->addFlash('error', 'Cette convention n\'est pas en attente de validation.');
+            return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
+        }
+
+        $convention->setStatus('validated');
+        $convention->setValidatedAt(new \DateTime());
+        $this->entityManager->flush();
+
+        // Notifier l'étudiant
+        $this->sendValidationConfirmationEmail($convention);
+
+        $this->addFlash('success', 'La convention de ' . $convention->getStudent()->getFirstName() . ' ' . $convention->getStudent()->getLastName() . ' a été validée avec succès.');
+
+        return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
+    }
+
+    private function sendValidationRequestEmail(Convention $convention): void
+    {
+        $professor = $convention->getReferentProfessor();
+
+        if (!$professor || !$professor->getEmail()) {
+            return;
+        }
+
+        $conventionUrl = $this->urlGenerator->generate('convention_show', [
+            'id' => $convention->getId(),
+        ], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        $email = (new TemplatedEmail())
+            ->from('noreply@conventio.edu')
+            ->to($professor->getEmail())
+            ->subject(sprintf(
+                'Demande de validation de convention — %s %s',
+                $convention->getStudent()->getFirstName(),
+                $convention->getStudent()->getLastName()
+            ))
+            ->htmlTemplate('emails/convention_validation_request.html.twig')
+            ->context([
+                'professor' => $professor,
+                'convention' => $convention,
+                'conventionUrl' => $conventionUrl,
+            ]);
+
+        try {
+            $this->mailer->send($email);
         } catch (\Exception $e) {
-            throw $this->createAccessDeniedException('Erreur lors de la génération du PDF : ' . $e->getMessage());
+            // Ne pas bloquer si l'email échoue
         }
     }
 
-    #[Route('/{id}/refuse', name: 'admin_convention_refuse', methods: ['POST'])]
-    public function refuse(
-        Convention $convention,
-        Request $request,
-        EntityManagerInterface $entityManager
-    ): Response {
-        // Vérifier que la convention est validée
-        if (!$convention->isValidated()) {
-            throw $this->createNotFoundException('Cette convention n\'est pas disponible.');
+    private function sendValidationConfirmationEmail(Convention $convention): void
+    {
+        $student = $convention->getStudent();
+
+        if (!$student || !$student->getEmail()) {
+            return;
         }
 
-        // Valider le token CSRF
-        if (!$this->isCsrfTokenValid('refuse_' . $convention->getId(), $request->request->get('_token'))) {
-            $this->addFlash('error', 'Token de sécurité invalide.');
-            return $this->redirectToRoute('admin_convention_show', ['id' => $convention->getId()]);
-        }
+        $conventionUrl = $this->urlGenerator->generate('convention_show', [
+            'id' => $convention->getId(),
+        ], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        // Récupérer la raison du refus
-        $rejectionReason = $request->request->get('rejectionReason', '');
+        $email = (new TemplatedEmail())
+            ->from('noreply@conventio.edu')
+            ->to($student->getEmail())
+            ->subject('Votre convention de stage a été validée !')
+            ->htmlTemplate('emails/convention_validated.html.twig')
+            ->context([
+                'student' => $student,
+                'convention' => $convention,
+                'conventionUrl' => $conventionUrl,
+            ]);
 
-        if (empty($rejectionReason)) {
-            $this->addFlash('error', 'La raison du refus est obligatoire.');
-            return $this->redirectToRoute('admin_convention_show', ['id' => $convention->getId()]);
-        }
-
-        // Mettre à jour la convention : enregistrer uniquement la raison du refus
-        $convention->setRejectionReason($rejectionReason);
-
-        $entityManager->flush();
-
-        $this->addFlash('success', 'La convention a été refusée avec succès.');
-
-        return $this->redirectToRoute('admin_convention_list');
-    }
-
-    #[Route('/{id}/approve', name: 'admin_convention_approve', methods: ['POST'])]
-    public function approve(
-        Convention $convention,
-        Request $request,
-        EntityManagerInterface $entityManager,
-        ConventionPdfService $pdfService
-    ): Response {
-        // Vérifier que la convention est validée
-        if (!$convention->isValidated()) {
-            throw $this->createNotFoundException('Cette convention n\'est pas disponible.');
-        }
-
-        // Valider le token CSRF
-        if (!$this->isCsrfTokenValid('approve_' . $convention->getId(), $request->request->get('_token'))) {
-            $this->addFlash('error', 'Token de sécurité invalide.');
-            return $this->redirectToRoute('admin_convention_show', ['id' => $convention->getId()]);
-        }
-
-        // Générer le PDF
         try {
-            $pdfContent = $pdfService->generateConventionPdf($convention);
-
-            // Sauvegarder le PDF
-            $filename = 'convention_' . $convention->getId() . '_' . time() . '.pdf';
-            $filepath = 'uploads/conventions/' . $filename;
-
-            // Créer le répertoire s'il n'existe pas
-            if (!is_dir('uploads/conventions')) {
-                mkdir('uploads/conventions', 0755, true);
-            }
-
-            // Sauvegarder le PDF
-            file_put_contents($filepath, $pdfContent);
-
-            // Mettre à jour la convention
-            $convention->setStatus('signed');
-            $convention->setSignedAt(new \DateTime());
-            $convention->setDocumentPath($filepath);
-            $convention->setValidationNotes('Approuvé par DDF le ' . (new \DateTime())->format('d/m/Y H:i'));
-
-            $entityManager->flush();
-
-            $this->addFlash('success', 'La convention a été approuvée et le PDF a été généré.');
+            $this->mailer->send($email);
         } catch (\Exception $e) {
-            $this->addFlash('error', 'Erreur lors de la génération du PDF : ' . $e->getMessage());
+            // Ne pas bloquer si l'email échoue
         }
-
-        return $this->redirectToRoute('admin_convention_list');
     }
 }
-
