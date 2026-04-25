@@ -74,9 +74,9 @@ class ProfessorRegistrationFormType extends AbstractType
                     ),
                 ],
                 'attr' => [
-                    'placeholder' => 'Email académique (ex: prenom.nom@ac-academie.fr)',
+                    'placeholder' => 'Ex : prenom.nom@ac-grenoble.fr',
                 ],
-                'help' => 'Vous devez utiliser votre adresse email académique professionnelle',
+                'help' => 'Utilisez votre adresse académique @ac-grenoble.fr',
             ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
