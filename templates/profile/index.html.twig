@@ -33,12 +33,14 @@
                         <h2 class="mt-4 text-xl font-bold text-gray-900">{{ user.firstName }} {{ user.lastName }}</h2>
                         <p class="text-sm text-gray-600">{{ user.email }}</p>
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-2">
-                            {% if user is instanceof('App\\Entity\\Professor') %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                Administrateur
+                            {% elseif user is instanceof('App\\Entity\\Professor') %}
                                 Professeur
                             {% elseif user is instanceof('App\\Entity\\Student') %}
                                 Étudiant
                             {% else %}
-                                Tuteur
+                                Utilisateur
                             {% endif %}
                         </span>
                     </div>

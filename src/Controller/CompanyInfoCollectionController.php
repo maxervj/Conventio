@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Convention;
 use App\Entity\InternshipCompanyInfo;
 use App\Entity\Student;
 use App\Form\CollectionRequestFormType;
@@ -88,6 +89,29 @@ class CompanyInfoCollectionController extends AbstractController
             }
 
             $this->entityManager->persist($companyInfo);
+
+            // Crée automatiquement la convention liée à cette collecte
+            $convention = new Convention();
+            $convention->setStudent($user);
+            $convention->setCompanyInfo($companyInfo);
+
+            // Assigne le prof référent depuis les niveaux de l'étudiant
+            $professor = null;
+            foreach ($user->getLevels() as $level) {
+                foreach ($level->getReferentProfessors() as $ref) {
+                    $professor = $ref;
+                    break 2;
+                }
+                foreach ($level->getTeachers() as $teacher) {
+                    $professor = $teacher;
+                    break 2;
+                }
+            }
+            if ($professor) {
+                $convention->setReferentProfessor($professor);
+            }
+
+            $this->entityManager->persist($convention);
             $this->entityManager->flush();
 
             // Envoi de l'email
@@ -233,6 +257,13 @@ class CompanyInfoCollectionController extends AbstractController
                 // Marquer comme complété
                 $companyInfo->setIsCompleted(true);
                 $companyInfo->setCompletedAt(new \DateTime());
+
+                // Passe la convention en attente de validation prof
+                $convention = $this->conventionRepository->findByCompanyInfo($companyInfo);
+                if ($convention && $convention->isDraft()) {
+                    $convention->setStatus('pending_validation');
+                }
+
                 $this->entityManager->flush();
 
                 // Send email to student

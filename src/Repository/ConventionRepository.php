@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Convention;
+use App\Entity\InternshipCompanyInfo;
 use App\Entity\Professor;
 use App\Entity\Student;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -66,6 +67,31 @@ class ConventionRepository extends ServiceEntityRepository
             ->andWhere('c.status = :status')
             ->setParameter('status', 'validated')
             ->orderBy('c.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Trouve la convention liée à une collecte d'informations
+     */
+    public function findByCompanyInfo(InternshipCompanyInfo $companyInfo): ?Convention
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.companyInfo = :companyInfo')
+            ->setParameter('companyInfo', $companyInfo)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * Toutes les conventions actives (hors brouillon) pour la vue admin
+     */
+    public function findAllActiveForAdmin(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.status != :draft')
+            ->setParameter('draft', 'draft')
+            ->orderBy('c.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
     }

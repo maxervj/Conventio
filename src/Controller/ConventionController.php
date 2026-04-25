@@ -6,6 +6,7 @@ use App\Entity\Convention;
 use App\Entity\Professor;
 use App\Entity\Student;
 use App\Repository\ConventionRepository;
+use App\Service\PdfGeneratorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,33 +25,31 @@ class ConventionController extends AbstractController
         private EntityManagerInterface $entityManager,
         private ConventionRepository $conventionRepository,
         private MailerInterface $mailer,
-        private UrlGeneratorInterface $urlGenerator
+        private UrlGeneratorInterface $urlGenerator,
+        private PdfGeneratorService $pdfGenerator,
     ) {}
 
     /**
-     * Liste des conventions : pour le prof référent, toutes ses conventions ; pour l'étudiant, les siennes.
+     * Liste des conventions : admin → toutes, prof → les siennes, étudiant → les siennes.
      */
     #[Route('', name: 'convention_index', methods: ['GET'])]
     public function index(): Response
     {
         $user = $this->getUser();
 
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $conventions = $this->conventionRepository->findAllActiveForAdmin();
+            return $this->render('convention/list.html.twig', ['conventions' => $conventions]);
+        }
+
         if ($user instanceof Professor) {
             $conventions = $this->conventionRepository->findByReferentProfessor($user);
-
-            return $this->render('convention/index.html.twig', [
-                'conventions' => $conventions,
-                'role' => 'professor',
-            ]);
+            return $this->render('convention/index.html.twig', ['conventions' => $conventions, 'role' => 'professor']);
         }
 
         if ($user instanceof Student) {
             $conventions = $this->conventionRepository->findByStudent($user);
-
-            return $this->render('convention/index.html.twig', [
-                'conventions' => $conventions,
-                'role' => 'student',
-            ]);
+            return $this->render('convention/index.html.twig', ['conventions' => $conventions, 'role' => 'student']);
         }
 
         throw $this->createAccessDeniedException();
@@ -64,9 +63,8 @@ class ConventionController extends AbstractController
     {
         $user = $this->getUser();
 
-        // Only the student of the convention or the referent professor can view it
-        if (
-            !($user instanceof Student && $convention->getStudent() === $user)
+        if (!$this->isGranted('ROLE_ADMIN')
+            && !($user instanceof Student && $convention->getStudent() === $user)
             && !($user instanceof Professor && $convention->getReferentProfessor() === $user)
         ) {
             throw $this->createAccessDeniedException('Vous n\'avez pas accès à cette convention.');
@@ -75,8 +73,47 @@ class ConventionController extends AbstractController
         return $this->render('convention/show.html.twig', [
             'convention' => $convention,
             'isReferentProfessor' => $user instanceof Professor && $convention->getReferentProfessor() === $user,
-            'isStudent' => $user instanceof Student,
+            'isStudent' => $user instanceof Student && !$this->isGranted('ROLE_ADMIN'),
         ]);
+    }
+
+    /**
+     * L'admin approuve la convention (passage en signed).
+     */
+    #[Route('/{id}/approve', name: 'convention_approve', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function approve(Convention $convention, Request $request): Response
+    {
+        if (!$this->isCsrfTokenValid('approve_convention_' . $convention->getId(), $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Token CSRF invalide.');
+        }
+
+        if (!$convention->isValidated()) {
+            $this->addFlash('error', 'La convention doit être validée par le professeur avant l\'approbation de l\'établissement.');
+            return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
+        }
+
+        $convention->setStatus('signed');
+        $convention->setSignedAt(new \DateTime());
+        $this->entityManager->flush();
+
+        $this->addFlash('success', 'La convention a été approuvée par l\'établissement.');
+        return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
+    }
+
+    /**
+     * Génère le PDF de la convention (admin uniquement).
+     */
+    #[Route('/{id}/pdf', name: 'convention_pdf', methods: ['GET'], requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function generatePdf(Convention $convention): Response
+    {
+        if ($convention->getStatus() === 'draft') {
+            $this->addFlash('error', 'Impossible de générer le PDF d\'une convention en brouillon.');
+            return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
+        }
+
+        return $this->pdfGenerator->streamConventionPdf($convention);
     }
 
     /**
