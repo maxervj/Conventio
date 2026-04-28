@@ -368,7 +368,18 @@
             </div>
             {% endif %}
 
-            {% if info.workSchedule %}
+            {# Afficher les horaires si au moins un jour a des horaires renseignés #}
+            {% set hasSchedule = false %}
+            {% for dayKey in ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] %}
+                {% if info.workSchedule[dayKey] is defined and info.workSchedule[dayKey] %}
+                    {% set sched = info.workSchedule[dayKey] %}
+                    {% if sched.morning_start_h is defined or sched.afternoon_start_h is defined %}
+                        {% set hasSchedule = true %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            {% if hasSchedule %}
             <div class="divider"></div>
             <div class="field-label" style="margin-bottom:6px;">Horaires de travail</div>
             <table class="table">
@@ -384,14 +395,38 @@
                 <tbody>
                     {% set days = {'monday': 'Lundi', 'tuesday': 'Mardi', 'wednesday': 'Mercredi', 'thursday': 'Jeudi', 'friday': 'Vendredi', 'saturday': 'Samedi'} %}
                     {% for dayKey, dayLabel in days %}
-                        {% if info.workSchedule[dayKey] is defined %}
-                        {% set schedule = info.workSchedule[dayKey] %}
+                        {% if info.workSchedule[dayKey] is defined and info.workSchedule[dayKey] %}
+                        {% set sched = info.workSchedule[dayKey] %}
                         <tr>
                             <td><strong>{{ dayLabel }}</strong></td>
-                            <td>{{ schedule.morning_start ?? '-' }}</td>
-                            <td>{{ schedule.morning_end ?? '-' }}</td>
-                            <td>{{ schedule.afternoon_start ?? '-' }}</td>
-                            <td>{{ schedule.afternoon_end ?? '-' }}</td>
+                            <td>
+                                {% if sched.morning_start_h is defined %}
+                                    {{ '%02d'|format(sched.morning_start_h) }}:{{ '%02d'|format(sched.morning_start_m|default(0)) }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if sched.morning_end_h is defined %}
+                                    {{ '%02d'|format(sched.morning_end_h) }}:{{ '%02d'|format(sched.morning_end_m|default(0)) }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if sched.afternoon_start_h is defined %}
+                                    {{ '%02d'|format(sched.afternoon_start_h) }}:{{ '%02d'|format(sched.afternoon_start_m|default(0)) }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if sched.afternoon_end_h is defined %}
+                                    {{ '%02d'|format(sched.afternoon_end_h) }}:{{ '%02d'|format(sched.afternoon_end_m|default(0)) }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
                         </tr>
                         {% endif %}
                     {% endfor %}

@@ -69,7 +69,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                     {% if convention.student.levels|length > 0 %}
-                                        {{ convention.student.levels|map(l => l.levelName)|join(', ') }}
+                                        {{ convention.student.levels|map(l => l.levelCode)|join(', ') }}
                                     {% else %}
                                         <span class="text-gray-400 italic">—</span>
                                     {% endif %}
