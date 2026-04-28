@@ -29,8 +29,8 @@
                         <p class="text-sm font-semibold text-blue-800">Sujet en attente de votre validation</p>
                         <p class="text-xs text-blue-600 mt-0.5">Vous êtes le professeur référent de cet étudiant. Vous pouvez valider ce sujet de stage.</p>
                     </div>
-                    <form method="POST" action="{{ path('convention_validate', {id: convention.id}) }}">
-                        <input type="hidden" name="_token" value="{{ csrf_token('validate_convention_' ~ convention.id) }}">
+                    <form method="POST" action="{{ path('professor_collecte_validate_convention', {id: companyInfo.id}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('validate_convention_' ~ companyInfo.id) }}">
                         <button type="submit"
                                 class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 shadow-md transition-all duration-200 whitespace-nowrap">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,6 +46,26 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
                     </svg>
                     <p class="text-sm font-semibold text-green-800">Sujet validé</p>
+                </div>
+            {% endif %}
+        {% else %}
+            {# Aucune convention n'existe encore - afficher le bouton pour en créer une #}
+            {% if companyInfo.isCompleted() %}
+                <div class="bg-blue-50 border border-blue-200 rounded-2xl p-5 mb-6 flex items-center justify-between gap-4">
+                    <div>
+                        <p class="text-sm font-semibold text-blue-800">Collecte complétée</p>
+                        <p class="text-xs text-blue-600 mt-0.5">Créez et validez la convention pour cet étudiant.</p>
+                    </div>
+                    <form method="POST" action="{{ path('professor_collecte_create_convention', {id: companyInfo.id}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('create_convention_' ~ companyInfo.id) }}">
+                        <button type="submit"
+                                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 shadow-md transition-all duration-200 whitespace-nowrap">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            Créer la convention
+                        </button>
+                    </form>
                 </div>
             {% endif %}
         {% endif %}
