@@ -53,7 +53,7 @@
                                     </svg>
                                     <span>Nouvelle demande</span>
                                 </a>
-                                <a href="{{ path('app_home') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                <a href="{{ path('convention_index') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 flex items-center gap-2">
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                     </svg>
@@ -77,29 +77,17 @@
                                     </svg>
                                     <span>Mes étudiants</span>
                                 </a>
-                                <a href="{{ path('app_home') }}" class="px-4 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                <a href="{{ path('professor_collectes') }}" class="px-4 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition duration-200 flex items-center gap-2">
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                                     </svg>
+                                    <span>Collectes</span>
+                                </a>
+                                <a href="{{ path('convention_index') }}" class="px-4 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
                                     <span>Conventions</span>
-                                </a>
-                            </div>
-                        {% endif %}
-
-                        {# Menu pour TUTEURS #}
-                        {% if app.user is instanceof('App\\Entity\\Tutor') and not is_granted('ROLE_ADMIN') %}
-                            <div class="hidden md:flex items-center gap-2">
-                                <a href="{{ path('app_home') }}" class="px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-lg transition duration-200 flex items-center gap-2">
-                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                                    </svg>
-                                    <span>Accueil</span>
-                                </a>
-                                <a href="#" class="px-4 py-2 text-gray-700 hover:text-green-600 hover:bg-green-50 rounded-lg transition duration-200 flex items-center gap-2">
-                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                    </svg>
-                                    <span>Mes stagiaires</span>
                                 </a>
                             </div>
                         {% endif %}
@@ -119,7 +107,7 @@
                                     </svg>
                                     <span>Signature</span>
                                 </a>
-                                <a href="{{ path('admin_convention_list') }}" class="px-4 py-2 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition duration-200 flex items-center gap-2">
+                                <a href="{{ path('convention_index') }}" class="px-4 py-2 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition duration-200 flex items-center gap-2">
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                                     </svg>
@@ -139,37 +127,31 @@
 
                         {# User Info et Menu Profil #}
                         <div class="flex items-center gap-3 border-l border-gray-200 pl-4">
-                            <div class="hidden sm:flex items-center gap-2">
-                                <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                                    <a href="{{ path('app_profile') }}" class="flex items-center justify-center w-full h-full text-center focus:outline-none">
+                            <div class="relative flex items-center">
+                                <a href="{{ path('app_profile') }}" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition duration-200">
+                                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                                         {{ app.user.firstName|first|upper }}{{ app.user.lastName|first|upper }}
-                                    </a>
-                                </div>
-                                <div class="text-left">
-                                    <p class="text-sm font-semibold text-gray-900">{{ app.user.firstName }} {{ app.user.lastName }}</p>
-                                    <p class="text-xs text-gray-500">
-                                        {% if app.user and is_granted('ROLE_STUDENT') %}
-                                            Étudiant
-                                        {% elseif app.user and is_granted('ROLE_PROFESSOR') %}
-                                            Professeur
-                                        {% elseif app.user is instanceof('App\\Entity\\Tutor') %}
-                                            Tuteur
-                                        {% elseif is_granted('ROLE_ADMIN') %}
-                                            Administrateur
-                                        {% else %}
-                                            Utilisateur
-                                        {% endif %}
-                                    </p>
-                                </div>
-                            </div>
-                            <form action="{{ path('app_logout') }}" method="post" class="inline">
-                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
-                                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200 flex items-center gap-2 shadow-sm">
-                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                    </div>
+                                    <div class="hidden sm:block text-left">
+                                        <p class="text-sm font-semibold text-gray-900">{{ app.user.firstName }} {{ app.user.lastName }}</p>
+                                        <p class="text-xs text-gray-500">
+                                            {% if is_granted('ROLE_ADMIN') %}
+                                                Administrateur
+                                            {% elseif app.user is instanceof('App\\Entity\\Student') %}
+                                                Étudiant
+                                            {% elseif app.user is instanceof('App\\Entity\\Professor') %}
+                                                Professeur
+                                            {% else %}
+                                                Utilisateur
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </a>
+                                <button id="user-menu-button" class="p-1.5 rounded-lg hover:bg-gray-100 transition duration-200">
+                                    <svg class="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                     </svg>
                                 </button>
-                            </form>
 
                                 {# Menu déroulant #}
                                 <div id="user-menu" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
@@ -186,16 +168,15 @@
                                             </svg>
                                             Changer mon mot de passe
                                         </a>
-                                    </div>
-                                    <div class="border-t border-gray-100 my-1">
+                                        <div class="border-t border-gray-100 my-1"></div>
                                         <form action="{{ path('app_logout') }}" method="post">
                                             <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
-                                                <button type="submit" class="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition duration-200">
-                                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                                                    </svg>
-                                                    Déconnexion
-                                                </button>
+                                            <button type="submit" class="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition duration-200">
+                                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                                </svg>
+                                                Déconnexion
+                                            </button>
                                         </form>
                                     </div>
                                 </div>
@@ -227,7 +208,7 @@
                             </svg>
                             Nouvelle demande
                         </a>
-                        <a href="{{ path('app_home') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">
+                        <a href="{{ path('convention_index') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">
                             <svg class="inline h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                             </svg>
@@ -235,16 +216,9 @@
                         </a>
                     {% elseif app.user is instanceof('App\\Entity\\Professor') and not is_granted('ROLE_ADMIN') %}
                         <a href="{{ path('app_home') }}" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition">Accueil</a>
-                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition">Mes étudiants</a>
+                        <a href="{{ path('professor_my_students') }}" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition">Mes étudiants</a>
+                        <a href="{{ path('professor_collectes') }}" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition">Collectes</a>
                         <a href="{{ path('convention_index') }}" class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition">Conventions</a>
-                    {% elseif app.user is instanceof('App\\Entity\\Tutor') and not is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('app_home') }}" class="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition">Accueil</a>
-                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition">Mes stagiaires</a>
-                    {% elseif app.user and is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('app_home') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">Accueil</a>
-                        <a href="{{ path('admin_convention_list') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">Demandes en cours</a>
-                        <a href="{{ path('app_signature_index') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">Information de signature</a>
-                        <a href="{{ path('app_level_index') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition">Formation</a>
                     {% endif %}
                     {% if is_granted('ROLE_ADMIN') %}
                         <div class="border-t border-gray-100 pt-2 mt-2">
@@ -320,6 +294,7 @@
 
     {# Scripts #}
     {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
         <script>
             // Toggle mobile menu
             document.addEventListener('DOMContentLoaded', function() {

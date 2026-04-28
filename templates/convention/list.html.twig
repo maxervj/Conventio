@@ -1,90 +1,113 @@
-{% extends "base.html.twig" %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Demandes en cours - Conventio {% endblock %}
+{% block title %}Toutes les conventions — Conventio{% endblock %}
 
 {% block body %}
-<div class="container mx-auto px-4 py-8">
-    <!-- En-tête -->
-    <div class="mb-8">
-        <h1 class="text-4xl font-bold text-gray-900 mb-2">Demandes en cours</h1>
-        <p class="text-gray-600">Conventions validées par les professeurs en attente de validation</p>
-    </div>
+<div class="min-h-screen bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
 
-    <!-- Alertes de session -->
-    {% for message in app.flashes('success') %}
-        <div class="mb-4 p-4 bg-green-50 border-l-4 border-green-500 text-green-700">
-            {{ message }}
+        <div class="mb-8 flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-extrabold text-gray-900">Toutes les conventions</h1>
+                <p class="mt-1 text-sm text-gray-500">Vue administrateur — conventions actives (hors brouillons)</p>
+            </div>
+            <div class="w-14 h-14 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
         </div>
-    {% endfor %}
 
-    {% for message in app.flashes('error') %}
-        <div class="mb-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-700">
-            {{ message }}
-        </div>
-    {% endfor %}
-
-    <!-- Contenu principal -->
-    {% if groupedByFormation|length == 0 %}
-        <div class="bg-gray-50 rounded-lg border border-gray-200 p-8 text-center">
-            <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-            </svg>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Aucune demande</h3>
-            <p class="text-gray-600">Aucune convention en cours de validation.</p>
-        </div>
-    {% else %}
-        <!-- Groupé par formation -->
-        <div class="space-y-6">
-            {% for formationName, conventions in groupedByFormation %}
-                <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-                    <!-- En-tête de formation -->
-                    <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
-                        <h2 class="text-xl font-bold text-white">{{ formationName }}</h2>
-                        <p class="text-blue-100 text-sm">{{ conventions|length }} demande{{ conventions|length > 1 ? 's' : '' }}</p>
-                    </div>
-
-                    <!-- Liste des étudiants -->
-                    <div class="divide-y divide-gray-200">
-                        {% for convention in conventions %}
-                            <div class="hover:bg-blue-50 transition duration-200">
-                                <a href="{{ path('admin_convention_show', {'id': convention.id}) }}" class="block px-6 py-4 no-underline hover:no-underline">
-                                    <div class="flex items-center justify-between">
-                                        <div>
-                                            <p class="font-semibold text-gray-900">
-                                                {{ convention.student.firstName }} {{ convention.student.lastName }}
-                                            </p>
-                                            <p class="text-sm text-gray-500 mt-1">
-                                                <span class="inline-block">
-                                                    {% if convention.companyInfo %}
-                                                        {{ convention.companyInfo.companyName }}
-                                                    {% else %}
-                                                        <span class="text-gray-400">Entreprise non renseignée</span>
-                                                    {% endif %}
-                                                </span>
-                                            </p>
-                                            {% if convention.referentProfessor %}
-                                                <p class="text-sm text-gray-500">
-                                                    Professeur référent: <span class="font-medium">{{ convention.referentProfessor.firstName }} {{ convention.referentProfessor.lastName }}</span>
-                                                </p>
-                                            {% endif %}
-                                        </div>
-                                        <div class="text-right">
-                                            <span class="inline-block px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                                                En attente
-                                            </span>
-                                            <svg class="h-5 w-5 text-gray-400 ml-2 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        {% endfor %}
-                    </div>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-6 p-4 rounded-xl border-l-4 {{ label == 'error' ? 'bg-red-50 border-red-500 text-red-700' : 'bg-green-50 border-green-500 text-green-700' }}">
+                    {{ message }}
                 </div>
             {% endfor %}
-        </div>
-    {% endif %}
+        {% endfor %}
+
+        {% set statusLabel = {
+            'pending_validation': 'En attente prof',
+            'validated': 'À approuver',
+            'signed': 'Approuvée',
+            'completed': 'Complétée',
+            'cancelled': 'Annulée'
+        } %}
+        {% set statusColor = {
+            'pending_validation': 'bg-amber-100 text-amber-700',
+            'validated': 'bg-blue-100 text-blue-700',
+            'signed': 'bg-green-100 text-green-700',
+            'completed': 'bg-purple-100 text-purple-700',
+            'cancelled': 'bg-red-100 text-red-700'
+        } %}
+
+        {% if conventions|length == 0 %}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
+                <h3 class="text-lg font-semibold text-gray-900">Aucune convention active</h3>
+                <p class="text-sm text-gray-500 mt-1">Aucune convention n'est en cours de traitement.</p>
+            </div>
+        {% else %}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Étudiant</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Classe</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Entreprise</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prof référent</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="relative px-6 py-3"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-100">
+                        {% for convention in conventions %}
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <p class="text-sm font-medium text-gray-900">{{ convention.student.firstName }} {{ convention.student.lastName }}</p>
+                                    <p class="text-xs text-gray-500">{{ convention.student.email }}</p>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    {% if convention.student.levels|length > 0 %}
+                                        {{ convention.student.levels|map(l => l.levelName)|join(', ') }}
+                                    {% else %}
+                                        <span class="text-gray-400 italic">—</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    {% if convention.companyInfo %}
+                                        {{ convention.companyInfo.companyName }}
+                                    {% else %}
+                                        <span class="text-gray-400 italic">—</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    {% if convention.referentProfessor %}
+                                        {{ convention.referentProfessor.firstName }} {{ convention.referentProfessor.lastName }}
+                                    {% else %}
+                                        <span class="text-gray-400 italic">—</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2.5 py-1 rounded-full text-xs font-semibold {{ statusColor[convention.status] ?? 'bg-gray-100 text-gray-700' }}">
+                                        {{ statusLabel[convention.status] ?? convention.status }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">
+                                    {{ convention.createdAt|date('d/m/Y') }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right">
+                                    <a href="{{ path('convention_show', {id: convention.id}) }}"
+                                       class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                                        Voir →
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
-
