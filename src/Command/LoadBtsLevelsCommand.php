@@ -27,54 +27,49 @@ class LoadBtsLevelsCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $btsLevels = [
-            ['id_level' => 1, 'code' => 1001, 'name' => 'BTS SIO 1ère année'],
-            ['id_level' => 2, 'code' => 1002, 'name' => 'BTS SIO 2ème année'],
-            ['id_level' => 3, 'code' => 2001, 'name' => 'BTS MCO 1ère année'],
-            ['id_level' => 4, 'code' => 2002, 'name' => 'BTS MCO 2ème année'],
-            ['id_level' => 5, 'code' => 3001, 'name' => 'BTS NDRC 1ère année'],
-            ['id_level' => 6, 'code' => 3002, 'name' => 'BTS NDRC 2ème année'],
-            ['id_level' => 7, 'code' => 4001, 'name' => 'BTS GPME 1ère année'],
-            ['id_level' => 8, 'code' => 4002, 'name' => 'BTS GPME 2ème année'],
-            ['id_level' => 9, 'code' => 5001, 'name' => 'BTS CG 1ère année'],
-            ['id_level' => 10, 'code' => 5002, 'name' => 'BTS CG 2ème année'],
-            ['id_level' => 11, 'code' => 6001, 'name' => 'BTS SAM 1ère année'],
-            ['id_level' => 12, 'code' => 6002, 'name' => 'BTS SAM 2ème année'],
+            ['code' => 'BTS SIO 1', 'name' => 'Services Informatiques aux Organisations 1ère année'],
+            ['code' => 'BTS SIO 2', 'name' => 'Services Informatiques aux Organisations 2ème année'],
+            ['code' => 'BTS CG 1', 'name' => 'Comptabilité et Gestion 1ère année'],
+            ['code' => 'BTS CG 2', 'name' => 'Comptabilité et Gestion 2ème année'],
+            ['code' => 'BTS SAM 1', 'name' => 'Support à l\'Action Managériale 1ère année'],
+            ['code' => 'BTS SAM 2', 'name' => 'Support à l\'Action Managériale 2ème année'],
+            ['code' => 'BTS GPME 1', 'name' => 'Gestion de la PME 1ère année'],
+            ['code' => 'BTS GPME 2', 'name' => 'Gestion de la PME 2ème année'],
+            ['code' => 'BTS SP3S 1', 'name' => 'Services à la Personne et aux Structures 1ère année'],
+            ['code' => 'BTS SP3S 2', 'name' => 'Services à la Personne et aux Structures 2ème année'],
         ];
 
-        $io->title('Chargement des niveaux BTS');
+        $io->title('Chargement des classes BTS');
 
         foreach ($btsLevels as $btsData) {
             // Check if level already exists
             $existingLevel = $this->entityManager->getRepository(Level::class)->findOneBy([
-                'id_level' => $btsData['id_level']
+                'levelCode' => $btsData['code']
             ]);
 
             if ($existingLevel) {
-                $io->warning("Le niveau {$btsData['name']} existe déjà, mise à jour...");
-                $level = $existingLevel;
-            } else {
-                $level = new Level();
-                $io->info("Création du niveau {$btsData['name']}");
+                $io->warning("La classe {$btsData['code']} existe déjà");
+                continue;
             }
 
-            $level->setIdLevel($btsData['id_level']);
+            $level = new Level();
             $level->setLevelCode($btsData['code']);
             $level->setLevelName($btsData['name']);
 
             $this->entityManager->persist($level);
+            $io->info("Création du classe {$btsData['code']}");
         }
 
         $this->entityManager->flush();
 
-        $io->success('Tous les niveaux BTS ont été chargés avec succès !');
+        $io->success('Tous les classes BTS ont été chargés avec succès !');
         $io->text([
             'Niveaux créés :',
             '- BTS SIO (Services Informatiques aux Organisations)',
-            '- BTS MCO (Management Commercial Opérationnel)',
-            '- BTS NDRC (Négociation et Digitalisation de la Relation Client)',
-            '- BTS GPME (Gestion de la PME)',
             '- BTS CG (Comptabilité et Gestion)',
             '- BTS SAM (Support à l\'Action Managériale)',
+            '- BTS GPME (Gestion de la PME)',
+            '- BTS SP3S (Services et Prestations des secteurs Sanitaire et Social)',
         ]);
 
         return Command::SUCCESS;

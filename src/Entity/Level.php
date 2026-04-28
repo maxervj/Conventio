@@ -39,6 +39,12 @@ class Level
     #[ORM\OneToMany(targetEntity: Professor::class, mappedBy: 'referentLevel')]
     private Collection $referentProfessors;
 
+    /**
+     * @var InternshipDate
+     */
+    #[ORM\ManyToOne(targetEntity: InternshipDate::class, inversedBy: 'levels')]
+    private ?InternshipDate $internshipDate = null;
+
     public function __construct()
     {
         $this->students = new ArrayCollection();
@@ -162,4 +168,16 @@ class Level
     {
         return $this->levelName ?? '';
     }
+
+    public function getInternshipDate(): ?InternshipDate
+    {
+        return $this->internshipDate;
+    }
+    public function setInternshipDate(?InternshipDate $internshipDate): static
+    {
+        $this->internshipDate = $internshipDate;
+
+        return $this;
+    }
+
 }

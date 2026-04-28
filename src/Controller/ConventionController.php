@@ -70,8 +70,15 @@ class ConventionController extends AbstractController
             throw $this->createAccessDeniedException('Vous n\'avez pas accès à cette convention.');
         }
 
+        // Récupérer les dates paramétrées selon la classe de l'étudiant
+        $internshipDates = null;
+        if ($convention->getStudent() && $convention->getStudent()->getLevel()) {
+            $internshipDates = $convention->getStudent()->getLevel()->getInternshipDate();
+        }
+
         return $this->render('convention/show.html.twig', [
             'convention' => $convention,
+            'internshipDates' => $internshipDates,
             'isReferentProfessor' => $user instanceof Professor && $convention->getReferentProfessor() === $user,
             'isStudent' => $user instanceof Student && !$this->isGranted('ROLE_ADMIN'),
         ]);

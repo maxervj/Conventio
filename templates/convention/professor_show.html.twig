@@ -191,32 +191,30 @@
                     <!-- Dates et période de stage -->
                     <div class="mb-6 pb-6 border-b border-gray-200">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">📅 Période de stage</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Date de début</p>
-                                <p class="text-base font-medium text-gray-900 mt-1">
-                                    {% if convention.companyInfo.internshipStartDate %}
-                                        <span class="inline-block px-3 py-1 bg-blue-50 text-blue-900 rounded">
-                                            {{ convention.companyInfo.internshipStartDate|date('d/m/Y') }}
-                                        </span>
-                                    {% else %}
-                                        <span class="text-gray-400">Non renseignée</span>
-                                    {% endif %}
-                                </p>
+                        {% if convention.student and convention.student.level and convention.student.level.internshipDate %}
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Date de début</p>
+                                    <p class="text-base font-medium text-gray-900 mt-1">
+                    <span class="inline-block px-3 py-1 bg-indigo-50 text-indigo-900 rounded font-semibold">
+                        {{ convention.student.level.internshipDate.startDate|date('d/m/Y') }}
+                    </span>
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Date de fin</p>
+                                    <p class="text-base font-medium text-gray-900 mt-1">
+                    <span class="inline-block px-3 py-1 bg-indigo-50 text-indigo-900 rounded font-semibold">
+                        {{ convention.student.level.internshipDate.endDate|date('d/m/Y') }}
+                    </span>
+                                    </p>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Date de fin</p>
-                                <p class="text-base font-medium text-gray-900 mt-1">
-                                    {% if convention.companyInfo.internshipEndDate %}
-                                        <span class="inline-block px-3 py-1 bg-blue-50 text-blue-900 rounded">
-                                            {{ convention.companyInfo.internshipEndDate|date('d/m/Y') }}
-                                        </span>
-                                    {% else %}
-                                        <span class="text-gray-400">Non renseignée</span>
-                                    {% endif %}
-                                </p>
+                        {% else %}
+                            <div class="bg-yellow-50 rounded-lg border-l-4 border-yellow-400 p-4 text-yellow-700">
+                                <p class="text-sm">⚠️ Aucune date paramétrée pour la classe de l'étudiant.</p>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
 
                     <!-- Sujet et missions -->

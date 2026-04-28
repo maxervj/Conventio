@@ -118,19 +118,19 @@ class RegistrationFormType extends AbstractType
                 ],
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
             ])
-            ->add('levels', EntityType::class, [
+            ->add('level', EntityType::class, [
                 'class' => Level::class,
-                'choice_label' => 'LevelName',
+                'choice_label' => 'levelCode',
                 'label' => 'Classe BTS *',
-                'multiple' => true,
-                'expanded' => true,
-                'by_reference' => false,
+                'placeholder' => 'Sélectionnez votre classe',
+                'multiple' => false,
+                'expanded' => false,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Veuillez sélectionner au moins une classe',
+                        'message' => 'Veuillez sélectionner une classe',
                     ]),
                 ],
-                'help' => 'Sélectionnez votre/vos classe(s) de BTS',
+                'required' => true,
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'label' => 'Accepter les CGU',

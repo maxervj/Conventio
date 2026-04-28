@@ -187,38 +187,26 @@
                     </div>
 
                     {# ── ÉTUDIANT : sélection d'UNE classe ── #}
-                    {% if registrationForm.levels is defined %}
+                    {% if registrationForm.level is defined %}
                         <div class="rounded-xl border border-blue-200 overflow-hidden">
                             <div class="bg-blue-600 px-4 py-3 flex items-center gap-2">
                                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                                 </svg>
-                                <span class="text-white font-semibold text-sm">Votre classe BTS <span class="text-blue-200 font-normal">(sélection unique)</span></span>
+                                <span class="text-white font-semibold text-sm">Votre classe BTS</span>
                             </div>
                             <div class="bg-blue-50 p-4">
-                                {# Inputs cachés — gérés par Symfony #}
-                                <div class="hidden">
-                                    {% for level in registrationForm.levels %}
-                                        {{ form_widget(level) }}
-                                    {% endfor %}
-                                </div>
-                                {# Cards visuelles #}
-                                <div class="grid grid-cols-2 gap-2" id="student-level-grid">
-                                    {% for level in registrationForm.levels %}
-                                        <label class="level-card-student cursor-pointer rounded-lg border-2 border-gray-200 bg-white p-3 flex items-center gap-3 hover:border-blue-400 hover:bg-blue-50 transition-all duration-150 select-none {{ level.vars.checked ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-300' : '' }}"
-                                               data-input-id="{{ level.vars.id }}">
-                                            {# Indicateur radio #}
-                                            <div class="level-radio-dot flex-shrink-0 w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all {{ level.vars.checked ? 'border-blue-500 bg-blue-500' : '' }}">
-                                                <div class="w-2 h-2 rounded-full bg-white {{ level.vars.checked ? '' : 'hidden' }} radio-inner-dot"></div>
-                                            </div>
-                                            <span class="text-sm font-medium text-gray-800 leading-tight">{{ level.vars.label }}</span>
-                                        </label>
-                                    {% endfor %}
-                                </div>
-                                {{ form_errors(registrationForm.levels) }}
+                                <div class="relative">
+                                    {{ form_widget(registrationForm.level, {'attr': {'class': 'block w-full pl-4 pr-10 py-2.5 border border-blue-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm text-gray-800 appearance-none transition'}}) }}
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-blue-400">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                        </svg>
+                                    </div>
+                                </div>{{ form_errors(registrationForm.level) }}
                             </div>
                         </div>
-                        {% do registrationForm.levels.setRendered() %}
+                        {% do registrationForm.level.setRendered() %}
                     {% endif %}
 
                     {# ── PROFESSEUR : multi-sélection des classes enseignées ── #}
