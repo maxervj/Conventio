@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Convention;
+use App\Entity\InternshipCompanyInfo;
 use App\Entity\Professor;
 use App\Entity\Student;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -71,19 +72,26 @@ class ConventionRepository extends ServiceEntityRepository
     }
 
     /**
-     * Trouve les conventions validées
-     * Retourne un tableau de conventions triées par level
+     * Trouve la convention liée à une collecte d'informations
      */
-    public function findValidatedGroupedByLevel(): array
+    public function findByCompanyInfo(InternshipCompanyInfo $companyInfo): ?Convention
     {
         return $this->createQueryBuilder('c')
-            ->innerJoin('c.student', 's')
-            ->leftJoin('s.levels', 'l')
-            ->andWhere('c.status = :status')
-            ->setParameter('status', 'validated')
-            ->orderBy('l.levelName', 'ASC')
-            ->addOrderBy('s.firstName', 'ASC')
-            ->addOrderBy('s.lastName', 'ASC')
+            ->andWhere('c.companyInfo = :companyInfo')
+            ->setParameter('companyInfo', $companyInfo)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * Toutes les conventions actives (hors brouillon) pour la vue admin
+     */
+    public function findAllActiveForAdmin(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.status != :draft')
+            ->setParameter('draft', 'draft')
+            ->orderBy('c.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
     }

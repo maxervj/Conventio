@@ -14,12 +14,21 @@ class LevelType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('LevelName', TextType::class, [
+            ->add('levelCode', TextType::class, [
+                'label' => 'Code de la classe',
+                'constraints' => [
+                    new NotBlank(message: 'Le code de la classe est obligatoire.'),
+                ],
+                'attr' => ['placeholder' => 'Ex : SIO1'],
+            ]);
+
+        $builder
+            ->add('levelName', TextType::class, [
                 'label' => 'Intitulé de la classe',
                 'constraints' => [
-                    new NotBlank(message: 'L\'intitulé est obligatoire.'),
+                    new NotBlank(message: 'Intitulé de la classe est obligatoire.'),
                 ],
-                'attr' => ['placeholder' => 'Ex : BTS SIO 1'],
+                'attr' => ['placeholder' => 'Ex : Services Informatiques aux Organisations 1ère année'],
             ])
         ;
     }

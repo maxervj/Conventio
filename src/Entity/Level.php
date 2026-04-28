@@ -15,9 +15,6 @@ class Level
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $id_level = null;
-
     #[ORM\Column(length: 255)]
     private ?string $levelCode = null;
 
@@ -52,18 +49,6 @@ class Level
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getIdLevel(): ?int
-    {
-        return $this->id_level;
-    }
-
-    public function setIdLevel(int $id_level): static
-    {
-        $this->id_level = $id_level;
-
-        return $this;
     }
 
     public function getLevelCode(): ?string

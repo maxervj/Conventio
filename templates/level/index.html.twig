@@ -51,6 +51,7 @@
                 <tbody class="bg-white divide-y divide-gray-100">
                     {% for level in levels %}
                         <tr class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4 font-medium text-gray-900">{{ level.levelCode }}</td>
                             <td class="px-6 py-4 font-medium text-gray-900">{{ level.levelName }}</td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex items-center justify-end gap-2">
@@ -62,7 +63,7 @@
                                         Modifier
                                     </a>
                                     <form method="post" action="{{ path('app_level_delete', {'id': level.id}) }}"
-                                          onsubmit="return confirm('Supprimer la classe « {{ level.levelName }} » ?');">
+                                          onsubmit="return confirm('Supprimer la classe « {{ level.levelCode }} » ?');">
                                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ level.id) }}">
                                         <button type="submit"
                                                 class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition">
