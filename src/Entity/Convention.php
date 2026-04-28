@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ConventionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -86,10 +88,17 @@ class Convention
     #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private ?string $yousignStatus = null;
 
+    /**
+     * @var Collection<int, ConventionDate>
+     */
+    #[ORM\OneToMany(targetEntity: ConventionDate::class, mappedBy: 'convention')]
+    private Collection $conventionDates;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->status = 'draft';
+        $this->conventionDates = new ArrayCollection();
     }
 
     public function getYousignRequestId(): ?string
@@ -370,5 +379,68 @@ class Convention
         return $this->studentSignedAt !== null
             && $this->companySignedAt !== null
             && $this->schoolSignedAt !== null;
+    }
+
+    /**
+     * @return Collection<int, ConventionDate>
+     */
+    public function getConventionDates(): Collection
+    {
+        return $this->conventionDates;
+    }
+
+    public function addConventionDate(ConventionDate $conventionDate): static
+    {
+        if (!$this->conventionDates->contains($conventionDate)) {
+            $this->conventionDates->add($conventionDate);
+            $conventionDate->setConvention($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConventionDate(ConventionDate $conventionDate): static
+    {
+        if ($this->conventionDates->removeElement($conventionDate)) {
+            // set the owning side to null (unless already changed)
+            if ($conventionDate->getConvention() === $this) {
+                $conventionDate->setConvention(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Crée automatiquement une ContractDate à partir du Level->InternshipDate
+     * si aucune ContractDate n'existe encore.
+     */
+    public function initializeContractDates(): void
+    {
+        // éviter doublons
+        if (count($this->contractDates) > 0) {
+            return;
+        }
+
+        if (!property_exists($this, 'student')) {
+            return;
+        }
+
+        /** @var Student|null $student */
+        $student = $this->student ?? null;
+        if (!$student || !$student->getLevel()) {
+            return;
+        }
+
+        $level = $student->getLevel();
+        $internshipDate = $level->getInternshipDate();
+        if (!$internshipDate) {
+            return;
+        }
+
+        $contractDate = new ContractDate();
+        $contractDate->setStartDate($internshipDate->getStartDate());
+        $contractDate->setEndDate($internshipDate->getEndDate());
+        $this->addContractDate($contractDate);
     }
 }

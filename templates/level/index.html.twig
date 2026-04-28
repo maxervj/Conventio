@@ -53,6 +53,12 @@
                         <tr class="hover:bg-gray-50 transition">
                             <td class="px-6 py-4 font-medium text-gray-900">{{ level.levelCode }}</td>
                             <td class="px-6 py-4 font-medium text-gray-900">{{ level.levelName }}</td>
+                            <td class="px-6 py-4 text-gray-700">
+                                {{ level.internshipDate ? level.internshipDate.startDate|date('d/m/Y') : '—' }}
+                            </td>
+                            <td class="px-6 py-4 text-gray-700">
+                                {{ level.internshipDate ? level.internshipDate.endDate|date('d/m/Y') : '—' }}
+                            </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex items-center justify-end gap-2">
                                     <a href="{{ path('app_level_edit', {'id': level.id}) }}"
