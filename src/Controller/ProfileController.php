@@ -78,10 +78,21 @@ class ProfileController extends AbstractController
                 'user' => $user,
             ]);
         } elseif ($user instanceof Student) {
+            $student = $entityManager->getRepository(Student::class)->find($user->getId());
+            if (!$student) {
+                throw $this->createNotFoundException('Étudiant introuvable.');
+            }
+
             $form = $this->createForm(StudentProfileType::class, $user);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+                $level = $student->getLevel();
+                if ($level && !$entityManager->contains($level)) {
+                    $managedLevel = $entityManager->getRepository(get_class($level))->find($level->getId());
+                    $student->setLevel($managedLevel);
+                }
+
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Votre profil a été mis à jour avec succès.');

@@ -14,13 +14,15 @@ class StudentProfileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('levels', EntityType::class, [
+            ->add('level', EntityType::class, [
                 'class' => Level::class,
                 'choice_label' => 'levelCode',
                 'label' => 'Classe dont vous êtes',
                 'required' => false,
                 'placeholder' => 'Sélectionnez votre classe',
-                'help' => 'Sélectionnez votre classe',
+                'multiple' => false,
+                'expanded' => true,
+                'by_reference' => false,
             ])
         ;
     }
