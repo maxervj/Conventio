@@ -402,7 +402,6 @@ class Convention
     public function removeConventionDate(ConventionDate $conventionDate): static
     {
         if ($this->conventionDates->removeElement($conventionDate)) {
-            // set the owning side to null (unless already changed)
             if ($conventionDate->getConvention() === $this) {
                 $conventionDate->setConvention(null);
             }
@@ -412,35 +411,32 @@ class Convention
     }
 
     /**
-     * Crée automatiquement une ContractDate à partir du Level->InternshipDate
-     * si aucune ContractDate n'existe encore.
+     * Crée automatiquement une ConventionDate à partir du Level->InternshipDate
+     * si aucune ConventionDate n'existe encore.
      */
-    public function initializeContractDates(): void
+    public function initializeConventionDates(): void
     {
-        // éviter doublons
-        if (count($this->contractDates) > 0) {
+        if (count($this->conventionDates) > 0) {
             return;
         }
 
-        if (!property_exists($this, 'student')) {
+        if (!$this->student) {
             return;
         }
 
-        /** @var Student|null $student */
-        $student = $this->student ?? null;
-        if (!$student || !$student->getLevel()) {
+        $level = $this->student->getLevel();
+        if (!$level) {
             return;
         }
 
-        $level = $student->getLevel();
         $internshipDate = $level->getInternshipDate();
         if (!$internshipDate) {
             return;
         }
 
-        $contractDate = new ContractDate();
-        $contractDate->setStartDate($internshipDate->getStartDate());
-        $contractDate->setEndDate($internshipDate->getEndDate());
-        $this->addContractDate($contractDate);
+        $conventionDate = new ConventionDate();
+        $conventionDate->setStartDate($internshipDate->getStartDate());
+        $conventionDate->setEndDate($internshipDate->getEndDate());
+        $this->addConventionDate($conventionDate);
     }
 }

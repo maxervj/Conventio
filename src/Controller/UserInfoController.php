@@ -42,7 +42,7 @@ final class UserInfoController extends AbstractController
             $entityManager->persist($professor);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Les niveaux ont été mis à jour.');
+            $this->addFlash('success', 'Les classes ont été mis à jour.');
             return $this->redirectToRoute('app_user_info');
         }
 
