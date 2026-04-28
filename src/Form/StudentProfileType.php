@@ -16,13 +16,11 @@ class StudentProfileType extends AbstractType
         $builder
             ->add('levels', EntityType::class, [
                 'class' => Level::class,
-                'choice_label' => 'LevelName',
-                'label' => 'Mes classes',
-                'multiple' => true,
-                'expanded' => true,
-                'by_reference' => false,
+                'choice_label' => 'levelCode',
+                'label' => 'Classe dont vous êtes',
                 'required' => false,
-                'help' => 'Sélectionnez vos classes',
+                'placeholder' => 'Sélectionnez votre classe',
+                'help' => 'Sélectionnez votre classe',
             ])
         ;
     }
