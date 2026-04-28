@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Level;
 use App\Entity\Student;
 use App\Entity\Professor;
 use App\Entity\Tutor;
@@ -44,7 +45,9 @@ class AddUserCommand extends Command
             ->addArgument('lastName', InputArgument::REQUIRED, 'Last name')
             ->addArgument('type', InputArgument::REQUIRED, 'User type: student, professor, or tutor')
             ->addOption('role', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'Additional roles (e.g., ROLE_ADMIN)', [])
+            ->addOption('level', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'Level id_level to assign (e.g., 1 for BTS SIO 1ère année)', [])
             ->addOption('personal-email', null, InputOption::VALUE_OPTIONAL, 'Personal email (for students only)')
+            ->addOption('verified', null, InputOption::VALUE_NONE, 'Mark the student account as verified (can log in immediately)')
             ->setHelp(<<<'HELP'
 The <info>%command.name%</info> command creates a new user:
 
@@ -75,6 +78,7 @@ HELP
         $lastName = $input->getArgument('lastName');
         $userType = strtolower($input->getArgument('type'));
         $personalEmail = $input->getOption('personal-email');
+        $levelIds = $input->getOption('level');
 
         // Validate email
         $violations = $this->validator->validate($email, [new Email(['mode' => 'html5'])]);
@@ -138,10 +142,28 @@ HELP
             if ($personalEmail) {
                 $user->setPersonalEmail($personalEmail);
             }
-            // New students are not verified by default
-            $user->setIsVerified(false);
+            $isVerified = $input->getOption('verified');
+            $user->setIsVerified($isVerified);
 
-            $io->note('Student accounts are not verified by default. Use the verification system to verify the account.');
+            if (!$isVerified) {
+                $io->note('Student accounts are not verified by default. Use the verification system to verify the account.');
+            }
+        }
+
+        // Assign levels
+        if (!empty($levelIds)) {
+            foreach ($levelIds as $levelId) {
+                $level = $this->entityManager->getRepository(Level::class)->findOneBy(['id_level' => (int) $levelId]);
+                if ($level === null) {
+                    $io->warning(sprintf('Level with id_level "%s" not found, skipping.', $levelId));
+                    continue;
+                }
+                if ($user instanceof Student) {
+                    $user->addLevel($level);
+                } elseif ($user instanceof Professor) {
+                    $user->addTaughtLevel($level);
+                }
+            }
         }
 
         // Persist user
@@ -154,8 +176,12 @@ HELP
             sprintf('Roles: %s', implode(', ', $user->getRoles())),
         ]);
 
-        if ($user instanceof Student && !$user->isVerified()) {
-            $io->warning('This student account is NOT verified and cannot log in yet.');
+        if ($user instanceof Student) {
+            if ($user->isVerified()) {
+                $io->success('This student account is verified and can log in immediately.');
+            } else {
+                $io->warning('This student account is NOT verified and cannot log in yet.');
+            }
         }
 
         return Command::SUCCESS;

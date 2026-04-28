@@ -7,9 +7,12 @@ use App\Entity\Professor;
 use App\Entity\Student;
 use App\Repository\ConventionRepository;
 use App\Service\PdfGeneratorService;
+use App\Service\YousignService;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -27,11 +30,10 @@ class ConventionController extends AbstractController
         private MailerInterface $mailer,
         private UrlGeneratorInterface $urlGenerator,
         private PdfGeneratorService $pdfGenerator,
+        private YousignService $yousignService,
+        private LoggerInterface $logger,
     ) {}
 
-    /**
-     * Liste des conventions : admin → toutes, prof → les siennes, étudiant → les siennes.
-     */
     #[Route('', name: 'convention_index', methods: ['GET'])]
     public function index(): Response
     {
@@ -55,9 +57,6 @@ class ConventionController extends AbstractController
         throw $this->createAccessDeniedException();
     }
 
-    /**
-     * Détail d'une convention.
-     */
     #[Route('/{id}', name: 'convention_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(Convention $convention): Response
     {
@@ -78,7 +77,8 @@ class ConventionController extends AbstractController
     }
 
     /**
-     * L'admin approuve la convention (passage en signed).
+     * Admin : relance YouSign manuellement si le déclenchement automatique a échoué.
+     * Uniquement disponible quand la convention est `validated` et sans demande YouSign existante.
      */
     #[Route('/{id}/approve', name: 'convention_approve', methods: ['POST'], requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_ADMIN')]
@@ -88,21 +88,30 @@ class ConventionController extends AbstractController
             throw $this->createAccessDeniedException('Token CSRF invalide.');
         }
 
-        if (!$convention->isValidated()) {
-            $this->addFlash('error', 'La convention doit être validée par le professeur avant l\'approbation de l\'établissement.');
+        if (!$convention->isValidated() || $convention->getYousignRequestId() !== null) {
+            $this->addFlash('error', 'La signature YouSign ne peut être relancée que si la convention est validée et sans demande existante.');
             return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
         }
 
-        $convention->setStatus('signed');
-        $convention->setSignedAt(new \DateTime());
-        $this->entityManager->flush();
+        try {
+            $pdfPath = $this->pdfGenerator->saveConventionPdf($convention);
+            $this->yousignService->sendConventionSignatureRequest($convention, $pdfPath);
+            $this->entityManager->flush();
+            $this->addFlash('success', 'La demande de signature a été envoyée aux 3 parties via YouSign.');
+        } catch (\Exception $e) {
+            $this->logger->error('YouSign trigger failed on approve', [
+                'convention_id' => $convention->getId(),
+                'error' => $e->getMessage(),
+            ]);
+            $this->addFlash('error', 'Erreur lors du déclenchement YouSign : ' . $e->getMessage());
+        }
 
-        $this->addFlash('success', 'La convention a été approuvée par l\'établissement.');
         return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
     }
 
     /**
-     * Génère le PDF de la convention (admin uniquement).
+     * Génère ou télécharge le PDF de la convention.
+     * Si la convention est signée et dispose d'un document YouSign, télécharge le PDF signé.
      */
     #[Route('/{id}/pdf', name: 'convention_pdf', methods: ['GET'], requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_ADMIN')]
@@ -111,6 +120,25 @@ class ConventionController extends AbstractController
         if ($convention->getStatus() === 'draft') {
             $this->addFlash('error', 'Impossible de générer le PDF d\'une convention en brouillon.');
             return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
+        }
+
+        if ($convention->isSigned() && $convention->getYousignRequestId() && $convention->getYousignDocumentId()) {
+            try {
+                $content = $this->yousignService->downloadSignedDocument(
+                    $convention->getYousignRequestId(),
+                    $convention->getYousignDocumentId()
+                );
+
+                return new Response($content, Response::HTTP_OK, [
+                    'Content-Type' => 'application/pdf',
+                    'Content-Disposition' => HeaderUtils::makeDisposition(
+                        HeaderUtils::DISPOSITION_ATTACHMENT,
+                        sprintf('convention_%d_signee.pdf', $convention->getId())
+                    ),
+                ]);
+            } catch (\Exception) {
+                // Fallback : génération depuis le template
+            }
         }
 
         return $this->pdfGenerator->streamConventionPdf($convention);
@@ -147,7 +175,6 @@ class ConventionController extends AbstractController
         $convention->setStatus('pending_validation');
         $this->entityManager->flush();
 
-        // Envoyer un email au professeur référent
         $this->sendValidationRequestEmail($convention);
 
         $this->addFlash('success', 'Votre demande de validation a été envoyée à ' . $professor->getFirstName() . ' ' . $professor->getLastName() . '.');
@@ -157,6 +184,8 @@ class ConventionController extends AbstractController
 
     /**
      * Le professeur référent valide la convention.
+     * Déclenche automatiquement la procédure de signature YouSign :
+     * l'étudiant, l'entreprise et l'établissement reçoivent un email avec leur lien de signature.
      */
     #[Route('/{id}/validate', name: 'convention_validate', methods: ['POST'], requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_PROFESSOR')]
@@ -181,10 +210,35 @@ class ConventionController extends AbstractController
         $convention->setValidatedAt(new \DateTime());
         $this->entityManager->flush();
 
-        // Notifier l'étudiant
         $this->sendValidationConfirmationEmail($convention);
 
-        $this->addFlash('success', 'La convention de ' . $convention->getStudent()->getFirstName() . ' ' . $convention->getStudent()->getLastName() . ' a été validée avec succès.');
+        // Déclenchement automatique de la signature YouSign
+        // YouSign envoie les emails de signature à l'étudiant, l'entreprise et l'établissement
+        try {
+            $pdfPath = $this->pdfGenerator->saveConventionPdf($convention);
+            $this->yousignService->sendConventionSignatureRequest($convention, $pdfPath);
+            $this->entityManager->flush();
+
+            $this->addFlash('success', sprintf(
+                'La convention de %s %s a été validée. Les 3 parties (étudiant, entreprise, établissement) ont reçu un email YouSign avec leur lien de signature.',
+                $convention->getStudent()->getFirstName(),
+                $convention->getStudent()->getLastName()
+            ));
+        } catch (\Exception $e) {
+            $this->logger->error('YouSign trigger failed on validate', [
+                'convention_id' => $convention->getId(),
+                'error' => $e->getMessage(),
+            ]);
+            $this->addFlash('success', sprintf(
+                'La convention de %s %s a été validée.',
+                $convention->getStudent()->getFirstName(),
+                $convention->getStudent()->getLastName()
+            ));
+            $this->addFlash('error', sprintf(
+                'La signature électronique n\'a pas pu être déclenchée automatiquement (%s). Un administrateur peut la relancer depuis la page de la convention.',
+                $e->getMessage()
+            ));
+        }
 
         return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
     }
@@ -218,7 +272,7 @@ class ConventionController extends AbstractController
 
         try {
             $this->mailer->send($email);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Ne pas bloquer si l'email échoue
         }
     }
@@ -248,7 +302,7 @@ class ConventionController extends AbstractController
 
         try {
             $this->mailer->send($email);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Ne pas bloquer si l'email échoue
         }
     }

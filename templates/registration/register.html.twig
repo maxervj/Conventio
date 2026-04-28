@@ -196,20 +196,13 @@
                                 <span class="text-white font-semibold text-sm">Votre classe BTS <span class="text-blue-200 font-normal">(sélection unique)</span></span>
                             </div>
                             <div class="bg-blue-50 p-4">
-                                {# Inputs cachés — gérés par Symfony #}
-                                <div class="hidden">
-                                    {% for level in registrationForm.levels %}
-                                        {{ form_widget(level) }}
-                                    {% endfor %}
-                                </div>
-                                {# Cards visuelles #}
+                                {# Cards visuelles — checkbox intégré dans le label #}
                                 <div class="grid grid-cols-2 gap-2" id="student-level-grid">
                                     {% for level in registrationForm.levels %}
-                                        <label class="level-card-student cursor-pointer rounded-lg border-2 border-gray-200 bg-white p-3 flex items-center gap-3 hover:border-blue-400 hover:bg-blue-50 transition-all duration-150 select-none {{ level.vars.checked ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-300' : '' }}"
-                                               data-input-id="{{ level.vars.id }}">
-                                            {# Indicateur radio #}
-                                            <div class="level-radio-dot flex-shrink-0 w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center transition-all {{ level.vars.checked ? 'border-blue-500 bg-blue-500' : '' }}">
-                                                <div class="w-2 h-2 rounded-full bg-white {{ level.vars.checked ? '' : 'hidden' }} radio-inner-dot"></div>
+                                        <label class="level-card-student cursor-pointer rounded-lg border-2 bg-white p-3 flex items-center gap-3 hover:border-blue-400 hover:bg-blue-50 transition-all duration-150 select-none {{ level.vars.checked ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-300' : 'border-gray-200' }}">
+                                            {{ form_widget(level, {'attr': {'class': 'sr-only'}}) }}
+                                            <div class="level-radio-dot flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all {{ level.vars.checked ? 'border-blue-500 bg-blue-500' : 'border-gray-300' }}">
+                                                <div class="w-2 h-2 rounded-full bg-white radio-inner-dot {{ level.vars.checked ? '' : 'hidden' }}"></div>
                                             </div>
                                             <span class="text-sm font-medium text-gray-800 leading-tight">{{ level.vars.label }}</span>
                                         </label>
@@ -231,21 +224,15 @@
                                 <span class="text-white font-semibold text-sm">Classes que vous enseignez <span class="text-purple-200 font-normal">(multi-sélection)</span></span>
                             </div>
                             <div class="bg-purple-50 p-4">
-                                {# Inputs cachés — gérés par Symfony #}
-                                <div class="hidden">
-                                    {% for level in registrationForm.taughtLevels %}
-                                        {{ form_widget(level) }}
-                                    {% endfor %}
-                                </div>
-                                {# Badges toggle #}
+                                {# Badges toggle — checkbox intégré dans le label #}
                                 <div class="flex flex-wrap gap-2" id="prof-level-grid">
                                     {% for level in registrationForm.taughtLevels %}
-                                        <label class="level-badge-prof cursor-pointer px-4 py-2 rounded-full border-2 border-gray-300 bg-white text-sm font-medium text-gray-700 hover:border-purple-400 hover:text-purple-700 transition-all duration-150 select-none flex items-center gap-2 {{ level.vars.checked ? 'border-purple-500 bg-purple-500 text-white' : '' }}"
-                                               data-input-id="{{ level.vars.id }}">
-                                            <svg class="w-4 h-4 check-icon {{ level.vars.checked ? '' : 'hidden' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <label class="level-badge-prof cursor-pointer px-4 py-2 rounded-full border-2 text-sm font-medium transition-all duration-150 select-none flex items-center gap-2 {{ level.vars.checked ? 'border-purple-500 bg-purple-500 text-white' : 'border-gray-300 bg-white text-gray-700 hover:border-purple-400 hover:text-purple-700' }}">
+                                            {{ form_widget(level, {'attr': {'class': 'sr-only'}}) }}
+                                            <svg class="w-4 h-4 check-icon pointer-events-none {{ level.vars.checked ? '' : 'hidden' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
                                             </svg>
-                                            {{ level.vars.label }}
+                                            <span class="pointer-events-none">{{ level.vars.label }}</span>
                                         </label>
                                     {% endfor %}
                                 </div>
@@ -342,15 +329,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ── ÉTUDIANT : sélection unique (comportement radio) ──
     document.querySelectorAll('.level-card-student').forEach(function (card) {
-        card.addEventListener('click', function () {
-            const inputId = card.dataset.inputId;
-            const checkbox = document.getElementById(inputId);
+        card.addEventListener('click', function (e) {
+            e.preventDefault();
+            const checkbox = card.querySelector('input[type="checkbox"]');
             if (!checkbox) return;
 
             // Décocher tous les autres
             document.querySelectorAll('.level-card-student').forEach(function (c) {
-                const otherId = c.dataset.inputId;
-                const other = document.getElementById(otherId);
+                const other = c.querySelector('input[type="checkbox"]');
                 if (other) other.checked = false;
                 c.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2', 'ring-blue-300');
                 c.classList.add('border-gray-200', 'bg-white');
@@ -373,9 +359,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ── PROFESSEUR : multi-sélection (toggle badges) ──
     document.querySelectorAll('.level-badge-prof').forEach(function (badge) {
-        badge.addEventListener('click', function () {
-            const inputId = badge.dataset.inputId;
-            const checkbox = document.getElementById(inputId);
+        badge.addEventListener('click', function (e) {
+            e.preventDefault();
+            const checkbox = badge.querySelector('input[type="checkbox"]');
             if (!checkbox) return;
 
             checkbox.checked = !checkbox.checked;

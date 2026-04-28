@@ -43,18 +43,11 @@
             </div>
 
             <div class="bg-blue-50 p-5">
-                {# Inputs Symfony cachés #}
-                <div class="hidden">
-                    {% for level in form.levels %}
-                        {{ form_widget(level) }}
-                    {% endfor %}
-                </div>
-
-                {# Cards visuelles 2 colonnes #}
+                {# Cards visuelles 2 colonnes — checkbox intégré dans le label #}
                 <div class="grid grid-cols-2 gap-2">
                     {% for level in form.levels %}
-                        <label class="level-card-student cursor-pointer rounded-xl border-2 bg-white p-3.5 flex items-center gap-3 hover:border-blue-400 hover:shadow-md transition-all duration-150 select-none {{ level.vars.checked ? 'border-blue-500 bg-blue-50 shadow-md ring-2 ring-blue-200' : 'border-gray-200' }}"
-                               data-input-id="{{ level.vars.id }}">
+                        <label class="level-card-student cursor-pointer rounded-xl border-2 bg-white p-3.5 flex items-center gap-3 hover:border-blue-400 hover:shadow-md transition-all duration-150 select-none {{ level.vars.checked ? 'border-blue-500 bg-blue-50 shadow-md ring-2 ring-blue-200' : 'border-gray-200' }}">
+                            {{ form_widget(level, {'attr': {'class': 'sr-only'}}) }}
                             <div class="level-radio-dot flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all {{ level.vars.checked ? 'border-blue-500 bg-blue-500' : 'border-gray-300' }}">
                                 <div class="w-2 h-2 rounded-full bg-white radio-inner-dot {{ level.vars.checked ? '' : 'hidden' }}"></div>
                             </div>
@@ -90,12 +83,13 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.level-card-student').forEach(function (card) {
-        card.addEventListener('click', function () {
-            const checkbox = document.getElementById(card.dataset.inputId);
+        card.addEventListener('click', function (e) {
+            e.preventDefault();
+            const checkbox = card.querySelector('input[type="checkbox"]');
             if (!checkbox) return;
 
             document.querySelectorAll('.level-card-student').forEach(function (c) {
-                const other = document.getElementById(c.dataset.inputId);
+                const other = c.querySelector('input[type="checkbox"]');
                 if (other) other.checked = false;
                 c.classList.remove('border-blue-500', 'bg-blue-50', 'shadow-md', 'ring-2', 'ring-blue-200');
                 c.classList.add('border-gray-200');

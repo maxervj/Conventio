@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Professor;
+use App\Entity\Student;
 use App\Form\ContactType;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,6 +17,16 @@ final class HomeController extends AbstractController
     #[Route('/home', name: 'app_home')]
     public function index(): Response
     {
+        $user = $this->getUser();
+
+        if ($user instanceof Professor) {
+            return $this->redirectToRoute('professor_my_students');
+        }
+
+        if ($user instanceof Student) {
+            return $this->redirectToRoute('student_my_requests');
+        }
+
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
         ]);
