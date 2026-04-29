@@ -3,9 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Level;
-use App\Entity\User;
 use App\Entity\Professor;
-use App\Entity\Student;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,9 +14,9 @@ class SelectionClasseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('Level', EntityType::class, [
+            ->add('taughtLevels', EntityType::class, [
                 'class' => Level::class,
-                'choice_label' => 'LevelCode',
+                'choice_label' => 'levelCode',
                 'multiple' => true,
                 'expanded' => true,
                 'label' => 'Classes',

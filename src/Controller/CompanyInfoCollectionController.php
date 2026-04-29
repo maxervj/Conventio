@@ -66,8 +66,10 @@ class CompanyInfoCollectionController extends AbstractController
         if (!$user instanceof Student) {
             throw $this->createAccessDeniedException('Cette fonctionnalité est réservée aux étudiants.');
         }
-        // Crée le formulaire de demande
-        $form = $this->createForm(CollectionRequestFormType::class);
+        // Crée le formulaire de demande avec l'étudiant pour pré-remplissage
+        $form = $this->createForm(CollectionRequestFormType::class, null, [
+            'student' => $user,
+        ]);
         $form->handleRequest($request);
         // Traite la soumission du formulaire
         if ($form->isSubmitted() && $form->isValid()) {

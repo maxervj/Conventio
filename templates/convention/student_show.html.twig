@@ -37,8 +37,8 @@
                     {{ convention.getStatus() }}
                 </span>
             {% endif %}
-            {% if convention.student.formation %}
-                <span class="text-gray-600 font-medium">{{ convention.student.formation.libelle }}</span>
+            {% if convention.student.level %}
+                <span class="text-gray-600 font-medium">{{ convention.student.level.levelName }}</span>
             {% endif %}
         </div>
     </div>
@@ -90,8 +90,8 @@
                     <div>
                         <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Formation</p>
                         <p class="text-lg font-medium text-gray-900 mt-1">
-                            {% if convention.student.formation %}
-                                {{ convention.student.formation.libelle }}
+                            {% if convention.student.level %}
+                                {{ convention.student.level.levelName }}
                             {% else %}
                                 <span class="text-gray-400">Non renseignée</span>
                             {% endif %}
