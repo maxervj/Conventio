@@ -50,16 +50,39 @@ class CollectionRequestFormType extends AbstractType
                     new Assert\NotBlank(message: 'Veuillez saisir l\'adresse email.'),
                     new Assert\Email(message: 'L\'adresse email n\'est pas valide.')
                 ]
+            ])
+            ->add('internshipStartDate', DateType::class, [
+                'label' => 'Date de début du stage',
+                'widget' => 'single_text',
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'constraints' => [
+                    new Assert\NotBlank(message: 'Veuillez saisir la date de début.'),
+                ]
+            ])
+            ->add('internshipEndDate', DateType::class, [
+                'label' => 'Date de fin du stage',
+                'widget' => 'single_text',
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'constraints' => [
+                    new Assert\NotBlank(message: 'Veuillez saisir la date de fin.'),
+                ]
             ]);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $data = $event->getData() ?? [];
             $form = $event->getForm();
-            $student = $form->getParent()?->getData();
+
+            // Essayer de récupérer l'étudiant depuis le parent ou les options
+            $student = $form->getConfig()->getOption('student') ?? $form->getParent()?->getData();
 
             if ($student instanceof Student && $student->getLevel()) {
                 $internshipDate = $student->getLevel()->getInternshipDate();
                 if ($internshipDate) {
-                    $data = $event->getData();
+                    // Pré-remplissage des dates dans le formulaire
                     if (is_array($data)) {
                         $data['internshipStartDate'] = $internshipDate->getStartDate();
                         $data['internshipEndDate'] = $internshipDate->getEndDate();
@@ -74,6 +97,7 @@ class CollectionRequestFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => null,
+            'student' => null,
         ]);
     }
 }

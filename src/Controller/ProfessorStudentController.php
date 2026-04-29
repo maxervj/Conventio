@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Convention;
 use App\Entity\Professor;
+use App\Entity\Student;
+use App\Entity\Level;
 use App\Repository\ConventionRepository;
 use App\Repository\InternshipCompanyInfoRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -37,32 +39,153 @@ class ProfessorStudentController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        $studentsByLevel = [];
-
+        // Récupérer tous les étudiants du professeur
+        $students = [];
         foreach ($user->getTaughtLevels() as $level) {
-            if ($level->getStudents()->count() > 0) {
-                $studentsByLevel[] = [
-                    'level' => $level,
-                    'students' => $level->getStudents()->toArray(),
-                ];
+            foreach ($level->getStudents() as $student) {
+                if (!isset($students[$student->getId()])) {
+                    $students[$student->getId()] = $student;
+                }
             }
         }
-
         if ($user->getReferentLevel()) {
-            $refLevel = $user->getReferentLevel();
-            $alreadyIncluded = array_filter($studentsByLevel, fn($g) => $g['level'] === $refLevel);
-            if (empty($alreadyIncluded) && $refLevel->getStudents()->count() > 0) {
-                array_unshift($studentsByLevel, [
-                    'level' => $refLevel,
-                    'students' => $refLevel->getStudents()->toArray(),
-                ]);
+            foreach ($user->getReferentLevel()->getStudents() as $student) {
+                if (!isset($students[$student->getId()])) {
+                    $students[$student->getId()] = $student;
+                }
             }
         }
 
-        return $this->render('profile/index.html.twig', [
+        // Récupérer les niveaux pour les stats
+        $levels = [];
+        foreach ($user->getTaughtLevels() as $level) {
+            if (!isset($levels[$level->getId()])) {
+                $levels[$level->getId()] = $level;
+            }
+        }
+        if ($user->getReferentLevel() && !isset($levels[$user->getReferentLevel()->getId()])) {
+            $levels[$user->getReferentLevel()->getId()] = $user->getReferentLevel();
+        }
+
+        return $this->render('professor/my_students.html.twig', [
             'user' => $user,
-            'studentsByLevel' => $studentsByLevel,
-            'conventions' => $this->conventionRepository->findByReferentProfessor($user),
+            'students' => array_values($students),
+            'levels' => array_values($levels),
+        ]);
+    }
+
+    #[Route('/students/{id}', name: 'professor_student_show', methods: ['GET'])]
+    public function showStudent(int $id): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof Professor) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->render('professor/student_show.html.twig', [
+            'student' => $this->getStudentOrThrow($id),
+        ]);
+    }
+
+    #[Route('/students/{id}/collections', name: 'professor_student_collections', methods: ['GET'])]
+    public function studentCollections(int $id): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof Professor) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $student = $this->getStudentOrThrow($id);
+        $collections = $this->companyInfoRepository->findBy(['student' => $student], ['createdAt' => 'DESC']);
+
+        return $this->render('professor/student_collections.html.twig', [
+            'student' => $student,
+            'collections' => $collections,
+        ]);
+    }
+
+    private function getStudentOrThrow(int $id)
+    {
+        $user = $this->getUser();
+        $entityManager = $this->entityManager;
+        $student = $entityManager->getRepository(Student::class)->find($id);
+
+        if (!$student) {
+            throw $this->createNotFoundException('Étudiant introuvable.');
+        }
+
+        // Vérifier que le prof enseigne cet étudiant
+        if (!$this->isProfessorReferent($user, $student)) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à voir cet étudiant.');
+        }
+
+        return $student;
+    }
+
+    #[Route('/students', name: 'professor_student_new', methods: ['GET', 'POST'])]
+    public function newStudent(Request $request): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof Professor) {
+            throw $this->createAccessDeniedException();
+        }
+
+        // Récupérer les niveaux du professeur
+        $levels = $user->getTaughtLevels()->toArray();
+        if (empty($levels) && $user->getReferentLevel()) {
+            $levels[] = $user->getReferentLevel();
+        }
+
+        // Récupérer les étudiants disponibles (non assignés à ces niveaux)
+        $assignedStudents = [];
+        foreach ($levels as $level) {
+            foreach ($level->getStudents() as $student) {
+                $assignedStudents[$student->getId()] = $student;
+            }
+        }
+
+        // Récupérer tous les étudiants
+        $allStudents = $this->entityManager->getRepository(Student::class)->findAll();
+        $availableStudents = array_filter($allStudents, fn($s) => !isset($assignedStudents[$s->getId()]));
+
+        if ($request->isMethod('POST')) {
+            $studentId = $request->request->get('student');
+            $levelId = $request->request->get('level');
+
+            if (!$studentId || !$levelId) {
+                $this->addFlash('error', 'Veuillez sélectionner un étudiant et un niveau.');
+                return $this->redirectToRoute('professor_student_new');
+            }
+
+            $student = $this->entityManager->getRepository(Student::class)->find($studentId);
+            $level = $this->entityManager->getRepository(Level::class)->find($levelId);
+
+            if (!$student || !$level) {
+                $this->addFlash('error', 'Étudiant ou niveau introuvable.');
+                return $this->redirectToRoute('professor_student_new');
+            }
+
+            // Vérifier que le prof enseigne ce niveau
+            if (!in_array($level, $levels)) {
+                throw $this->createAccessDeniedException('Vous ne pouvez pas assigner un étudiant à ce niveau.');
+            }
+
+            // Assigner l'étudiant au niveau
+            if (!$level->getStudents()->contains($student)) {
+                $level->addStudent($student);
+                $this->entityManager->flush();
+                $this->addFlash('success', 'Étudiant assigné avec succès à ' . $level->getLevelName());
+            }
+
+            return $this->redirectToRoute('professor_my_students');
+        }
+
+        return $this->render('professor/student_new.html.twig', [
+            'availableStudents' => array_values($availableStudents),
+            'levels' => $levels,
         ]);
     }
 

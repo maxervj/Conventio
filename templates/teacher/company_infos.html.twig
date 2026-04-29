@@ -27,7 +27,8 @@
                 <td>{{ info.student.lastName }}</td>
                 <td>{{ info.createdAt|date('d/m/Y H:i') }}</td>
                 <td>
-                    <form method="post" action="{{ path('teacher_company_info_validate', {id: info.id}) }}">
+                    <form method="post" action="{{ path('professor_collecte_validate_convention', {id: info.id}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('validate_convention_' ~ info.id) }}">
                         <button class="btn btn-success" type="submit">Valider</button>
                     </form>
                 </td>

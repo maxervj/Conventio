@@ -18,6 +18,6 @@ class ConventionSubscriber
             return;
         }
 
-        $entity->initializeContractDates();
+        $entity->initializeConventionDates();
     }
 }
