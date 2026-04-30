@@ -76,7 +76,7 @@ php bin/console app:add-user jean.dupont@lycee-faure.fr Etudiant123! Jean Dupont
 
 **Identifiants de connexion :**
 - Email : `jean.dupont@lycee-faure.fr`
-- Mot de passe : `Student123!`
+- Mot de passe : `Etudiant123!`
 
 **IMPORTANT** : Les comptes étudiants créés via cette commande ne sont **pas vérifiés** par défaut. 
 
@@ -106,7 +106,7 @@ Pour qu'un étudiant puisse se connecter, vous devez soit :
 
 **État de la Convention** :
 ```
-1. Étudiant crée la demande de la colecte d'informations
+1. Étudiant crée la demande de la collecte d'informations
    ↓ 
 2. Entreprise complète la collecte
    ↓ 
@@ -196,14 +196,8 @@ Paramétrage uniquement pour admin (DDF).
 **Templates Twig spécifiques**
   - `collecte_info.html.twig` : Formulaire collecte
   - `convention.html.twig` : Convention complète
-  - Smart Anchor Yousign : `{{s1|signature|85|37}}`
-    (texte blanc sur blanc pour signature invisible)
 
 **Routes de téléchargement**
   - `GET /student/company-info/{id}/pdf` : Étudiant récupère collecte
   - `GET /company-info/{token}/pdf` : Entreprise via token
-
-
----
-
 
