@@ -1,511 +1,558 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convention de stage — {{ convention.student.firstName }} {{ convention.student.lastName }}</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; font-size: 11px; color: #1a1a1a; background: #fff; }
+<meta charset="UTF-8">
+<title>Convention de Stage</title>
+<style>
+@page { size: A4; margin: 16mm 14mm 18mm 14mm; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; font-size: 9.5px; color: #000; line-height: 1.45; }
 
-        .header {
-            background: #1e3a5f;
-            color: white;
-            padding: 20px 30px;
-            margin-bottom: 20px;
-        }
-        .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
-        .header h1 { font-size: 22px; font-weight: bold; }
-        .header .subtitle { font-size: 12px; margin-top: 4px; opacity: 0.85; }
-        .header .ref { font-size: 10px; opacity: 0.7; margin-top: 2px; }
+/* ——— Mise en page ——— */
+.page-break { page-break-before: always; }
 
-        .status-badge {
-            display: inline-block;
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-        .status-draft { background: #e5e7eb; color: #374151; }
-        .status-pending { background: #fef9c3; color: #854d0e; }
-        .status-validated { background: #dbeafe; color: #1d4ed8; }
-        .status-signed { background: #dcfce7; color: #166534; }
-        .status-completed { background: #f0fdf4; color: #14532d; border: 1px solid #86efac; }
+/* ——— En-tête principal ——— */
+.main-header { border: 2px solid #1a3a6b; margin-bottom: 10px; }
+.header-inner { display: flex; }
+.header-left  { flex: 1; padding: 8px 10px; border-right: 2px solid #1a3a6b; }
+.header-right { width: 155px; padding: 7px 8px; font-size: 8.5px; }
+.school-name  { font-size: 13px; font-weight: bold; color: #1a3a6b; }
+.school-city  { font-size: 10px; color: #1a3a6b; }
+.conv-title   { font-size: 17px; font-weight: bold; text-transform: uppercase; text-align: center; margin: 5px 0 3px; color: #1a3a6b; letter-spacing: 1px; }
+.class-name   { font-size: 12px; font-weight: bold; text-align: center; color: #333; }
+.ddf-line     { margin-top: 7px; font-size: 8.5px; color: #333; }
 
-        .content { padding: 0 30px 30px; }
+/* ——— Cadre réservé lycée ——— */
+.reserved-box { border: 1px solid #000; padding: 5px; font-size: 8px; height: 100%; }
+.reserved-title { font-weight: bold; text-align: center; border-bottom: 1px solid #000; padding-bottom: 3px; margin-bottom: 4px; font-size: 8.5px; }
+.cb-line { margin: 4px 0; }
 
-        .section {
-            margin-bottom: 18px;
-            border: 1px solid #e5e7eb;
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        .section-title {
-            background: #1e3a5f;
-            color: white;
-            padding: 8px 14px;
-            font-size: 11px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .section-body { padding: 12px 14px; }
+/* ——— Articles ——— */
+.article-title { font-weight: bold; font-size: 9.5px; margin: 9px 0 4px; border-bottom: 1px solid #1a3a6b; padding-bottom: 2px; color: #1a3a6b; }
+.legal-text    { font-size: 9px; line-height: 1.55; margin-bottom: 5px; text-align: justify; }
+.legal-ul      { font-size: 9px; line-height: 1.55; margin: 3px 0 5px 18px; }
 
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+/* ——— Champs de saisie ——— */
+.fields-table { width: 100%; border-collapse: collapse; margin: 5px 0 6px; }
+.fields-table td { padding: 2px 4px; vertical-align: bottom; font-size: 9px; }
+.field-label  { font-weight: bold; white-space: nowrap; padding-right: 5px; }
+.field-value  { border-bottom: 1px solid #555; min-width: 80px; }
 
-        .field { margin-bottom: 8px; }
-        .field-label { font-size: 9px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 2px; }
-        .field-value { font-size: 11px; color: #111827; font-weight: 500; }
-        .field-value.empty { color: #9ca3af; font-style: italic; font-weight: normal; }
+/* ——— Tableau horaires ——— */
+.table-sched { width: 100%; border-collapse: collapse; margin: 5px 0; font-size: 9px; }
+.table-sched th { background: #d8e4f0; border: 1px solid #777; padding: 3px 5px; text-align: center; font-size: 8.5px; }
+.table-sched td { border: 1px solid #777; padding: 3px 6px; text-align: center; }
+.table-sched td.day { font-weight: bold; text-align: left; }
 
-        .divider { height: 1px; background: #e5e7eb; margin: 10px 0; }
+/* ——— Encadrés ——— */
+.info-box { border: 1px solid #ccc; border-radius: 3px; padding: 6px 8px; font-size: 8px; font-style: italic; color: #444; margin: 6px 0; line-height: 1.5; }
+.bold-notice { font-weight: bold; font-style: normal; color: #000; font-size: 8.5px; }
 
-        .signature-block {
-            border: 1px solid #e5e7eb;
-            border-radius: 6px;
-            padding: 12px;
-            background: #f9fafb;
-        }
-        .signature-block h4 { font-size: 11px; font-weight: bold; color: #374151; margin-bottom: 8px; }
-        .sig-signed { color: #16a34a; font-weight: bold; }
-        .sig-pending { color: #9ca3af; font-style: italic; }
+/* ——— Signatures ——— */
+.sig-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
+.sig-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.sig-box { border: 1px solid #1a3a6b; padding: 7px; }
+.sig-box-title { font-weight: bold; font-size: 8.5px; text-align: center; border-bottom: 1px solid #1a3a6b; padding-bottom: 4px; margin-bottom: 5px; text-transform: uppercase; color: #1a3a6b; }
+.sig-name  { font-size: 8.5px; color: #333; margin-bottom: 2px; }
+.sig-note  { font-size: 7.5px; color: #555; font-style: italic; margin-bottom: 3px; }
+.sig-place { font-size: 8px; margin-bottom: 5px; }
+/* Zone de signature : le texte Smart Anchor Yousign est blanc (invisible visuellement mais lisible par le parseur PDF) */
+.sig-area { min-height: 48px; border: 1px dashed #aaa; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 10.5pt; }
 
-        .stamp-area {
-            border: 2px dashed #d1d5db;
-            border-radius: 6px;
-            padding: 20px;
-            text-align: center;
-            color: #9ca3af;
-            font-size: 10px;
-            margin-top: 10px;
-            height: 70px;
-        }
+/* ——— Pied de page ——— */
+.page-footer { margin-top: 12px; border-top: 1px solid #aaa; padding-top: 4px; display: flex; justify-content: space-between; font-size: 7.5px; color: #888; }
 
-        .bool-yes { color: #16a34a; font-weight: bold; }
-        .bool-no { color: #9ca3af; }
+/* ——— Annexes ——— */
+.annex-title    { font-size: 14px; font-weight: bold; text-align: center; text-transform: uppercase; border: 2px solid #1a3a6b; padding: 7px; margin-bottom: 8px; color: #1a3a6b; letter-spacing: 0.5px; }
+.annex-subtitle { font-size: 10px; font-weight: bold; text-align: center; margin-bottom: 8px; text-transform: uppercase; }
+.section-title  { font-weight: bold; font-size: 9.5px; text-transform: uppercase; border-bottom: 1px solid #1a3a6b; padding-bottom: 2px; margin: 8px 0 5px; color: #1a3a6b; }
+.input-zone { border: 1px solid #bbb; min-height: 36px; padding: 4px 6px; margin-top: 3px; font-size: 9px; }
 
-        .table { width: 100%; border-collapse: collapse; font-size: 10px; }
-        .table th { background: #f3f4f6; padding: 6px 8px; text-align: left; border: 1px solid #e5e7eb; color: #374151; font-size: 9px; }
-        .table td { padding: 5px 8px; border: 1px solid #e5e7eb; }
-
-        .legal-box {
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 6px;
-            padding: 14px;
-            font-size: 9px;
-            color: #6b7280;
-            line-height: 1.6;
-            margin-bottom: 18px;
-        }
-
-        .footer {
-            margin-top: 30px;
-            padding: 14px 30px;
-            border-top: 2px solid #e5e7eb;
-            display: flex;
-            justify-content: space-between;
-            font-size: 9px;
-            color: #9ca3af;
-        }
-    </style>
+/* ——— Remboursements ——— */
+.cb-item { margin: 3px 0; font-size: 9px; }
+.two-col-flex { display: flex; gap: 14px; }
+.two-col-flex > div { flex: 1; }
+</style>
 </head>
 <body>
 
-<div class="header">
-    <div class="header-top">
-        <div style="display:flex; align-items:center; gap:14px;">
-            <img src="lyceegabrielfaure_logo.jpg" alt="Lycée Gabriel Fauré" style="height:50px; filter:brightness(0) invert(1);">
-            <div>
-                <h1>Convention de Stage</h1>
-                <p class="subtitle">{{ convention.student.firstName }} {{ convention.student.lastName }}</p>
-                {% if convention.companyInfo %}
-                    <p class="ref">{{ convention.companyInfo.companyName }}</p>
+{% set info    = convention.companyInfo %}
+{% set student = convention.student %}
+{% set prof    = convention.referentProfessor %}
+
+{# ================================================================== #}
+{# PAGE 1 — EN-TÊTE + ARTICLE 1 + SIGNATURES PRINCIPALES              #}
+{# ================================================================== #}
+
+{# ——— En-tête ——— #}
+<div class="main-header">
+    <div class="header-inner">
+        <div class="header-left">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+                <img src="lyceegabrielfaure_logo.jpg" alt="Lycée Gabriel Fauré" style="height:48px;">
+                <div>
+                    <div class="school-name">Lycée Gabriel Fauré</div>
+                    <div class="school-city">2 avenue du Rhône — 74000 ANNECY</div>
+                    <div class="conv-title">Convention de Stage</div>
+                    {% if student.levels is not empty %}
+                    <div class="class-name">
+                        {% for lvl in student.levels %}{{ lvl.levelName }}{% if not loop.last %}, {% endif %}{% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% if schoolSignature %}
+            <div class="ddf-line">
+                Dossier suivi par : <strong>{{ schoolSignature.civiliteDDF }} {{ schoolSignature.prenomDDF }} {{ schoolSignature.nomDDF }}</strong> —
+                Directrice Déléguée aux Formations Professionnelles et Technologiques<br>
+                Tél. : {{ schoolSignature.telDDF }} — E-mail : {{ schoolSignature.emailDDF }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="header-right">
+            <div class="reserved-box">
+                <div class="reserved-title">Cadre réservé au lycée</div>
+                <div class="cb-line">☐ &nbsp;Exemplaire étudiant</div>
+                <div class="cb-line" style="margin-top:5px;">Convention reçue le :<br>___________________</div>
+                <div class="cb-line" style="margin-top:5px;">Convention expédiée le :<br>___________________</div>
+                <div class="cb-line" style="margin-top:5px;">☐ &nbsp;Exemplaire organisme</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# ——— Article 1 ——— #}
+<div class="article-title">Article 1 : Objet de la convention</div>
+<div class="legal-text">La présente convention est établie :</div>
+<div class="legal-text">
+    Entre le <strong>LYCÉE GABRIEL FAURÉ</strong>, 2 avenue du Rhône 74000 ANNECY,<br>
+    Représenté par le-la Proviseur(e), autorisé(e) par le Conseil d'Administration.
+</div>
+<div class="legal-text">et l'organisme :</div>
+
+{% if info %}
+<table class="fields-table">
+    <tr>
+        <td style="width:50%; vertical-align:top; padding-right:12px;">
+            <table style="width:100%; border-collapse:collapse;">
+                <tr><td class="field-label">Raison sociale :</td><td class="field-value">{{ info.companyName }}</td></tr>
+                <tr><td class="field-label">Siège social :</td><td class="field-value">{{ info.address }}{% if info.addressComplement %}, {{ info.addressComplement }}{% endif %}</td></tr>
+                <tr><td class="field-label">CP / Ville :</td><td class="field-value">{{ info.postalCode }} {{ info.city }}{% if info.country %}, {{ info.country }}{% endif %}</td></tr>
+                <tr><td class="field-label">Tél. fixe :</td><td class="field-value">{{ info.landlinePhone ?: '' }}</td></tr>
+                <tr><td class="field-label">Portable :</td><td class="field-value">{{ info.mobilePhone ?: '' }}</td></tr>
+                <tr><td class="field-label">E-mail :</td><td class="field-value">{{ info.email ?: '' }}</td></tr>
+            </table>
+        </td>
+        <td style="width:50%; vertical-align:top;">
+            <table style="width:100%; border-collapse:collapse;">
+                <tr><td class="field-label">Famille-métier :</td><td class="field-value">&nbsp;</td></tr>
+                <tr><td class="field-label">SIRET :</td><td class="field-value">{{ info.siret ?: '' }}</td></tr>
+                <tr><td class="field-label">Nom assureur :</td><td class="field-value">{{ info.insurerName ?: '' }}</td></tr>
+                <tr><td class="field-label">Réf. contrat :</td><td class="field-value">{{ info.insurerReference ?: '' }}</td></tr>
+                {% if info.internshipAddress %}
+                <tr><td class="field-label">Lieu d'accueil :</td><td class="field-value">{{ info.internshipAddress }}, {{ info.internshipPostalCode }} {{ info.internshipCity }}</td></tr>
                 {% endif %}
-            </div>
-        </div>
-        <div style="text-align:right; margin-top:4px;">
-            {% if convention.status == 'draft' %}
-                <span class="status-badge status-draft">Brouillon</span>
-            {% elseif convention.status == 'pending_validation' %}
-                <span class="status-badge status-pending">En attente de validation</span>
-            {% elseif convention.status == 'validated' %}
-                <span class="status-badge status-validated">Validée</span>
-            {% elseif convention.status == 'signed' %}
-                <span class="status-badge status-signed">Signée</span>
-            {% elseif convention.status == 'completed' %}
-                <span class="status-badge status-completed">Complétée</span>
-            {% endif %}
-            <br><span style="font-size:9px; opacity:0.7; margin-top:4px; display:block;">Réf. #{{ convention.id }}</span>
-        </div>
-    </div>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<div class="info-box">
+    Nous recommandons au responsable d'entreprise de vérifier que son assurance le protège lorsque la responsabilité de son entreprise ou celle d'un de ses salariés peut être engagée. De par sa signature le responsable de l'organisme s'engage : à accueillir l'étudiant au sein de ses locaux (l'étudiant n'est pas autorisé à rester à son domicile pour réaliser son projet) ; à permettre à l'étudiant l'accès à un poste informatique et à internet durant la durée du stage.
 </div>
 
-<div class="content">
+<table class="fields-table">
+    <tr>
+        <td class="field-label">Maître de stage :</td>
+        <td class="field-value" style="width:35%;">{{ info.supervisorFirstName }} {{ info.supervisorLastName }}</td>
+        <td class="field-label" style="padding-left:12px;">Fonction :</td>
+        <td class="field-value">{{ info.supervisorFunction ?: '' }}</td>
+    </tr>
+    <tr>
+        <td class="field-label">Tél. fixe :</td>
+        <td class="field-value">{{ info.supervisorPhone ?: '' }}</td>
+        <td class="field-label" style="padding-left:12px;">E-mail :</td>
+        <td class="field-value">{{ info.supervisorEmail ?: '' }}</td>
+    </tr>
+</table>
+{% endif %}
 
-    {# --- Mentions légales / intro --- #}
-    <div class="legal-box">
-        La présente convention est établie conformément aux dispositions légales et réglementaires
-        relatives aux stages en milieu professionnel. Elle fixe les engagements respectifs de
-        l'établissement d'enseignement, de l'étudiant et de l'organisme d'accueil.
-    </div>
+<div class="legal-text" style="margin-top:5px;">L'Organisme s'engage à accepter en stage de formation professionnelle l'étudiant(e) :</div>
 
-    {# --- Parties à la convention --- #}
-    <div class="section">
-        <div class="section-title">Parties à la convention</div>
-        <div class="section-body">
-            <div class="grid-2">
-                {# Étudiant #}
-                <div>
-                    <p style="font-weight:bold; font-size:11px; margin-bottom:8px; color:#1e3a5f;">L'Étudiant(e)</p>
-                    <div class="field">
-                        <div class="field-label">Nom et prénom</div>
-                        <div class="field-value">{{ convention.student.firstName }} {{ convention.student.lastName }}</div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Email établissement</div>
-                        <div class="field-value">{{ convention.student.email }}</div>
-                    </div>
-                    {% if convention.student.personalEmail %}
-                    <div class="field">
-                        <div class="field-label">Email personnel</div>
-                        <div class="field-value">{{ convention.student.personalEmail }}</div>
-                    </div>
-                    {% endif %}
-                    {% if convention.student.birthDate %}
-                    <div class="field">
-                        <div class="field-label">Date de naissance</div>
-                        <div class="field-value">{{ convention.student.birthDate|date('d/m/Y') }}</div>
-                    </div>
-                    {% endif %}
-                    {% if convention.student.levels is not empty %}
-                    <div class="field">
-                        <div class="field-label">Formation</div>
-                        <div class="field-value">
-                            {% for level in convention.student.levels %}
-                                {{ level.levelName }}{% if not loop.last %}, {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                    {% endif %}
-                </div>
-
-                {# Professeur référent #}
-                <div>
-                    <p style="font-weight:bold; font-size:11px; margin-bottom:8px; color:#1e3a5f;">Le Professeur référent</p>
-                    {% if convention.referentProfessor %}
-                        <div class="field">
-                            <div class="field-label">Nom et prénom</div>
-                            <div class="field-value">{{ convention.referentProfessor.firstName }} {{ convention.referentProfessor.lastName }}</div>
-                        </div>
-                        <div class="field">
-                            <div class="field-label">Email</div>
-                            <div class="field-value">{{ convention.referentProfessor.email }}</div>
-                        </div>
-                    {% else %}
-                        <div class="field-value empty">Non désigné</div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {# --- Entreprise d'accueil --- #}
-    {% if convention.companyInfo %}
-    {% set info = convention.companyInfo %}
-    <div class="section">
-        <div class="section-title">Organisme d'accueil</div>
-        <div class="section-body">
-            <div class="grid-2">
-                <div>
-                    <div class="field">
-                        <div class="field-label">Raison sociale</div>
-                        <div class="field-value">{{ info.companyName }}</div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">SIRET</div>
-                        <div class="field-value">{{ info.siret ?: '-' }}</div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Adresse</div>
-                        <div class="field-value">
-                            {{ info.address }}
-                            {% if info.addressComplement %}<br>{{ info.addressComplement }}{% endif %}
-                            <br>{{ info.postalCode }} {{ info.city }}
-                            {% if info.country %}, {{ info.country }}{% endif %}
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div class="field">
-                        <div class="field-label">Téléphone</div>
-                        <div class="field-value">{{ info.landlinePhone ?: info.mobilePhone ?: '-' }}</div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Email</div>
-                        <div class="field-value">{{ info.email ?: '-' }}</div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Site web</div>
-                        <div class="field-value">{{ info.website ?: '-' }}</div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Assureur / Référence</div>
-                        <div class="field-value">{{ info.insurerName ?: '-' }} {% if info.insurerReference %}/ {{ info.insurerReference }}{% endif %}</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="divider"></div>
-
-            <div class="grid-2">
-                <div>
-                    <p style="font-weight:bold; font-size:10px; color:#374151; margin-bottom:6px;">Responsable</p>
-                    <div class="field">
-                        <div class="field-label">Nom et prénom</div>
-                        <div class="field-value">{{ info.responsibleFirstName }} {{ info.responsibleLastName }}</div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Fonction</div>
-                        <div class="field-value">{{ info.responsibleFunction ?: '-' }}</div>
-                    </div>
-                </div>
-                <div>
-                    <p style="font-weight:bold; font-size:10px; color:#374151; margin-bottom:6px;">Maître de stage</p>
-                    <div class="field">
-                        <div class="field-label">Nom et prénom</div>
-                        <div class="field-value">{{ info.supervisorFirstName }} {{ info.supervisorLastName }}</div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Fonction</div>
-                        <div class="field-value">{{ info.supervisorFunction ?: '-' }}</div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Téléphone / Email</div>
-                        <div class="field-value">{{ info.supervisorPhone ?: '-' }} / {{ info.supervisorEmail ?: '-' }}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {# --- Modalités du stage --- #}
-    <div class="section">
-        <div class="section-title">Modalités du stage</div>
-        <div class="section-body">
-            <div class="grid-3">
-                <div>
-                    <div class="field">
-                        <div class="field-label">Date de début</div>
-                        <div class="field-value">{{ info.internshipStartDate ? info.internshipStartDate|date('d/m/Y') : '-' }}</div>
-                    </div>
-                </div>
-                <div>
-                    <div class="field">
-                        <div class="field-label">Date de fin</div>
-                        <div class="field-value">{{ info.internshipEndDate ? info.internshipEndDate|date('d/m/Y') : '-' }}</div>
-                    </div>
-                </div>
-                <div>
-                    <div class="field">
-                        <div class="field-label">Déplacements professionnels</div>
-                        <div class="field-value {{ info.hasTravel ? 'bool-yes' : 'bool-no' }}">{{ info.hasTravel ? 'Oui' : 'Non' }}</div>
-                    </div>
-                </div>
-            </div>
-
-            {% if info.internshipAddress %}
-            <div class="divider"></div>
-            <div class="field">
-                <div class="field-label">Lieu de stage (si différent du siège)</div>
-                <div class="field-value">{{ info.internshipAddress }}, {{ info.internshipPostalCode }} {{ info.internshipCity }}{% if info.internshipCountry %}, {{ info.internshipCountry }}{% endif %}</div>
-            </div>
-            {% endif %}
-
-            <div class="divider"></div>
-            <div class="grid-2">
-                <div>
-                    <div class="field">
-                        <div class="field-label">Transport</div>
-                        <div class="field-value {{ info.coversTransportCosts ? 'bool-yes' : 'bool-no' }}">
-                            {{ info.coversTransportCosts ? 'Pris en charge' : 'Non pris en charge' }}
-                            {% if info.coversTransportCosts and info.transportCostsDetails %} — {{ info.transportCostsDetails }}{% endif %}
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Repas</div>
-                        <div class="field-value {{ info.coversMealCosts ? 'bool-yes' : 'bool-no' }}">
-                            {{ info.coversMealCosts ? 'Pris en charge' : 'Non pris en charge' }}
-                            {% if info.coversMealCosts and info.mealCostsDetails %} — {{ info.mealCostsDetails }}{% endif %}
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div class="field">
-                        <div class="field-label">Hébergement</div>
-                        <div class="field-value {{ info.coversAccommodationCosts ? 'bool-yes' : 'bool-no' }}">
-                            {{ info.coversAccommodationCosts ? 'Pris en charge' : 'Non pris en charge' }}
-                            {% if info.coversAccommodationCosts and info.accommodationCostsDetails %} — {{ info.accommodationCostsDetails }}{% endif %}
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Gratification</div>
-                        <div class="field-value {{ info.providesGratification ? 'bool-yes' : 'bool-no' }}">
-                            {{ info.providesGratification ? 'Oui' : 'Non' }}
-                            {% if info.providesGratification and info.gratificationDetails %} — {{ info.gratificationDetails }}{% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {% if info.plannedActivities %}
-            <div class="divider"></div>
-            <div class="field">
-                <div class="field-label">Activités professionnelles prévues</div>
-                <div class="field-value" style="font-weight:normal; line-height:1.6;">{{ info.plannedActivities }}</div>
-            </div>
-            {% endif %}
-
-            {% if info.workSchedule %}
-            <div class="divider"></div>
-            <div class="field-label" style="margin-bottom:6px;">Horaires de travail</div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Jour</th>
-                        <th>Matin début</th>
-                        <th>Matin fin</th>
-                        <th>Après-midi début</th>
-                        <th>Après-midi fin</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% set days = {'monday': 'Lundi', 'tuesday': 'Mardi', 'wednesday': 'Mercredi', 'thursday': 'Jeudi', 'friday': 'Vendredi', 'saturday': 'Samedi'} %}
-                    {% for dayKey, dayLabel in days %}
-                        {% if info.workSchedule[dayKey] is defined %}
-                        {% set schedule = info.workSchedule[dayKey] %}
-                        <tr>
-                            <td><strong>{{ dayLabel }}</strong></td>
-                            <td>{{ schedule.morning_start ?? '-' }}</td>
-                            <td>{{ schedule.morning_end ?? '-' }}</td>
-                            <td>{{ schedule.afternoon_start ?? '-' }}</td>
-                            <td>{{ schedule.afternoon_end ?? '-' }}</td>
-                        </tr>
-                        {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% endif %}
-        </div>
-    </div>
+<table class="fields-table">
+    <tr>
+        <td class="field-label">Nom :</td>
+        <td class="field-value" style="width:28%;">{{ student.lastName }}</td>
+        <td class="field-label" style="padding-left:12px;">Prénom :</td>
+        <td class="field-value">{{ student.firstName }}</td>
+    </tr>
+    {% if student.levels is not empty %}
+    <tr>
+        <td class="field-label">Classe :</td>
+        <td class="field-value" colspan="3">{% for lvl in student.levels %}{{ lvl.levelName }}{% if not loop.last %}, {% endif %}{% endfor %}</td>
+    </tr>
     {% endif %}
+    {% if info %}
+    <tr>
+        <td class="field-label">Du :</td>
+        <td class="field-value">{{ info.internshipStartDate ? info.internshipStartDate|date('d/m/Y') : '___________' }}</td>
+        <td class="field-label" style="padding-left:12px;">Au :</td>
+        <td class="field-value">{{ info.internshipEndDate ? info.internshipEndDate|date('d/m/Y') : '___________' }}</td>
+    </tr>
+    {% endif %}
+    {% if prof %}
+    <tr>
+        <td class="field-label">Enseignant référent :</td>
+        <td class="field-value" colspan="3">{{ prof.firstName }} {{ prof.lastName }}</td>
+    </tr>
+    {% endif %}
+</table>
 
-    {# --- Signatures --- #}
-    <div class="section">
-        <div class="section-title">Signatures électroniques</div>
-        <div class="section-body">
-            <div class="grid-3">
-                {# Étudiant #}
-                <div class="signature-block">
-                    <h4>L'Étudiant(e)</h4>
-                    <p style="font-size:10px; color:#374151; margin-bottom:8px;">{{ convention.student.firstName }} {{ convention.student.lastName }}</p>
-                    {% if convention.studentSignedAt %}
-                        <p class="sig-signed">&#10003; Signé le {{ convention.studentSignedAt|date('d/m/Y à H:i') }}</p>
-                    {% else %}
-                        <p class="sig-pending">En attente de signature</p>
-                        <div class="stamp-area">Signature</div>
-                    {% endif %}
-                </div>
+{% if info and info.workSchedule %}
+<div class="legal-text" style="margin-top:4px; font-weight:bold;">Horaires journaliers de l'étudiant(e) :</div>
+<table class="table-sched">
+    <thead>
+        <tr>
+            <th style="width:14%;"></th>
+            <th colspan="2">Matin</th>
+            <th colspan="2">Après-midi</th>
+        </tr>
+        <tr>
+            <th></th>
+            <th style="width:18%;">Début</th>
+            <th style="width:18%;">Fin</th>
+            <th style="width:18%;">Début</th>
+            <th style="width:18%;">Fin</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% set days_map = {'monday': 'Lundi', 'tuesday': 'Mardi', 'wednesday': 'Mercredi', 'thursday': 'Jeudi', 'friday': 'Vendredi', 'saturday': 'Samedi'} %}
+        {% for dayKey, dayLabel in days_map %}
+            {% set sch = info.workSchedule[dayKey] ?? null %}
+            <tr>
+                <td class="day">{{ dayLabel }}</td>
+                <td>{{ sch ? (sch.morning_start ?? '—') : '—' }}</td>
+                <td>{{ sch ? (sch.morning_end ?? '—') : '—' }}</td>
+                <td>{{ sch ? (sch.afternoon_start ?? '—') : '—' }}</td>
+                <td>{{ sch ? (sch.afternoon_end ?? '—') : '—' }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
 
-                {# Entreprise #}
-                <div class="signature-block">
-                    <h4>L'Entreprise</h4>
-                    {% if convention.companyInfo %}
-                        <p style="font-size:10px; color:#374151; margin-bottom:8px;">{{ convention.companyInfo.companyName }}</p>
-                    {% endif %}
-                    {% if convention.companySignedAt %}
-                        <p class="sig-signed">&#10003; Signé le {{ convention.companySignedAt|date('d/m/Y à H:i') }}</p>
-                    {% else %}
-                        <p class="sig-pending">En attente de signature</p>
-                        <div class="stamp-area">Signature &amp; Cachet</div>
-                    {% endif %}
-                </div>
-
-                {# Établissement #}
-                <div class="signature-block">
-                    <h4>L'Établissement</h4>
-                    <p style="font-size:10px; color:#374151; margin-bottom:8px;">Direction</p>
-                    {% if convention.schoolSignedAt %}
-                        <p class="sig-signed">&#10003; Signé le {{ convention.schoolSignedAt|date('d/m/Y à H:i') }}</p>
-                    {% else %}
-                        <p class="sig-pending">En attente de signature</p>
-                        <div class="stamp-area">Signature &amp; Cachet</div>
-                    {% endif %}
-                </div>
-            </div>
-
-            {% if convention.validationNotes %}
-            <div style="margin-top:12px; padding:10px; background:#eff6ff; border-left:3px solid #3b82f6; border-radius:4px;">
-                <p style="font-size:9px; font-weight:bold; color:#1d4ed8; margin-bottom:4px;">Notes de validation</p>
-                <p style="font-size:10px; color:#374151;">{{ convention.validationNotes }}</p>
-            </div>
-            {% endif %}
-
-            {% if convention.rejectionReason %}
-            <div style="margin-top:12px; padding:10px; background:#fef2f2; border-left:3px solid #ef4444; border-radius:4px;">
-                <p style="font-size:9px; font-weight:bold; color:#dc2626; margin-bottom:4px;">Motif de rejet</p>
-                <p style="font-size:10px; color:#374151;">{{ convention.rejectionReason }}</p>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-
-    {# --- Historique --- #}
-    <div class="section">
-        <div class="section-title">Historique de la convention</div>
-        <div class="section-body">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Étape</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Création</td>
-                        <td>{{ convention.createdAt|date('d/m/Y à H:i') }}</td>
-                    </tr>
-                    {% if convention.validatedAt %}
-                    <tr>
-                        <td>Validation</td>
-                        <td>{{ convention.validatedAt|date('d/m/Y à H:i') }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if convention.signedAt %}
-                    <tr>
-                        <td>Signature</td>
-                        <td>{{ convention.signedAt|date('d/m/Y à H:i') }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if convention.completedAt %}
-                    <tr>
-                        <td>Complétion</td>
-                        <td>{{ convention.completedAt|date('d/m/Y à H:i') }}</td>
-                    </tr>
-                    {% endif %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-
+<div class="info-box" style="margin-top:8px;">
+    Le lycée devra porter cette convention à la connaissance de l'étudiant(e) ou, s'il(elle) est mineur, de son représentant légal et obtenir, préalablement au stage, un consentement exprès aux clauses de la convention.<br>
+    La convention doit être signée par les trois parties. Elle est conforme aux dispositions relatives aux stages contenues dans la loi n° 2006-396 du 31 mars 2006 pour l'égalité des chances.<br>
+    <strong class="bold-notice">Fait en trois exemplaires originaux. Faire précéder la signature de la mention manuscrite « Lu et approuvé »</strong>
 </div>
 
-<div class="footer">
-    <span>Conventio — Système de gestion des conventions de stage</span>
-    <span>Généré le {{ "now"|date('d/m/Y à H:i') }}</span>
+{# ——— BLOC SIGNATURES PRINCIPAL (s1 / s2 / s3) ——— #}
+<div class="sig-grid-3">
+    <div class="sig-box">
+        <div class="sig-box-title">L'Étudiant(e) majeur(e)</div>
+        <div class="sig-name"><strong>{{ student.firstName }} {{ student.lastName }}</strong></div>
+        <div class="sig-note">(représentant légal si mineur)</div>
+        <div class="sig-place">Fait à _____________ le {{ convention.validatedAt ? convention.validatedAt|date('d/m/Y') : '__________' }}</div>
+        <div class="sig-area">{{ '{{s1|signature|85|37}}' }}</div>
+    </div>
+    <div class="sig-box">
+        <div class="sig-box-title">L'Organisme<br><small style="font-weight:normal; text-transform:none;">Cachet et signature sur toutes les pages</small></div>
+        {% if info %}<div class="sig-name"><strong>{{ info.companyName }}</strong></div>{% endif %}
+        <div class="sig-place">Fait à _____________ le ___________</div>
+        <div class="sig-area">{{ '{{s2|signature|85|37}}' }}</div>
+    </div>
+    <div class="sig-box">
+        <div class="sig-box-title">
+            {% if schoolSignature %}{{ schoolSignature.civiliteProviseur }}{% endif %} le-la Proviseur(e)<br>
+            <small style="font-weight:normal; text-transform:none;">Lycée Gabriel Fauré</small>
+        </div>
+        {% if schoolSignature %}<div class="sig-name"><strong>{{ schoolSignature.prenomProviseur }} {{ schoolSignature.nomProviseur }}</strong></div>{% endif %}
+        <div class="sig-place">Fait à Annecy le {{ convention.validatedAt ? convention.validatedAt|date('d/m/Y') : '__________' }}</div>
+        <div class="sig-area">{{ '{{s3|signature|85|37}}' }}</div>
+    </div>
+</div>
+
+<div class="page-footer">
+    <span>Lycée Gabriel Fauré — Convention de Stage — {{ student.firstName }} {{ student.lastName }}</span>
+    <span>Page 1 — Réf. #{{ convention.id }} — Généré le {{ "now"|date('d/m/Y') }}</span>
+</div>
+
+{# ================================================================== #}
+{# PAGE 2 — ARTICLES 2 À 9                                            #}
+{# ================================================================== #}
+<div class="page-break">
+
+<div class="article-title">Article 2 : Complémentarité entre formation reçue au lycée et en organisme</div>
+<div class="legal-text">Le stage de formation aura pour objet essentiel d'assurer l'application pratique de l'enseignement donné au lycée, sans que l'employeur ne puisse retirer aucun profit direct de la présence d'un(e) étudiant(e) stagiaire dans son Organisme.</div>
+
+<div class="article-title">Article 3 : Programme du stage</div>
+<div class="legal-text">Le programme du stage est établi par l'organisme en accord avec le professeur responsable du suivi du stage en tenant compte de la spécialisation de l'étudiant(e) et des objectifs définis dans l'annexe 1 pédagogique ci-jointe.</div>
+
+<div class="article-title">Article 4 : Statut du stagiaire</div>
+<div class="legal-text">L'étudiant(e) stagiaire, pendant la durée de son séjour dans l'organisme, conserve son statut d'étudiant(e) du lycée. Il(elle) sera suivi par le professeur responsable dans des conditions qui seront déterminées ultérieurement.</div>
+
+<div class="article-title">Article 5 : Engagements de l'établissement d'enseignement vis-à-vis de l'étudiant(e)</div>
+<div class="legal-text">L'établissement d'enseignement s'engage à :</div>
+<ul class="legal-ul">
+    <li>définir les objectifs du stage et s'assurer que le stage proposé y répond ;</li>
+    <li>accompagner l'étudiant dans la recherche de stage ;</li>
+    <li>préparer l'étudiant au stage ;</li>
+    <li>assurer le suivi de l'étudiant pendant la durée de son stage, en lui affectant un enseignant qui veillera au bon déroulement du stage et mettra à la disposition de ce dernier les outils nécessaires à l'appréciation de la qualité du stage ;</li>
+    <li>le guider et le conseiller dans la réalisation de son rapport de stage et mettre tout en œuvre pour faciliter la participation du représentant de l'organisme aux soutenances de rapport de stage.</li>
+</ul>
+<div class="legal-text">L'établissement autorise le stagiaire à se déplacer selon les besoins du stage s'il est accompagné d'au moins une personne de l'organisme, à l'extérieur du site géographique de rattachement d'exercice du stage.</div>
+
+<div class="article-title">Article 6 : Engagements de l'organisme d'accueil vis-à-vis de l'étudiant(e)</div>
+<div class="legal-text">L'organisme d'accueil s'engage à :</div>
+<ul class="legal-ul">
+    <li>proposer un stage s'inscrivant dans le projet pédagogique défini par l'établissement d'enseignement ;</li>
+    <li>accueillir l'étudiant et lui donner les moyens de réussir sa mission ;</li>
+    <li>désigner un responsable de stage dont la tâche sera de : guider et conseiller l'étudiant ; l'informer sur les règles, les codes et la culture de l'organisme ; favoriser son intégration et l'accès aux informations nécessaires ; l'aider dans l'acquisition des compétences nécessaires ; assurer un suivi régulier de ses travaux ; évaluer la qualité du travail effectué ; le conseiller sur son projet professionnel ; rédiger une attestation de stage décrivant les missions effectuées.</li>
+</ul>
+<div class="legal-text">Lorsque le déroulement du stage n'est pas conforme aux engagements pris par l'organisme dans le cadre de la présente convention, le proviseur du lycée peut mettre un terme au stage en dénonçant la convention ; il en informe préalablement le responsable de l'organisme qui accuse réception de cette information.</div>
+
+<div class="article-title">Article 7 : Engagements de l'étudiant(e) vis-à-vis de l'organisme d'accueil</div>
+<div class="legal-text">L'étudiant s'engage à :</div>
+<ul class="legal-ul">
+    <li>réaliser sa mission et être disponible pour les tâches qui lui sont confiées ;</li>
+    <li>respecter les règles de l'organisme ainsi que ses codes et sa culture ;</li>
+    <li>respecter les exigences de confidentialité fixées par l'organisme ;</li>
+    <li>rédiger le rapport dans les délais prévus ; ce document devra être présenté aux responsables de l'organisme avant d'être soutenu.</li>
+</ul>
+<div class="legal-text">Durant son stage, l'étudiant(e) stagiaire est soumis(e) à la discipline de l'organisme, notamment en ce qui concerne les visites médicales et les horaires. Les horaires journaliers ne peuvent prévoir la présence des élèves sur leur lieu de stage avant 6 h du matin et après 20 h le soir et ne pourront dépasser la durée légale de 10 h, sauf situation exceptionnelle respectant le code du travail et acceptée par toutes les parties. Les horaires hebdomadaires ne pourront dépasser la durée légale de 35 h sauf situation exceptionnelle.</div>
+<div class="legal-text">L'étudiant(e) est tenu(e) au secret professionnel. En cas de manquement à la discipline, le chef de l'organisme d'accueil se réserve le droit de mettre fin au stage après avoir prévenu le proviseur du lycée.</div>
+
+<div class="article-title">Article 8 : Absences du stagiaire</div>
+<div class="legal-text">En cas d'absence, les autorisations et les justifications nécessaires seront fournies par l'étudiant(e) tant au chef de l'organisme d'accueil qu'au proviseur dans les vingt-quatre heures. L'étudiant(e) peut être autorisé à s'absenter notamment dans le cadre d'obligations attestées par l'établissement d'enseignement, les pièces justificatives étant transmises par l'étudiant à l'organisme d'accueil.</div>
+
+<div class="article-title">Article 9 : Rémunération du stagiaire</div>
+<div class="legal-text">Une gratification peut être versée au stagiaire. Les sommes versées ne donnent pas lieu à assujettissement aux cotisations et contributions de sécurité sociale dans la limite de 12,5 % du plafond horaire de la Sécurité Sociale, dans le cas où la durée de présence du stagiaire est égale à la durée légale du travail (35 h/semaine). Le représentant de l'organisme communiquera au début du stage les modalités de versement de cette gratification éventuelle. Cette dernière sera versée au stagiaire dans le mois suivant la fin de son stage. L'organisme communiquera au stagiaire à la signature de la convention la liste des avantages qu'il lui offre, notamment en ce qui concerne sa restauration, son hébergement ou le remboursement des frais engagés pour effectuer son stage (voir annexe 2).</div>
+
+<div style="margin-top:14px; border-top:1px solid #aaa; padding-top:6px; display:flex; justify-content:space-around; font-size:8px; font-style:italic; color:#555;">
+    <span>L'Organisme — Cachet et signature sur toutes les pages</span>
+    <span>L'Étudiant(e)</span>
+    <span>{{ schoolSignature ? schoolSignature.civiliteProviseur ~ ' le-la Proviseur(e)' : 'Le-la Proviseur(e)' }}</span>
+</div>
+
+<div class="page-footer">
+    <span>Lycée Gabriel Fauré — Convention de Stage — {{ student.firstName }} {{ student.lastName }}</span>
+    <span>Page 2/5</span>
+</div>
+</div>
+
+{# ================================================================== #}
+{# PAGE 3 — ARTICLES 10 À 15                                          #}
+{# ================================================================== #}
+<div class="page-break">
+
+<div class="article-title">Article 10 : Protection sociale du stagiaire</div>
+<div class="legal-text">L'étudiant(e) en stage garde le bénéfice du régime d'assurances sociales des étudiants. Il(Elle) continue à recevoir, au titre de ce régime, les prestations des assurances maladie, maternité, ainsi que les allocations familiales. Par ailleurs, l'étudiant(e) continue à bénéficier de la législation sur les accidents du travail en application de l'article 412-8 du Code de la Sécurité sociale et doit être muni de sa carte d'immatriculation.</div>
+<div class="legal-text">En cas d'accident survenant à l'étudiant(e) stagiaire, soit au cours du travail, soit au cours du trajet, le chef de l'organisme d'accueil s'engage à faire parvenir toutes les déclarations au proviseur du lycée dans la journée où l'accident s'est produit ou au plus tard dans les vingt-quatre heures. La déclaration du proviseur doit être faite par lettre recommandée à la caisse primaire d'assurance maladie dont relève l'établissement, dans les quarante-huit heures non compris les dimanches et jours fériés.</div>
+<div class="legal-text">Les accidents couverts sont :</div>
+<ul class="legal-ul">
+    <li>Ceux survenant dans l'organisme d'accueil ;</li>
+    <li>Ceux survenant lors d'un trajet (aller ou retour) domicile du stagiaire / lieu de stage ;</li>
+    <li>Ceux survenant sur le trajet (aller ou retour) lycée / lieu de stage.</li>
+</ul>
+
+<div class="article-title">Article 11 : Responsabilité civile de l'organisme d'accueil</div>
+<div class="legal-text">Le chef de l'organisme d'accueil contracte une assurance garantissant sa responsabilité civile, chaque fois qu'elle est engagée.</div>
+
+<div class="article-title">Article 12 : Responsabilité civile du stagiaire</div>
+<div class="legal-text">Pendant la durée du stage, la responsabilité civile de l'étudiant(e) est couverte par le contrat d'établissement 0902806J, souscrit par le lycée auprès de la MAIF.</div>
+
+<div class="article-title">Article 13 : Évaluation du stage</div>
+<div class="legal-text">Le responsable du stage dans l'organisme d'accueil adresse, à la fin du stage, au Proviseur du lycée une appréciation sur le travail de l'étudiant, à l'aide de l'imprimé qui lui sera fourni par le professeur lors de la visite de l'étudiant(e). Il sera remis à l'étudiant(e) stagiaire un certificat indiquant la nature et la durée du stage.</div>
+
+<div class="article-title">Article 14 : Dossier mémoire</div>
+<div class="legal-text">Le chef de l'organisme d'accueil appréciera le travail de l'étudiant(e) stagiaire. Il remplira le bilan et le certificat de stage que lui remettra l'étudiant(e). L'étudiant(e) stagiaire rédigera, durant le stage, un « dossier mémoire » sur l'activité conduite et le soumettra au professeur responsable. Après son stage, l'étudiant(e) devra remettre au professeur responsable un rapport de stage. Le dossier servira de support à l'épreuve orale de l'examen du BTS.</div>
+
+<div class="article-title">Article 15 : Fermeture du lycée</div>
+<div class="legal-text">Sont applicables aux stages effectués en partie pendant les vacances scolaires les clauses de la présente convention, sous réserve des dispositions suivantes : en cas de fermeture du lycée, les déclarations seront adressées à :</div>
+<div class="legal-text" style="margin-left:20px;">
+    M. le Recteur de l'Académie de Grenoble — 7 place Bir-Hakeim, BP 1065 — 38021 Grenoble Cedex
+</div>
+<div class="legal-text">Pour les stages à l'étranger, en cas d'accident survenu durant la période de fermeture de l'établissement, il convient que l'étudiant(e) ou le maître de stage avise la :</div>
+<div class="legal-text" style="margin-left:20px;">
+    CPAM Service Accidents du travail — 2 rue Robert Schuman — F – 74984 ANNECY CEDEX 9
+</div>
+<div class="legal-text">et, dans le même temps, avise sous simple pli le lycée (note n° 88-021 du 26 janvier 1988 – B.O.E.N.).</div>
+
+<div style="margin-top:14px; border-top:1px solid #aaa; padding-top:6px; display:flex; justify-content:space-around; font-size:8px; font-style:italic; color:#555;">
+    <span>L'Organisme — Cachet et signature sur toutes les pages</span>
+    <span>L'Étudiant(e)</span>
+    <span>{{ schoolSignature ? schoolSignature.civiliteProviseur ~ ' le-la Proviseur(e)' : 'Le-la Proviseur(e)' }}</span>
+</div>
+
+<div class="page-footer">
+    <span>Lycée Gabriel Fauré — Convention de Stage — {{ student.firstName }} {{ student.lastName }}</span>
+    <span>Page 3/5</span>
+</div>
+</div>
+
+{# ================================================================== #}
+{# PAGE 4 — ANNEXE 1 : PÉDAGOGIQUE                                    #}
+{# ================================================================== #}
+<div class="page-break">
+
+<div class="annex-title">ANNEXE 1 : PÉDAGOGIQUE</div>
+<div class="annex-subtitle">FICHE DE RENSEIGNEMENT ET DE VALIDATION DE L'OBJET « STAGE EN ORGANISME »</div>
+
+<div class="section-title">ACTIVITÉS PROPOSÉES À L'ÉTUDIANT</div>
+<div class="legal-text" style="font-style:italic; color:#555;">Ces activités doivent satisfaire aux exigences du référentiel du BTS et de l'Épreuve Orale.</div>
+
+<div style="margin:7px 0;">
+    <strong style="font-size:9px;">1° Modalités de la concertation entre le(s) professeur(s) et le tuteur de l'entreprise pour contrôler le déroulement de la période :</strong>
+    <div class="input-zone">Contacts téléphoniques, e-mails et visite du professeur référent.</div>
+</div>
+
+<div style="margin:7px 0;">
+    <strong style="font-size:9px;">2° Objectifs assignés :</strong>
+    <div class="input-zone">
+        Compléter la formation théorique par l'expérience des pratiques professionnelles.<br>
+        Acquérir les qualités relationnelles et les comportements professionnels propres aux exigences de l'emploi.
+    </div>
+</div>
+
+<div style="margin:7px 0;">
+    <strong style="font-size:9px;">3° Activités prévues :</strong>
+    <div class="input-zone" style="min-height:55px;">
+        {% if info and info.plannedActivities %}
+            {{ info.plannedActivities|nl2br }}
+        {% else %}
+            &nbsp;
+        {% endif %}
+    </div>
+</div>
+
+{# ——— Signatures Annexe 1 (s1 étudiant / s3 enseignant-proviseur / s2 organisme) ——— #}
+<div class="sig-grid-3" style="margin-top:18px;">
+    <div class="sig-box">
+        <div class="sig-box-title">L'ÉTUDIANT(E)</div>
+        <div class="sig-name"><strong>{{ student.firstName }} {{ student.lastName }}</strong></div>
+        <div class="sig-area">{{ '{{s1|signature|85|37}}' }}</div>
+    </div>
+    <div class="sig-box">
+        <div class="sig-box-title">L'ENSEIGNANT(E)<br><small style="font-weight:normal; text-transform:none;">Pour validation pédagogique</small></div>
+        {% if prof %}<div class="sig-name"><strong>{{ prof.firstName }} {{ prof.lastName }}</strong></div>{% endif %}
+        <div class="sig-area">{{ '{{s3|signature|85|37}}' }}</div>
+    </div>
+    <div class="sig-box">
+        <div class="sig-box-title">L'ORGANISME<br><small style="font-weight:normal; text-transform:none;">Cachet et signature du tuteur</small></div>
+        {% if info %}<div class="sig-name"><strong>{{ info.supervisorFirstName }} {{ info.supervisorLastName }}</strong></div>{% endif %}
+        <div class="sig-area">{{ '{{s2|signature|85|37}}' }}</div>
+    </div>
+</div>
+
+<div class="page-footer">
+    <span>Lycée Gabriel Fauré — Convention de Stage — {{ student.firstName }} {{ student.lastName }}</span>
+    <span>Page 4/5 — Annexe 1 Pédagogique</span>
+</div>
+</div>
+
+{# ================================================================== #}
+{# PAGE 5 — ANNEXE 2 : FINANCIÈRE                                     #}
+{# ================================================================== #}
+<div class="page-break">
+
+<div class="annex-title">ANNEXE 2 : FINANCIÈRE</div>
+<div class="legal-text" style="font-size:8px; font-style:italic; margin-bottom:8px;">
+    (Référence : note de service n° 93-179 du 24 mars 1993 relative au remboursement des frais d'hébergement, de restauration, de transport et des étudiants stagiaires en organisme.)
+</div>
+
+<div class="section-title">Avantages en nature et gratification</div>
+
+{% if info %}
+<div class="two-col-flex">
+    <div>
+        <div style="margin-bottom:6px;">
+            <strong style="font-size:9px;">• Hébergement</strong>
+            {% if info.coversAccommodationCosts %}
+            <div class="cb-item">☑ &nbsp;assuré par l'organisme{% if info.accommodationCostsDetails %} ({{ info.accommodationCostsDetails }}){% endif %}</div>
+            <div class="cb-item">☐ &nbsp;à la charge de l'étudiant</div>
+            {% else %}
+            <div class="cb-item">☐ &nbsp;assuré par l'organisme</div>
+            <div class="cb-item">☑ &nbsp;à la charge de l'étudiant</div>
+            {% endif %}
+        </div>
+        <div style="margin-bottom:6px;">
+            <strong style="font-size:9px;">• Restauration</strong>
+            {% if info.coversMealCosts %}
+            <div class="cb-item">☑ &nbsp;assurée par l'organisme{% if info.mealCostsDetails %} ({{ info.mealCostsDetails }}){% endif %}</div>
+            <div class="cb-item">☐ &nbsp;à la charge de l'étudiant</div>
+            {% else %}
+            <div class="cb-item">☐ &nbsp;assurée par l'organisme</div>
+            <div class="cb-item">☑ &nbsp;à la charge de l'étudiant</div>
+            {% endif %}
+        </div>
+        <div>
+            <strong style="font-size:9px;">• Transport</strong>
+            {% if info.coversTransportCosts %}
+            <div class="cb-item">☑ &nbsp;assuré par l'organisme{% if info.transportCostsDetails %} ({{ info.transportCostsDetails }}){% endif %}</div>
+            <div class="cb-item">☐ &nbsp;à la charge de l'étudiant</div>
+            {% else %}
+            <div class="cb-item">☐ &nbsp;assuré par l'organisme</div>
+            <div class="cb-item">☑ &nbsp;à la charge de l'étudiant</div>
+            {% endif %}
+        </div>
+    </div>
+    <div>
+        <strong style="font-size:9px;">• Gratification en espèces</strong>
+        {% if info.providesGratification %}
+        <div class="cb-item">☐ &nbsp;aucune</div>
+        <div class="cb-item">☑ &nbsp;versement d'un montant de : {{ info.gratificationDetails ?: '___' }} €</div>
+        {% else %}
+        <div class="cb-item">☑ &nbsp;aucune</div>
+        <div class="cb-item">☐ &nbsp;versement d'un montant de : ___ €</div>
+        {% endif %}
+    </div>
+</div>
+
+<table class="fields-table" style="margin-top:8px;">
+    <tr>
+        <td class="field-label">Le tuteur :</td>
+        <td class="field-value">{{ info.supervisorFirstName }} {{ info.supervisorLastName }}</td>
+    </tr>
+</table>
+{% endif %}
+
+{# ——— Signatures Annexe 2 (s2 organisme / s1 étudiant) ——— #}
+<div class="sig-grid-2" style="margin-top:16px;">
+    <div class="sig-box">
+        <div class="sig-box-title">L'ORGANISME<br><small style="font-weight:normal; text-transform:none;">Cachet et signature du tuteur</small></div>
+        {% if info %}<div class="sig-name"><strong>{{ info.companyName }}</strong></div>{% endif %}
+        <div class="sig-area">{{ '{{s2|signature|85|37}}' }}</div>
+    </div>
+    <div class="sig-box">
+        <div class="sig-box-title">L'ÉTUDIANT(E)</div>
+        <div class="sig-name"><strong>{{ student.firstName }} {{ student.lastName }}</strong></div>
+        <div class="sig-area">{{ '{{s1|signature|85|37}}' }}</div>
+    </div>
+</div>
+
+<div class="section-title" style="margin-top:14px;">MODALITÉS DE REMBOURSEMENT PAR LE LYCÉE</div>
+<div class="legal-text">Les remboursements sont effectués au prorata des crédits disponibles, sur présentation des justificatifs correspondant très exactement à la dépense autorisée (facturettes pour les repas, attestation de stage complétée par l'organisme…).</div>
+
+<div class="legal-text"><strong>DÉPENSES DE RESTAURATION</strong><br>
+Au-delà du coût du ticket repas à la charge de l'étudiant, le montant sur lequel est calculée la prise en charge est de maximum 50 % du coût du tarif ticket repas en vigueur au lycée.</div>
+
+<div class="legal-text"><strong>DÉPENSES DE TRANSPORT — STAGES EN FRANCE</strong><br>
+Seront remboursées les dépenses de transport basées sur la distance la plus courte du domicile ou du lycée au lieu de stage. Le remboursement sera calculé sur la base du coût moyen d'un billet SNCF de seconde classe au tarif en vigueur.</div>
+<ul class="legal-ul">
+    <li>Distance &lt; 50 km : les trajets quotidiens sont remboursés</li>
+    <li>51 km &lt; distance &lt; 200 km : les trajets hebdomadaires sont remboursés</li>
+    <li>Distance &gt; 201 km : remboursement d'un aller-retour durant la période de stage</li>
+</ul>
+
+<div class="legal-text"><strong>DÉPENSES DE TRANSPORT — STAGES HORS DU TERRITOIRE MÉTROPOLITAIN</strong><br>
+En Europe continentale (Grande Bretagne incluse) : un trajet aller-retour remboursé sur la base du coût moyen d'un billet SNCF de seconde classe.<br>
+Pour le reste du monde, DOM et TOM : un trajet aller-retour remboursé sur la base de 60 % du coût du voyage en avion (justificatif à joindre).</div>
+
+<div class="page-footer">
+    <span>Lycée Gabriel Fauré — Convention de Stage — {{ student.firstName }} {{ student.lastName }}</span>
+    <span>Page 5/5 — Annexe 2 Financière</span>
+</div>
 </div>
 
 </body>
