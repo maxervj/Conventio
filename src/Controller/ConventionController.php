@@ -206,18 +206,16 @@ class ConventionController extends AbstractController
             return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
         }
 
-        $convention->setStatus('validated');
-        $convention->setValidatedAt(new \DateTime());
-        $this->entityManager->flush();
-
-        $this->sendValidationConfirmationEmail($convention);
-
-        // Déclenchement automatique de la signature YouSign
-        // YouSign envoie les emails de signature à l'étudiant, l'entreprise et l'établissement
         try {
+            // Positionner validatedAt avant la génération du PDF pour qu'il figure dans le document
+            $convention->setValidatedAt(new \DateTime());
             $pdfPath = $this->pdfGenerator->saveConventionPdf($convention);
+            // Le service positionne lui-même le statut en 'pending_signature' après activation réussie
             $this->yousignService->sendConventionSignatureRequest($convention, $pdfPath);
+
             $this->entityManager->flush();
+
+            $this->sendValidationConfirmationEmail($convention);
 
             $this->addFlash('success', sprintf(
                 'La convention de %s %s a été validée. Les 3 parties (étudiant, entreprise, établissement) ont reçu un email YouSign avec leur lien de signature.',
@@ -229,13 +227,8 @@ class ConventionController extends AbstractController
                 'convention_id' => $convention->getId(),
                 'error' => $e->getMessage(),
             ]);
-            $this->addFlash('success', sprintf(
-                'La convention de %s %s a été validée.',
-                $convention->getStudent()->getFirstName(),
-                $convention->getStudent()->getLastName()
-            ));
             $this->addFlash('error', sprintf(
-                'La signature électronique n\'a pas pu être déclenchée automatiquement (%s). Un administrateur peut la relancer depuis la page de la convention.',
+                'La validation a échoué : la signature électronique n\'a pas pu être déclenchée (%s). La convention reste en attente de validation.',
                 $e->getMessage()
             ));
         }
