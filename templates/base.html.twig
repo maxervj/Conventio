@@ -295,34 +295,36 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         <script>
             // Toggle mobile menu
-            document.addEventListener('DOMContentLoaded', function() {
-                const mobileMenuButton = document.getElementById('mobile-menu-button');
-                const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
 
-                if (mobileMenuButton && mobileMenu) {
-                    mobileMenuButton.addEventListener('click', function() {
-                        mobileMenu.classList.toggle('hidden');
-                    });
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.onclick = function() {
+                    mobileMenu.classList.toggle('hidden');
+                };
+            }
+
+            // Toggle user menu — compatible Turbo Drive (pas de DOMContentLoaded)
+            const userMenuButton = document.getElementById('user-menu-button');
+            const userMenu = document.getElementById('user-menu');
+
+            if (userMenuButton && userMenu) {
+                userMenuButton.onclick = function(event) {
+                    event.stopPropagation();
+                    userMenu.classList.toggle('hidden');
+                };
+
+                // Close menu when clicking outside — évite l'accumulation de listeners avec Turbo
+                if (window._closeUserMenu) {
+                    document.removeEventListener('click', window._closeUserMenu);
                 }
-
-                // Toggle user menu
-                const userMenuButton = document.getElementById('user-menu-button');
-                const userMenu = document.getElementById('user-menu');
-
-                if (userMenuButton && userMenu) {
-                    userMenuButton.addEventListener('click', function(event) {
-                        event.stopPropagation();
-                        userMenu.classList.toggle('hidden');
-                    });
-
-                    // Close menu when clicking outside
-                    document.addEventListener('click', function(event) {
-                        if (!userMenu.contains(event.target) && !userMenuButton.contains(event.target)) {
-                            userMenu.classList.add('hidden');
-                        }
-                    });
-                }
-            });
+                window._closeUserMenu = function(event) {
+                    if (!userMenu.contains(event.target) && !userMenuButton.contains(event.target)) {
+                        userMenu.classList.add('hidden');
+                    }
+                };
+                document.addEventListener('click', window._closeUserMenu);
+            }
         </script>
     {% endblock %}
 </body>

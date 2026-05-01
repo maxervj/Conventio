@@ -325,58 +325,55 @@ function togglePasswordField(buttonElement, iconId) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+// ── ÉTUDIANT : sélection unique (comportement radio) — compatible Turbo ──
+document.querySelectorAll('.level-card-student').forEach(function (card) {
+    card.addEventListener('click', function (e) {
+        e.preventDefault();
+        const checkbox = card.querySelector('input[type="checkbox"]');
+        if (!checkbox) return;
 
-    // ── ÉTUDIANT : sélection unique (comportement radio) ──
-    document.querySelectorAll('.level-card-student').forEach(function (card) {
-        card.addEventListener('click', function (e) {
-            e.preventDefault();
-            const checkbox = card.querySelector('input[type="checkbox"]');
-            if (!checkbox) return;
-
-            // Décocher tous les autres
-            document.querySelectorAll('.level-card-student').forEach(function (c) {
-                const other = c.querySelector('input[type="checkbox"]');
-                if (other) other.checked = false;
-                c.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2', 'ring-blue-300');
-                c.classList.add('border-gray-200', 'bg-white');
-                const dot = c.querySelector('.level-radio-dot');
-                const inner = c.querySelector('.radio-inner-dot');
-                if (dot) { dot.classList.remove('border-blue-500', 'bg-blue-500'); dot.classList.add('border-gray-300'); }
-                if (inner) inner.classList.add('hidden');
-            });
-
-            // Cocher celui-ci
-            checkbox.checked = true;
-            card.classList.add('border-blue-500', 'bg-blue-50', 'ring-2', 'ring-blue-300');
-            card.classList.remove('border-gray-200', 'bg-white');
-            const dot = card.querySelector('.level-radio-dot');
-            const inner = card.querySelector('.radio-inner-dot');
-            if (dot) { dot.classList.add('border-blue-500', 'bg-blue-500'); dot.classList.remove('border-gray-300'); }
-            if (inner) inner.classList.remove('hidden');
+        // Décocher tous les autres
+        document.querySelectorAll('.level-card-student').forEach(function (c) {
+            const other = c.querySelector('input[type="checkbox"]');
+            if (other) other.checked = false;
+            c.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2', 'ring-blue-300');
+            c.classList.add('border-gray-200', 'bg-white');
+            const dot = c.querySelector('.level-radio-dot');
+            const inner = c.querySelector('.radio-inner-dot');
+            if (dot) { dot.classList.remove('border-blue-500', 'bg-blue-500'); dot.classList.add('border-gray-300'); }
+            if (inner) inner.classList.add('hidden');
         });
+
+        // Cocher celui-ci
+        checkbox.checked = true;
+        card.classList.add('border-blue-500', 'bg-blue-50', 'ring-2', 'ring-blue-300');
+        card.classList.remove('border-gray-200', 'bg-white');
+        const dot = card.querySelector('.level-radio-dot');
+        const inner = card.querySelector('.radio-inner-dot');
+        if (dot) { dot.classList.add('border-blue-500', 'bg-blue-500'); dot.classList.remove('border-gray-300'); }
+        if (inner) inner.classList.remove('hidden');
     });
+});
 
-    // ── PROFESSEUR : multi-sélection (toggle badges) ──
-    document.querySelectorAll('.level-badge-prof').forEach(function (badge) {
-        badge.addEventListener('click', function (e) {
-            e.preventDefault();
-            const checkbox = badge.querySelector('input[type="checkbox"]');
-            if (!checkbox) return;
+// ── PROFESSEUR : multi-sélection (toggle badges) — compatible Turbo ──
+document.querySelectorAll('.level-badge-prof').forEach(function (badge) {
+    badge.addEventListener('click', function (e) {
+        e.preventDefault();
+        const checkbox = badge.querySelector('input[type="checkbox"]');
+        if (!checkbox) return;
 
-            checkbox.checked = !checkbox.checked;
-            const checkIcon = badge.querySelector('.check-icon');
+        checkbox.checked = !checkbox.checked;
+        const checkIcon = badge.querySelector('.check-icon');
 
-            if (checkbox.checked) {
-                badge.classList.add('border-purple-500', 'bg-purple-500', 'text-white');
-                badge.classList.remove('border-gray-300', 'bg-white', 'text-gray-700');
-                if (checkIcon) checkIcon.classList.remove('hidden');
-            } else {
-                badge.classList.remove('border-purple-500', 'bg-purple-500', 'text-white');
-                badge.classList.add('border-gray-300', 'bg-white', 'text-gray-700');
-                if (checkIcon) checkIcon.classList.add('hidden');
-            }
-        });
+        if (checkbox.checked) {
+            badge.classList.add('border-purple-500', 'bg-purple-500', 'text-white');
+            badge.classList.remove('border-gray-300', 'bg-white', 'text-gray-700');
+            if (checkIcon) checkIcon.classList.remove('hidden');
+        } else {
+            badge.classList.remove('border-purple-500', 'bg-purple-500', 'text-white');
+            badge.classList.add('border-gray-300', 'bg-white', 'text-gray-700');
+            if (checkIcon) checkIcon.classList.add('hidden');
+        }
     });
 });
 </script>
