@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Convention;
 use App\Entity\InternshipCompanyInfo;
+use App\Repository\SignatureRepository;
 use Sensiolabs\GotenbergBundle\GotenbergPdfInterface;
 use Sensiolabs\GotenbergBundle\Processor\FileProcessor;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -16,6 +17,7 @@ class PdfGeneratorService
     public function __construct(
         private readonly GotenbergPdfInterface $gotenberg,
         private readonly Filesystem $filesystem,
+        private readonly SignatureRepository $signatureRepository,
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
     ) {}
@@ -85,7 +87,8 @@ class PdfGeneratorService
         /** @var \SplFileInfo $fileInfo */
         $fileInfo = $this->gotenberg->html()
             ->content('pdf/convention.html.twig', [
-                'convention' => $convention,
+                'convention'      => $convention,
+                'schoolSignature' => $this->signatureRepository->findOneBy([]),
             ])
             ->fileName($filename, HeaderUtils::DISPOSITION_ATTACHMENT)
             ->processor(new FileProcessor($this->filesystem, $dir))
@@ -102,7 +105,8 @@ class PdfGeneratorService
     {
         return $this->gotenberg->html()
             ->content('pdf/convention.html.twig', [
-                'convention' => $convention,
+                'convention'      => $convention,
+                'schoolSignature' => $this->signatureRepository->findOneBy([]),
             ])
             ->fileName(
                 sprintf('convention_%s', $convention->getId()),

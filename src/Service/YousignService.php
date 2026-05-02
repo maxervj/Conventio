@@ -136,11 +136,18 @@ class YousignService
             ));
         }
 
-        $anchorsFound = $content['total_anchors'] ?? 'n/a';
+        $anchorsFound = $content['total_anchors'] ?? 0;
         $this->logger->info('Yousign: document uploadé', [
             'document_id'    => $content['id'],
             'total_anchors'  => $anchorsFound,
         ]);
+
+        if ((int) $anchorsFound === 0) {
+            throw new \RuntimeException(
+                'Le PDF ne contient aucun ancre de signature détectable. '
+                . 'Le gabarit doit contenir les balises : {{s1|signature|85|37}}, {{s2|signature|85|37}}, {{s3|signature|85|37}}.'
+            );
+        }
 
         return $content;
     }

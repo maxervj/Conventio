@@ -175,7 +175,7 @@
             </div>
         {% endif %}
 
-        {# Historique de statut #}
+        {# Barre d'avancement #}
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
             <h2 class="text-sm font-bold text-gray-700 mb-4">Avancement</h2>
             <div class="flex items-center gap-0">
@@ -184,6 +184,7 @@
                     {key: 'pending_validation', label: 'Demande envoyée'},
                     {key: 'validated', label: 'Validée'},
                     {key: 'pending_signature', label: 'Signature'},
+                    {key: 'signed', label: 'Signée'},
                     {key: 'completed', label: 'Terminée'},
                 ] %}
                 {% set statusOrder = {'draft': 0, 'pending_validation': 1, 'validated': 2, 'pending_signature': 3, 'signed': 4, 'completed': 5} %}
@@ -219,37 +220,53 @@
             </div>
         </div>
 
-        {# Actions #}
+        {# Actions et messages d'état #}
         <div class="space-y-4">
 
-            {# Admin : approuver + générer PDF #}
+            {# Admin : actions #}
             {% if is_granted('ROLE_ADMIN') %}
                 <div class="bg-white rounded-2xl shadow-sm border border-red-100 p-6">
                     <h2 class="text-sm font-bold text-gray-700 mb-4">Actions administrateur</h2>
                     <div class="flex flex-wrap items-center gap-3">
-                        {% if convention.isValidated() %}
+
+                        {# Relancer YouSign si la validation a eu lieu mais le déclenchement automatique a échoué #}
+                        {% if convention.isValidated() and not convention.yousignRequestId %}
                             <form method="POST" action="{{ path('convention_approve', {id: convention.id}) }}">
                                 <input type="hidden" name="_token" value="{{ csrf_token('approve_convention_' ~ convention.id) }}">
                                 <button type="submit"
-                                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 shadow-md transition-all duration-200">
+                                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 shadow-md transition-all duration-200">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                                     </svg>
-                                    Approuver (établissement)
+                                    Envoyer pour signature (YouSign)
                                 </button>
                             </form>
                         {% endif %}
+
+                        {# Générer ou télécharger PDF #}
                         {% if convention.status != 'draft' %}
                             <a href="{{ path('convention_pdf', {id: convention.id}) }}"
                                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-md transition-all duration-200">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                 </svg>
-                                Générer PDF
+                                {% if convention.isSigned() %}Télécharger la convention signée{% else %}Générer PDF{% endif %}
                             </a>
                         {% endif %}
-                        {% if not convention.isValidated() and not convention.isSigned() %}
-                            <p class="text-xs text-gray-400 italic">L'approbation est disponible une fois la convention validée par le professeur référent.</p>
+
+                        {# Messages contextuels #}
+                        {% if convention.isPendingSignature() %}
+                            <p class="text-xs text-blue-600 italic w-full mt-1">
+                                En attente de signature par les 3 parties via YouSign. Les emails ont été envoyés automatiquement.
+                            </p>
+                        {% elseif convention.isValidated() and convention.yousignRequestId %}
+                            <p class="text-xs text-green-600 italic w-full mt-1">
+                                La demande de signature a été envoyée à YouSign.
+                            </p>
+                        {% elseif not convention.isValidated() and not convention.isSigned() and not convention.isPendingSignature() and not convention.isCompleted() %}
+                            <p class="text-xs text-gray-400 italic w-full mt-1">
+                                En attente de validation par le professeur référent.
+                            </p>
                         {% endif %}
                     </div>
                 </div>
@@ -276,7 +293,7 @@
                 </div>
             {% endif %}
 
-            {# Étudiant : convention en attente (message informatif) #}
+            {# Étudiant : convention en attente de validation #}
             {% if isStudent and convention.isPendingValidation() %}
                 <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
@@ -303,6 +320,7 @@
                         <strong>{{ convention.student.firstName }} {{ convention.student.lastName }}</strong>
                         {% if convention.companyInfo %}chez <strong>{{ convention.companyInfo.companyName }}</strong>{% endif %}
                         est conforme aux exigences pédagogiques.
+                        <span class="text-indigo-600 font-medium">La signature électronique sera automatiquement envoyée aux 3 parties via YouSign.</span>
                     </p>
                     <div class="flex items-center gap-3">
                         <form method="POST" action="{{ path('convention_validate', {id: convention.id}) }}">
@@ -312,14 +330,14 @@
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
                                 </svg>
-                                Valider la convention
+                                Valider et envoyer pour signature
                             </button>
                         </form>
                     </div>
                 </div>
             {% endif %}
 
-            {# Convention validée : message de succès #}
+            {# Convention validée : message de succès + attente YouSign #}
             {% if convention.isValidated() %}
                 <div class="bg-green-50 border border-green-200 rounded-2xl p-5 flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
@@ -328,10 +346,100 @@
                         </svg>
                     </div>
                     <div>
-                        <p class="text-sm font-semibold text-green-800">Convention validée</p>
+                        <p class="text-sm font-semibold text-green-800">Convention validée par le professeur</p>
                         <p class="text-xs text-green-600 mt-0.5">
                             Validée le {{ convention.validatedAt|date('d/m/Y à H:i') }} par {{ convention.referentProfessor ? convention.referentProfessor.firstName ~ ' ' ~ convention.referentProfessor.lastName : 'le professeur référent' }}.
+                            {% if not convention.yousignRequestId %}
+                                La signature électronique doit être envoyée.
+                            {% else %}
+                                La demande de signature a été transmise à YouSign.
+                            {% endif %}
                         </p>
+                    </div>
+                </div>
+            {% endif %}
+
+            {# En attente de signature YouSign (pour tous les rôles) #}
+            {% if convention.isPendingSignature() %}
+                <div class="bg-blue-50 border border-blue-200 rounded-2xl p-5 flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <svg class="w-5 h-5 text-blue-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-blue-800">En attente de signature électronique</p>
+                        <p class="text-xs text-blue-600 mt-0.5">
+                            Les 3 parties ont reçu un email YouSign avec leur lien de signature personnalisé :
+                        </p>
+                        <ul class="text-xs text-blue-600 mt-2 space-y-1 list-disc list-inside">
+                            <li>L'étudiant — {{ convention.student.firstName }} {{ convention.student.lastName }}</li>
+                            {% if convention.companyInfo %}
+                                <li>L'entreprise — {{ convention.companyInfo.companyName }}</li>
+                            {% endif %}
+                            <li>L'établissement scolaire</li>
+                        </ul>
+                        <p class="text-xs text-blue-500 mt-2 italic">La convention sera générée automatiquement dès que les 3 parties auront signé.</p>
+                    </div>
+                </div>
+            {% endif %}
+
+            {# Convention signée (toutes les parties ont signé) #}
+            {% if convention.isSigned() %}
+                <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-5 flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-indigo-800">Convention signée par toutes les parties</p>
+                        {% if convention.signedAt %}
+                            <p class="text-xs text-indigo-600 mt-0.5">Signée le {{ convention.signedAt|date('d/m/Y à H:i') }}.</p>
+                        {% endif %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <p class="text-xs text-indigo-500 mt-1">Vous pouvez télécharger la convention signée via le bouton ci-dessus.</p>
+                        {% else %}
+                            <p class="text-xs text-indigo-500 mt-1">La convention officielle signée est disponible auprès de votre établissement.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {# Convention annulée #}
+            {% if convention.isCancelled() %}
+                <div class="bg-red-50 border border-red-200 rounded-2xl p-5 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-red-800">Convention annulée</p>
+                        <p class="text-xs text-red-600 mt-0.5">
+                            {% if convention.rejectionReason %}
+                                Motif : {{ convention.rejectionReason }}
+                            {% else %}
+                                La procédure de signature a été annulée ou a expiré. Contactez votre établissement pour plus d'informations.
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+
+            {# Convention complétée #}
+            {% if convention.isCompleted() %}
+                <div class="bg-purple-50 border border-purple-200 rounded-2xl p-5 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-purple-800">Convention complétée</p>
+                        {% if convention.completedAt %}
+                            <p class="text-xs text-purple-600 mt-0.5">Archivée le {{ convention.completedAt|date('d/m/Y à H:i') }}.</p>
+                        {% endif %}
                     </div>
                 </div>
             {% endif %}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convention de stage complétée</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f3f4f6; margin: 0; padding: 0; }
+        .wrapper { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+        .header { background: linear-gradient(135deg, #6366f1, #8b5cf6); padding: 36px 32px; text-align: center; }
+        .header h1 { color: #ffffff; margin: 0; font-size: 22px; font-weight: 700; }
+        .header p { color: #c7d2fe; margin: 8px 0 0; font-size: 14px; }
+        .body { padding: 32px; }
+        .greeting { font-size: 16px; color: #1f2937; margin-bottom: 16px; }
+        .text { font-size: 14px; color: #4b5563; line-height: 1.7; margin-bottom: 16px; }
+        .success-box { background: #f5f3ff; border: 1px solid #c4b5fd; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: center; }
+        .success-box p { margin: 0; font-size: 15px; font-weight: 600; color: #4c1d95; }
+        .success-box .sub { font-size: 13px; color: #7c3aed; font-weight: 400; margin-top: 6px; }
+        .info-box { background: #faf5ff; border-left: 4px solid #8b5cf6; border-radius: 0 8px 8px 0; padding: 16px 20px; margin: 20px 0; }
+        .info-box p { margin: 0 0 6px; font-size: 14px; color: #374151; }
+        .info-box p:last-child { margin-bottom: 0; }
+        .info-box strong { color: #5b21b6; }
+        .signers-box { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 20px; margin: 20px 0; }
+        .signers-box p { margin: 0 0 8px; font-size: 13px; color: #374151; display: flex; align-items: center; gap: 8px; }
+        .signers-box p:last-child { margin-bottom: 0; }
+        .cta { text-align: center; margin: 28px 0; }
+        .cta a { display: inline-block; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px; font-size: 15px; font-weight: 600; }
+        .footer { background: #f9fafb; border-top: 1px solid #e5e7eb; padding: 20px 32px; text-align: center; font-size: 12px; color: #9ca3af; }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div class="header">
+        <h1>✅ Convention complétée !</h1>
+        <p>Tous les signataires ont apposé leur signature électronique</p>
+    </div>
+
+    <div class="body">
+        <p class="greeting">Bonjour {{ recipientName }},</p>
+
+        <div class="success-box">
+            <p>🎉 La convention de stage est entièrement signée</p>
+            <p class="sub">
+                {{ convention.student.firstName }} {{ convention.student.lastName }}
+                {% if convention.companyInfo %} — {{ convention.companyInfo.companyName }}{% endif %}
+            </p>
+        </div>
+
+        {% if recipientRole == 'student' %}
+        <p class="text">
+            Félicitations ! Votre convention de stage a été signée par toutes les parties.
+            Vous pouvez maintenant démarrer votre stage.
+        </p>
+        {% elseif recipientRole == 'professor' %}
+        <p class="text">
+            La convention de stage de <strong>{{ convention.student.firstName }} {{ convention.student.lastName }}</strong>
+            a été signée par toutes les parties et est désormais complète.
+        </p>
+        {% else %}
+        <p class="text">
+            La convention de stage de <strong>{{ convention.student.firstName }} {{ convention.student.lastName }}</strong>
+            a été signée électroniquement par tous les signataires via Yousign.
+        </p>
+        {% endif %}
+
+        {% if convention.companyInfo %}
+        <div class="info-box">
+            <p><strong>Étudiant :</strong> {{ convention.student.firstName }} {{ convention.student.lastName }}</p>
+            <p><strong>Entreprise :</strong> {{ convention.companyInfo.companyName }}</p>
+            {% if convention.companyInfo.city %}
+            <p><strong>Lieu :</strong> {{ convention.companyInfo.city }}{% if convention.companyInfo.country %}, {{ convention.companyInfo.country }}{% endif %}</p>
+            {% endif %}
+            {% if convention.companyInfo.internshipStartDate and convention.companyInfo.internshipEndDate %}
+            <p><strong>Période :</strong> {{ convention.companyInfo.internshipStartDate|date('d/m/Y') }} → {{ convention.companyInfo.internshipEndDate|date('d/m/Y') }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <p class="text">Vous pouvez consulter la convention complète en cliquant ci-dessous.</p>
+
+        <div class="cta">
+            <a href="{{ conventionUrl }}">Voir la convention</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Conventio — Gestion des conventions de stage</p>
+        <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
+    </div>
+</div>
+</body>
+</html>

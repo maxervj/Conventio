@@ -51,8 +51,8 @@ security:
 
     role_hierarchy:
         ROLE_PROFESSOR: ROLE_USER
-        ROLE_STUDENT: ROLE_USER
-        ROLE_ADMIN: [ROLE_PROFESSOR, ROLE_STUDENT]
+        ROLE_STUDENT:   ROLE_USER
+        ROLE_ADMIN:     [ROLE_PROFESSOR, ROLE_STUDENT]
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used

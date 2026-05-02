@@ -10,7 +10,7 @@
         <div class="mb-8">
             <a href="{{ path('app_profile') }}" class="inline-flex items-center gap-2 text-sm font-medium text-purple-600 hover:text-purple-500 mb-5 group">
                 <svg class="h-4 w-4 transition group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
                 Retour au profil
             </a>
@@ -43,26 +43,17 @@
             </div>
 
             <div class="bg-purple-50 p-5">
-                {# Inputs Symfony cachés #}
-                <div class="hidden">
-                    {% for level in form.taughtLevels %}
-                        {{ form_widget(level) }}
-                    {% endfor %}
-                </div>
-
-                {# Badges toggle #}
                 <div class="flex flex-wrap gap-2">
                     {% for level in form.taughtLevels %}
-                        <label class="level-badge-prof cursor-pointer px-4 py-2 rounded-full border-2 text-sm font-medium transition-all duration-150 select-none flex items-center gap-2 {{ level.vars.checked ? 'border-purple-500 bg-purple-500 text-white shadow-md' : 'border-gray-300 bg-white text-gray-700 hover:border-purple-400 hover:text-purple-700' }}"
-                               data-input-id="{{ level.vars.id }}">
-                            <svg class="w-3.5 h-3.5 check-icon {{ level.vars.checked ? '' : 'hidden' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <label class="level-badge-prof cursor-pointer px-4 py-2 rounded-full border-2 text-sm font-medium transition-all duration-150 select-none flex items-center gap-2 {{ level.vars.checked ? 'border-purple-500 bg-purple-500 text-white shadow-md' : 'border-gray-300 bg-white text-gray-700 hover:border-purple-400 hover:text-purple-700' }}">
+                            {{ form_widget(level, {'attr': {'class': 'sr-only level-checkbox-prof'}}) }}
+                            <svg class="w-3.5 h-3.5 check-icon pointer-events-none {{ level.vars.checked ? '' : 'hidden' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
                             </svg>
-                            {{ level.vars.label }}
+                            <span class="pointer-events-none">{{ level.vars.label }}</span>
                         </label>
                     {% endfor %}
                 </div>
-
                 {{ form_errors(form.taughtLevels) }}
             </div>
         </div>
@@ -105,22 +96,23 @@
             </a>
             <button type="submit"
                     class="px-6 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                 </svg>
                 Enregistrer
             </button>
         </div>
 
-        {{ form_end(form) }}
+        {{ form_end(form, {'render_rest': false}) }}
     </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.level-badge-prof').forEach(function (badge) {
-        badge.addEventListener('click', function () {
-            const checkbox = document.getElementById(badge.dataset.inputId);
+        badge.addEventListener('click', function (e) {
+            e.preventDefault();
+            const checkbox = badge.querySelector('input[type="checkbox"]');
             if (!checkbox) return;
 
             checkbox.checked = !checkbox.checked;
