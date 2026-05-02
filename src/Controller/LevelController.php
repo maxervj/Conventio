@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\InternshipDate;
 use App\Entity\Level;
 use App\Form\LevelType;
+use App\Form\SelectionClasseType;
 use App\Repository\LevelRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,9 +34,17 @@ final class LevelController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // id_level reflète LevelCode (champ requis non-nullable)
-            $level->setLevelCode(0);
-            $level->setIdLevel(0);
+            $startDate = $form->get('internshipDateStart')->getData();
+            $endDate = $form->get('internshipDateEnd')->getData();
+
+            if ($startDate && $endDate) {
+                $internshipDate = new InternshipDate();
+                $internshipDate->setStartDate($startDate);
+                $internshipDate->setEndDate($endDate);
+                $level->setInternshipDate($internshipDate);
+                $entityManager->persist($internshipDate);
+            }
+
             $entityManager->persist($level);
             $entityManager->flush();
 
@@ -53,11 +63,30 @@ final class LevelController extends AbstractController
     public function edit(Request $request, Level $level, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(LevelType::class, $level);
+
+        if ($level->getInternshipDate()) {
+            $form->get('internshipDateStart')->setData($level->getInternshipDate()->getStartDate());
+            $form->get('internshipDateEnd')->setData($level->getInternshipDate()->getEndDate());
+        }
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $level->setLevelCode(0);
-            $level->setIdLevel(0);
+            $startDate = $form->get('internshipDateStart')->getData();
+            $endDate = $form->get('internshipDateEnd')->getData();
+
+            if ($startDate && $endDate) {
+                if (!$level->getInternshipDate()) {
+                    $internshipDate = new InternshipDate();
+                    $level->setInternshipDate($internshipDate);
+                } else {
+                    $internshipDate = $level->getInternshipDate();
+                }
+                $internshipDate->setStartDate($startDate);
+                $internshipDate->setEndDate($endDate);
+                $entityManager->persist($internshipDate);
+            }
+
             $entityManager->flush();
 
             $this->addFlash('success', 'La classe a été modifiée avec succès.');

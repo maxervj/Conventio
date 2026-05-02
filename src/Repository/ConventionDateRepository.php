@@ -2,39 +2,39 @@
 
 namespace App\Repository;
 
-use App\Entity\Formation;
+use App\Entity\ConventionDate;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Formation>
+ * @extends ServiceEntityRepository<ConventionDate>
  */
-class FormationRepository extends ServiceEntityRepository
+class ConventionDateRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Formation::class);
+        parent::__construct($registry, ConventionDate::class);
     }
 
     //    /**
-    //     * @return Formation[] Returns an array of Formation objects
+    //     * @return ConventionDate[] Returns an array of ConventionDate objects
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
+    //        return $this->createQueryBuilder('c')
+    //            ->andWhere('c.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('f.id', 'ASC')
+    //            ->orderBy('c.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Formation
+    //    public function findOneBySomeField($value): ?ConventionDate
     //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
+    //        return $this->createQueryBuilder('c')
+    //            ->andWhere('c.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
     //            ->getOneOrNullResult()

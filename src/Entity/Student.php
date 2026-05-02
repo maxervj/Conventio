@@ -13,8 +13,6 @@ class Student extends User
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $personalEmail = null;
 
-    #[ORM\Column(type: 'boolean', options: ['default' => false])]
-    private bool $isVerified = false;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $verificationToken = null;
@@ -67,18 +65,6 @@ class Student extends User
         return $this;
     }
 
-    public function isVerified(): bool
-    {
-        return $this->isVerified;
-    }
-
-    public function setIsVerified(bool $isVerified): static
-    {
-        $this->isVerified = $isVerified;
-
-        return $this;
-    }
-
     public function getVerificationToken(): ?string
     {
         return $this->verificationToken;
@@ -87,6 +73,21 @@ class Student extends User
     public function setVerificationToken(?string $verificationToken): static
     {
         $this->verificationToken = $verificationToken;
+
+        return $this;
+    }
+    public function getLevel(): ?Level
+    {
+        $levels = $this->getLevels()->toArray();
+        return $levels[0] ?? null;
+    }
+
+    public function setLevel(?Level $level): static
+    {
+        $this->levels = new ArrayCollection();
+        if ($level !== null) {
+            $this->levels->add($level);
+        }
 
         return $this;
     }

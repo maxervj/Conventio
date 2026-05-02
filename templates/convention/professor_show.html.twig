@@ -1,0 +1,346 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Convention de stage - Conventio {% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Retour -->
+    <div class="mb-6">
+        <a href="{{ path('convention_index') }}" class="inline-flex items-center text-blue-600 hover:text-blue-700 transition">
+            <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Retour à mes conventions
+        </a>
+    </div>
+
+    <!-- En-tête -->
+    <div class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">
+            {{ convention.student.firstName }} {{ convention.student.lastName }}
+        </h1>
+        <div class="flex items-center gap-3 mb-4">
+            {% if convention.isPendingValidation() %}
+                <span class="inline-block px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                    ⏳ En attente de votre validation
+                </span>
+            {% elseif convention.isValidated() %}
+                <span class="inline-block px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                    ✓ Validée par vous
+                </span>
+            {% elseif convention.isDraft() %}
+                <span class="inline-block px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                    Brouillon
+                </span>
+            {% else %}
+                <span class="inline-block px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                    {{ convention.getStatus() }}
+                </span>
+            {% endif %}
+            {% if convention.student.level %}
+                <span class="text-gray-600 font-medium">{{ convention.student.level.levelName }}</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Alertes -->
+    {% for message in app.flashes('success') %}
+        <div class="mb-4 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded">
+            <div class="flex items-center">
+                <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                </svg>
+                {{ message }}
+            </div>
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="mb-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
+            <div class="flex items-center">
+                <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"/>
+                </svg>
+                {{ message }}
+            </div>
+        </div>
+    {% endfor %}
+
+    <!-- Contenu principal -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Section principale -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Informations de l'étudiant -->
+            <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">📋 Informations de l'étudiant</h2>
+
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Prénom</p>
+                        <p class="text-lg font-medium text-gray-900 mt-1">{{ convention.student.firstName }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Nom</p>
+                        <p class="text-lg font-medium text-gray-900 mt-1">{{ convention.student.lastName }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Email</p>
+                        <p class="text-lg font-medium text-gray-900 mt-1">{{ convention.student.email }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Formation</p>
+                        <p class="text-lg font-medium text-gray-900 mt-1">
+                            {% if convention.student.level %}
+                                {{ convention.student.level.levelName }}
+                            {% else %}
+                                <span class="text-gray-400">Non renseignée</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informations de la collecte (InternshipCompanyInfo) -->
+            {% if convention.companyInfo %}
+                <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">🏢 Informations de la collecte</h2>
+
+                    <!-- Entreprise -->
+                    <div class="mb-6 pb-6 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Entreprise</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Nom</p>
+                                <p class="text-base font-medium text-gray-900 mt-1">{{ convention.companyInfo.companyName }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">SIRET</p>
+                                <p class="text-base font-medium text-gray-900 mt-1">
+                                    {% if convention.companyInfo.siret %}
+                                        {{ convention.companyInfo.siret }}
+                                    {% else %}
+                                        <span class="text-gray-400">Non renseigné</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="col-span-2">
+                                <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Adresse</p>
+                                <p class="text-base font-medium text-gray-900 mt-1">
+                                    {% if convention.companyInfo.address %}
+                                        {{ convention.companyInfo.address }}
+                                        {% if convention.companyInfo.addressComplement %}<br>{{ convention.companyInfo.addressComplement }}{% endif %}
+                                        <br>{{ convention.companyInfo.postalCode }} {{ convention.companyInfo.city }}
+                                        {% if convention.companyInfo.country %}<br>{{ convention.companyInfo.country }}{% endif %}
+                                    {% else %}
+                                        <span class="text-gray-400">Non renseignée</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact responsable -->
+                    <div class="mb-6 pb-6 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">👤 Responsable de stage</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Nom</p>
+                                <p class="text-base font-medium text-gray-900 mt-1">
+                                    {% if convention.companyInfo.responsibleLastName %}
+                                        {{ convention.companyInfo.responsibleLastName }}
+                                    {% else %}
+                                        <span class="text-gray-400">Non renseigné</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Prénom</p>
+                                <p class="text-base font-medium text-gray-900 mt-1">
+                                    {% if convention.companyInfo.responsibleFirstName %}
+                                        {{ convention.companyInfo.responsibleFirstName }}
+                                    {% else %}
+                                        <span class="text-gray-400">Non renseigné</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Fonction</p>
+                                <p class="text-base font-medium text-gray-900 mt-1">
+                                    {% if convention.companyInfo.responsibleFunction %}
+                                        {{ convention.companyInfo.responsibleFunction }}
+                                    {% else %}
+                                        <span class="text-gray-400">Non renseignée</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Email</p>
+                                <p class="text-base font-medium text-gray-900 mt-1">
+                                    {% if convention.companyInfo.email %}
+                                        <a href="mailto:{{ convention.companyInfo.email }}" class="text-blue-600 hover:text-blue-700">
+                                            {{ convention.companyInfo.email }}
+                                        </a>
+                                    {% else %}
+                                        <span class="text-gray-400">Non renseigné</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dates et période de stage -->
+                    <div class="mb-6 pb-6 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">📅 Période de stage</h3>
+                        {% if convention.student and convention.student.level and convention.student.level.internshipDate %}
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Date de début</p>
+                                    <p class="text-base font-medium text-gray-900 mt-1">
+                    <span class="inline-block px-3 py-1 bg-indigo-50 text-indigo-900 rounded font-semibold">
+                        {{ convention.student.level.internshipDate.startDate|date('d/m/Y') }}
+                    </span>
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Date de fin</p>
+                                    <p class="text-base font-medium text-gray-900 mt-1">
+                    <span class="inline-block px-3 py-1 bg-indigo-50 text-indigo-900 rounded font-semibold">
+                        {{ convention.student.level.internshipDate.endDate|date('d/m/Y') }}
+                    </span>
+                                    </p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="bg-yellow-50 rounded-lg border-l-4 border-yellow-400 p-4 text-yellow-700">
+                                <p class="text-sm">⚠️ Aucune date paramétrée pour la classe de l'étudiant.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Sujet et missions -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">📝 Activités professionnelles prévues</h3>
+                        <div>
+                            <p class="text-base font-medium text-gray-900 bg-gray-50 p-4 rounded-lg">
+                                {% if convention.companyInfo.plannedActivities %}
+                                    {{ convention.companyInfo.plannedActivities }}
+                                {% else %}
+                                    <span class="text-gray-400">Non renseigné</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="bg-yellow-50 rounded-lg border-l-4 border-yellow-400 p-4 text-yellow-700">
+                    <p>⚠️ Aucune information de collecte disponible pour cette convention.</p>
+                </div>
+            {% endif %}
+
+            <!-- Statut et dates clés -->
+            <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">🔍 Statut et historique</h2>
+
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Date de création</p>
+                        <p class="text-lg font-medium text-gray-900 mt-1">
+                            {% if convention.createdAt %}
+                                {{ convention.createdAt|date('d/m/Y H:i') }}
+                            {% else %}
+                                <span class="text-gray-400">Non renseignée</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Statut actuel</p>
+                        <p class="text-lg font-medium text-gray-900 mt-1">
+                            {% if convention.isPendingValidation() %}
+                                <span class="inline-block px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                                    En attente de validation
+                                </span>
+                            {% elseif convention.isValidated() %}
+                                <span class="inline-block px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                    Validée
+                                </span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% if convention.validatedAt %}
+                        <div>
+                            <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Date de validation</p>
+                            <p class="text-lg font-medium text-gray-900 mt-1">{{ convention.validatedAt|date('d/m/Y H:i') }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Barre latérale - Actions -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6 sticky top-24">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Actions</h3>
+
+                <div class="space-y-3">
+                    <!-- Bouton Générer PDF -->
+                    <a href="{{ path('admin_convention_generate_pdf', {'id': convention.id}) }}"
+                       target="_blank"
+                       class="block w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-center font-semibold no-underline">
+                        <svg class="h-5 w-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8m0 8l-6-4m6 4l6-4"/>
+                        </svg>
+                        Générer le PDF
+                    </a>
+
+                    <!-- Bouton Valider (en attente) -->
+                    {% if convention.isPendingValidation() %}
+                        <form method="POST" action="{{ path('convention_validate', {'id': convention.id}) }}" class="w-full">
+                            <input type="hidden" name="_token" value="{{ csrf_token('validate_convention_' ~ convention.id) }}">
+                            <button type="submit"
+                                    class="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold flex items-center justify-center"
+                                    onclick="return confirm('Êtes-vous sûr de vouloir valider cette convention de stage ?')">
+                                <svg class="h-5 w-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Valider la convention
+                            </button>
+                        </form>
+
+                        <!-- Info box -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <p class="text-sm text-blue-800">
+                                <strong>⏳ En attente de votre validation</strong><br>
+                                L'étudiant a terminé sa collecte et attend votre approbation du sujet de stage.
+                            </p>
+                        </div>
+                    {% elseif convention.isValidated() %}
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <div class="flex items-center mb-2">
+                                <svg class="h-5 w-5 text-green-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                                </svg>
+                                <strong class="text-green-800">Convention validée</strong>
+                            </div>
+                            <p class="text-sm text-green-700">
+                                Vous avez approuvé cette convention de stage le {{ convention.validatedAt|date('d/m/Y à H:i') }}.
+                            </p>
+                        </div>
+                    {% endif %}
+
+                    <!-- Bouton Télécharger -->
+                    {% if convention.documentPath %}
+                        <a href="{{ convention.documentPath }}"
+                           class="block w-full px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition text-center font-semibold no-underline">
+                            <svg class="h-5 w-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                            </svg>
+                            Télécharger le document
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

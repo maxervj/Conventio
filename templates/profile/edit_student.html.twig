@@ -56,10 +56,10 @@
                     {% endfor %}
                 </div>
 
-                {{ form_errors(form.levels) }}
+                {{ form_errors(form.level) }}
             </div>
         </div>
-        {% do form.levels.setRendered() %}
+        {% do form.level.setRendered() %}
 
         {# Boutons #}
         <div class="flex items-center justify-end gap-3">

@@ -74,9 +74,9 @@ class ProfessorRegistrationFormType extends AbstractType
                     ),
                 ],
                 'attr' => [
-                    'placeholder' => 'Email académique (ex: prenom.nom@ac-academie.fr)',
+                    'placeholder' => 'Ex : prenom.nom@ac-grenoble.fr',
                 ],
-                'help' => 'Vous devez utiliser votre adresse email académique professionnelle',
+                'help' => 'Utilisez votre adresse académique @ac-grenoble.fr',
             ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
@@ -97,7 +97,7 @@ class ProfessorRegistrationFormType extends AbstractType
                             'max' => 4096,
                         ]),
                         new PasswordStrength([
-                            'minScore' => PasswordStrength::STRENGTH_MEDIUM,
+                            'minScore' => PasswordStrength::STRENGTH_WEAK,
                             'message' => 'Le mot de passe est trop faible. Veuillez utiliser un mot de passe plus robuste avec des lettres majuscules, minuscules, chiffres et caractères spéciaux.',
                         ]),
                         new NotCompromisedPassword([
@@ -120,7 +120,7 @@ class ProfessorRegistrationFormType extends AbstractType
             ])
             ->add('taughtLevels', EntityType::class, [
                 'class' => Level::class,
-                'choice_label' => 'LevelName',
+                'choice_label' => 'levelCode',
                 'label' => 'Classes que vous enseignez *',
                 'multiple' => true,
                 'expanded' => true,
@@ -130,7 +130,7 @@ class ProfessorRegistrationFormType extends AbstractType
             ])
             ->add('referentLevel', EntityType::class, [
                 'class' => Level::class,
-                'choice_label' => 'LevelName',
+                'choice_label' => 'levelCode',
                 'label' => 'Classe dont vous êtes référent',
                 'required' => false,
                 'placeholder' => 'Sélectionnez une classe (optionnel)',

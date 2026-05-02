@@ -17,7 +17,7 @@ class Professor extends User
     #[ORM\JoinTable(name: 'professor_taught_levels')]
     private Collection $taughtLevels;
 
-    #[ORM\ManyToOne(targetEntity: Level::class, inversedBy: 'referentProfessor')]
+    #[ORM\ManyToOne(targetEntity: Level::class, inversedBy: 'referentProfessors')]
     #[ORM\JoinColumn(nullable: true)]
     private ?Level $referentLevel = null;
 
@@ -58,7 +58,6 @@ class Professor extends User
     public function setReferentLevel(?Level $referentLevel): static
     {
         $this->referentLevel = $referentLevel;
-
         return $this;
     }
 }

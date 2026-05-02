@@ -20,6 +20,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 class ProfileController extends AbstractController
 {
+    //Todo: Bug un student à l'indication montrant quels classe il enseigne
     #[Route('', name: 'app_profile')]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -77,10 +78,21 @@ class ProfileController extends AbstractController
                 'user' => $user,
             ]);
         } elseif ($user instanceof Student) {
+            $student = $entityManager->getRepository(Student::class)->find($user->getId());
+            if (!$student) {
+                throw $this->createNotFoundException('Étudiant introuvable.');
+            }
+
             $form = $this->createForm(StudentProfileType::class, $user);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+                $level = $student->getLevel();
+                if ($level && !$entityManager->contains($level)) {
+                    $managedLevel = $entityManager->getRepository(get_class($level))->find($level->getId());
+                    $student->setLevel($managedLevel);
+                }
+
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Votre profil a été mis à jour avec succès.');

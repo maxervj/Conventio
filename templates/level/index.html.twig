@@ -44,14 +44,24 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Code</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Intitulé</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date début</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date fin</th>
                         <th class="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100">
                     {% for level in levels %}
                         <tr class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4 font-medium text-gray-900">{{ level.levelCode }}</td>
                             <td class="px-6 py-4 font-medium text-gray-900">{{ level.levelName }}</td>
+                            <td class="px-6 py-4 text-gray-700">
+                                {{ level.internshipDate ? level.internshipDate.startDate|date('d/m/Y') : '—' }}
+                            </td>
+                            <td class="px-6 py-4 text-gray-700">
+                                {{ level.internshipDate ? level.internshipDate.endDate|date('d/m/Y') : '—' }}
+                            </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex items-center justify-end gap-2">
                                     <a href="{{ path('app_level_edit', {'id': level.id}) }}"
@@ -62,7 +72,7 @@
                                         Modifier
                                     </a>
                                     <form method="post" action="{{ path('app_level_delete', {'id': level.id}) }}"
-                                          onsubmit="return confirm('Supprimer la classe « {{ level.levelName }} » ?');">
+                                          onsubmit="return confirm('Supprimer la classe « {{ level.levelCode }} » ?');">
                                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ level.id) }}">
                                         <button type="submit"
                                                 class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition">

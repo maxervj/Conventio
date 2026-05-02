@@ -16,7 +16,7 @@ class ProfessorProfileType extends AbstractType
         $builder
             ->add('taughtLevels', EntityType::class, [
                 'class' => Level::class,
-                'choice_label' => 'LevelName',
+                'choice_label' => 'levelCode',
                 'label' => 'Classes que vous enseignez',
                 'multiple' => true,
                 'expanded' => true,
@@ -26,7 +26,7 @@ class ProfessorProfileType extends AbstractType
             ])
             ->add('referentLevel', EntityType::class, [
                 'class' => Level::class,
-                'choice_label' => 'LevelName',
+                'choice_label' => 'levelCode',
                 'label' => 'Classe dont vous êtes référent',
                 'required' => false,
                 'placeholder' => 'Sélectionnez votre classe référente (optionnel)',

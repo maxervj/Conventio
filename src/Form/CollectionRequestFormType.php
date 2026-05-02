@@ -2,11 +2,14 @@
 
 namespace App\Form;
 
+use App\Entity\Student;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -52,28 +55,49 @@ class CollectionRequestFormType extends AbstractType
                 'label' => 'Date de début du stage',
                 'widget' => 'single_text',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
                 ],
                 'constraints' => [
-                    new Assert\NotBlank(message: 'Veuillez saisir la date de début du stage.')
+                    new Assert\NotBlank(message: 'Veuillez saisir la date de début.'),
                 ]
             ])
             ->add('internshipEndDate', DateType::class, [
                 'label' => 'Date de fin du stage',
                 'widget' => 'single_text',
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
                 ],
                 'constraints' => [
-                    new Assert\NotBlank(message: 'Veuillez saisir la date de fin du stage.')
+                    new Assert\NotBlank(message: 'Veuillez saisir la date de fin.'),
                 ]
             ]);
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $data = $event->getData() ?? [];
+            $form = $event->getForm();
+
+            // Essayer de récupérer l'étudiant depuis le parent ou les options
+            $student = $form->getConfig()->getOption('student') ?? $form->getParent()?->getData();
+
+            if ($student instanceof Student && $student->getLevel()) {
+                $internshipDate = $student->getLevel()->getInternshipDate();
+                if ($internshipDate) {
+                    // Pré-remplissage des dates dans le formulaire
+                    if (is_array($data)) {
+                        $data['internshipStartDate'] = $internshipDate->getStartDate();
+                        $data['internshipEndDate'] = $internshipDate->getEndDate();
+                        $event->setData($data);
+                    }
+                }
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => null,
+            'student' => null,
         ]);
     }
 }

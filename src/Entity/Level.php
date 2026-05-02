@@ -15,14 +15,11 @@ class Level
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $id_level = null;
-
-    #[ORM\Column]
-    private ?int $LevelCode = null;
+    #[ORM\Column(length: 255)]
+    private ?string $levelCode = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $LevelName = null;
+    private ?string $levelName = null;
 
     /**
      * @var Collection<int, Student>
@@ -42,6 +39,12 @@ class Level
     #[ORM\OneToMany(targetEntity: Professor::class, mappedBy: 'referentLevel')]
     private Collection $referentProfessors;
 
+    /**
+     * @var InternshipDate
+     */
+    #[ORM\ManyToOne(targetEntity: InternshipDate::class, inversedBy: 'levels')]
+    private ?InternshipDate $internshipDate = null;
+
     public function __construct()
     {
         $this->students = new ArrayCollection();
@@ -54,38 +57,26 @@ class Level
         return $this->id;
     }
 
-    public function getIdLevel(): ?int
+    public function getLevelCode(): ?string
     {
-        return $this->id_level;
+        return $this->levelCode;
     }
 
-    public function setIdLevel(int $id_level): static
+    public function setLevelCode(string $levelCode): static
     {
-        $this->id_level = $id_level;
-
-        return $this;
-    }
-
-    public function getLevelCode(): ?int
-    {
-        return $this->LevelCode;
-    }
-
-    public function setLevelCode(int $LevelCode): static
-    {
-        $this->LevelCode = $LevelCode;
+        $this->levelCode = $levelCode;
 
         return $this;
     }
 
     public function getLevelName(): ?string
     {
-        return $this->LevelName;
+        return $this->levelName;
     }
 
-    public function setLevelName(string $LevelName): static
+    public function setLevelName(string $levelName): static
     {
-        $this->LevelName = $LevelName;
+        $this->levelName = $levelName;
 
         return $this;
     }
@@ -175,6 +166,18 @@ class Level
 
     public function __toString(): string
     {
-        return $this->LevelName ?? '';
+        return $this->levelName ?? '';
     }
+
+    public function getInternshipDate(): ?InternshipDate
+    {
+        return $this->internshipDate;
+    }
+    public function setInternshipDate(?InternshipDate $internshipDate): static
+    {
+        $this->internshipDate = $internshipDate;
+
+        return $this;
+    }
+
 }

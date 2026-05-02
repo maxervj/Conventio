@@ -66,8 +66,10 @@ class CompanyInfoCollectionController extends AbstractController
         if (!$user instanceof Student) {
             throw $this->createAccessDeniedException('Cette fonctionnalité est réservée aux étudiants.');
         }
-        // Crée le formulaire de demande
-        $form = $this->createForm(CollectionRequestFormType::class);
+        // Crée le formulaire de demande avec l'étudiant pour pré-remplissage
+        $form = $this->createForm(CollectionRequestFormType::class, null, [
+            'student' => $user,
+        ]);
         $form->handleRequest($request);
         // Traite la soumission du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
@@ -198,6 +200,8 @@ class CompanyInfoCollectionController extends AbstractController
             // Gère les horaires de travail séparément
             $workSchedule = $request->request->all('work_schedule');
             if ($workSchedule) {
+                // Calcule les totaux pour chaque jour
+                $workSchedule = $this->calculateWorkScheduleTotals($workSchedule);
                 $companyInfo->setWorkSchedule($workSchedule);
             }
 
@@ -341,6 +345,60 @@ class CompanyInfoCollectionController extends AbstractController
             'companyInfo' => $companyInfo,
         ]);
     }
+
+    // Affichage de la collecte complétée en mode lecture seule
+    #[Route('/company-info/{token}/view', name: 'company_info_view', methods: ['GET'])]
+    public function view(string $token, Request $request): Response
+    {
+        $locale = $request->query->get('lang', 'fr');
+        $request->setLocale($locale);
+        $request->getSession()->set('_locale', $locale);
+
+        $companyInfo = $this->companyInfoRepository->findByToken($token);
+
+        if (!$companyInfo) {
+            return $this->render('company_info/error.html.twig', [
+                'error' => 'error_invalid'
+            ]);
+        }
+
+        // Afficher même si le formulaire n'est pas complété (pour consultation)
+        return $this->render('company_info/view.html.twig', [
+            'companyInfo' => $companyInfo,
+            'token' => $token,
+            'locale' => $locale
+        ]);
+    }
+
+    /*#[Route('/teacher/company-infos', name: 'teacher_company_infos', methods: ['GET'])]
+    #[IsGranted('ROLE_PROFESSOR')]
+    public function listForProfessor(): Response
+    {
+        $companyInfos = $this->companyInfoRepository->findBy(
+            ['isCompleted' => true], // On affiche les collectes complétées
+            ['createdAt' => 'DESC']
+        );
+
+        return $this->render('teacher/company_infos.html.twig', [
+            'companyInfos' => $companyInfos,
+        ]);
+    }
+
+    #[Route('/teacher/company-info/{id}/validate', name: 'teacher_company_info_validate', methods: ['POST'])]
+    #[IsGranted('ROLE_PROFESSOR')]
+    public function validate(int $id): Response
+    {
+        $companyInfo = $this->companyInfoRepository->find($id);
+        if (!$companyInfo) {
+            throw $this->createNotFoundException('Collecte non trouvée.');
+        }
+
+        // Ici, tu pourras plus tard ajouter la logique de validation (ex : setIsValidatedByTeacher(true))
+
+        $this->addFlash('success', 'Validation enregistrée (simulation).');
+        return $this->redirectToRoute('teacher_company_infos');
+    }*/
+
     // Envoie une notification par email à l'étudiant une fois les informations soumises
     private function sendNotificationToStudent(InternshipCompanyInfo $companyInfo): void
     {
@@ -418,5 +476,44 @@ class CompanyInfoCollectionController extends AbstractController
 
         // Envoyer l'email et laisser l'exception remonter si ça échoue
         $this->mailer->send($email);
+    }
+
+    // Calcule les totaux des horaires de travail
+    private function calculateWorkScheduleTotals(array $workSchedule): array
+    {
+        foreach ($workSchedule as $day => &$schedule) {
+            if (is_array($schedule)) {
+                // Convertir les valeurs en entiers
+                $morningStartH = (int)($schedule['morning_start_h'] ?? 0);
+                $morningStartM = (int)($schedule['morning_start_m'] ?? 0);
+                $morningEndH = (int)($schedule['morning_end_h'] ?? 0);
+                $morningEndM = (int)($schedule['morning_end_m'] ?? 0);
+
+                $afternoonStartH = (int)($schedule['afternoon_start_h'] ?? 0);
+                $afternoonStartM = (int)($schedule['afternoon_start_m'] ?? 0);
+                $afternoonEndH = (int)($schedule['afternoon_end_h'] ?? 0);
+                $afternoonEndM = (int)($schedule['afternoon_end_m'] ?? 0);
+
+                // Calculer la durée du matin en minutes
+                $morningStartMinutes = $morningStartH * 60 + $morningStartM;
+                $morningEndMinutes = $morningEndH * 60 + $morningEndM;
+                $morningDuration = max(0, $morningEndMinutes - $morningStartMinutes);
+
+                // Calculer la durée de l'après-midi en minutes
+                $afternoonStartMinutes = $afternoonStartH * 60 + $afternoonStartM;
+                $afternoonEndMinutes = $afternoonEndH * 60 + $afternoonEndM;
+                $afternoonDuration = max(0, $afternoonEndMinutes - $afternoonStartMinutes);
+
+                // Total en minutes et conversion en heures:minutes
+                $totalMinutes = $morningDuration + $afternoonDuration;
+                $hours = intdiv($totalMinutes, 60);
+                $minutes = $totalMinutes % 60;
+
+                // Ajouter le total formaté
+                $schedule['total'] = sprintf('%d:%02d', $hours, $minutes);
+            }
+        }
+
+        return $workSchedule;
     }
 }
