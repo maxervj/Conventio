@@ -40,6 +40,9 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $isVerified = false;
 
+    #[ORM\OneToOne(targetEntity: DDFPTSettings::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?DDFPTSettings $ddfptSettings = null;
+
     /**
      * @var list<string> The user roles
      */
@@ -257,5 +260,16 @@ abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
         } else {
             return 4;
         }
+    }
+
+    public function getDdfptSettings(): ?DDFPTSettings
+    {
+        return $this->ddfptSettings;
+    }
+
+    public function setDdfptSettings(?DDFPTSettings $ddfptSettings): static
+    {
+        $this->ddfptSettings = $ddfptSettings;
+        return $this;
     }
 }

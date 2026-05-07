@@ -6,7 +6,9 @@ use App\Entity\Convention;
 use App\Entity\Professor;
 use App\Entity\Student;
 use App\Repository\ConventionRepository;
+use App\Repository\DDFPTSettingsRepository;
 use App\Service\PdfGeneratorService;
+use App\Service\YousignService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,6 +29,8 @@ class ConventionController extends AbstractController
         private MailerInterface $mailer,
         private UrlGeneratorInterface $urlGenerator,
         private PdfGeneratorService $pdfGenerator,
+        private YousignService $yousignService,
+        private DDFPTSettingsRepository $ddfptSettingsRepository,
     ) {}
 
     /**
@@ -70,7 +74,6 @@ class ConventionController extends AbstractController
             throw $this->createAccessDeniedException('Vous n\'avez pas accès à cette convention.');
         }
 
-        // Récupérer les dates paramétrées selon la classe de l'étudiant
         $internshipDates = null;
         if ($convention->getStudent() && $convention->getStudent()->getLevel()) {
             $internshipDates = $convention->getStudent()->getLevel()->getInternshipDate();
@@ -85,7 +88,7 @@ class ConventionController extends AbstractController
     }
 
     /**
-     * L'admin approuve la convention (passage en signed).
+     * L'admin approuve la convention et lance l'envoi de signatures Yousign.
      */
     #[Route('/{id}/approve', name: 'convention_approve', methods: ['POST'], requirements: ['id' => '\d+'])]
     #[IsGranted('ROLE_ADMIN')]
@@ -96,15 +99,75 @@ class ConventionController extends AbstractController
         }
 
         if (!$convention->isValidated()) {
-            $this->addFlash('error', 'La convention doit être validée par le professeur avant l\'approbation de l\'établissement.');
+            $this->addFlash('error', 'Seule une convention validée peut être approuvée.');
             return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
         }
 
-        $convention->setStatus('signed');
-        $convention->setSignedAt(new \DateTime());
-        $this->entityManager->flush();
+        try {
+            // Générer le PDF
+            $pdfContent = $this->pdfGenerator->streamConventionPdf($convention);
+            $tempPdfPath = tempnam(sys_get_temp_dir(), 'convention_') . '.pdf';
+            file_put_contents($tempPdfPath, $pdfContent);
 
-        $this->addFlash('success', 'La convention a été approuvée par l\'établissement.');
+            // Récupérer les paramètres DDFPT
+            $ddfptSettings = $this->ddfptSettingsRepository->findOneBy(['user' => $this->getUser()]);
+            $requireApproval = $ddfptSettings?->isRequireYousignApproval() ?? false;
+            $approverEmail = $ddfptSettings?->getApprovalEmail() ?? $this->getUser()->getEmail();
+
+            // Envoyer la demande de signature à Yousign
+            $this->yousignService->sendConventionSignatureRequest(
+                convention: $convention,
+                pdfPath: $tempPdfPath,
+                requireApproval: $requireApproval,
+                approverEmail: $approverEmail,
+            );
+
+            $this->entityManager->flush();
+
+            // Nettoyage du fichier temporaire
+            @unlink($tempPdfPath);
+
+            $this->addFlash('success', 'Convention approuvée. Demandes de signature envoyées à Yousign.');
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Erreur lors de l\'envoi à Yousign : ' . $e->getMessage());
+        }
+
+        return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
+    }
+
+    /**
+     * L'admin valide l'approbation Yousign et active les signatures.
+     */
+    #[Route('/{id}/validate-approval', name: 'convention_validate_approval', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function validateApproval(Convention $convention, Request $request): Response
+    {
+        if (!$this->isCsrfTokenValid('validate_approval_' . $convention->getId(), $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Token CSRF invalide.');
+        }
+
+        if (!$convention->getSignatureRequestId()) {
+            throw $this->createNotFoundException('ID de demande de signature introuvable.');
+        }
+
+        if ($convention->getApprovalStatus() !== 'pending') {
+            $this->addFlash('error', 'Cette convention n\'est pas en attente d\'approbation.');
+            return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
+        }
+
+        try {
+            // Appeler l'API Yousign pour approuver
+            $this->yousignService->approveSignatureRequest($convention->getSignatureRequestId());
+
+            $convention->setApprovalStatus('approved');
+            $convention->setApprovedAt(new \DateTimeImmutable());
+            $this->entityManager->flush();
+
+            $this->addFlash('success', 'Approbation validée. Demandes de signature envoyées aux signataires.');
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Erreur lors de la validation : ' . $e->getMessage());
+        }
+
         return $this->redirectToRoute('convention_show', ['id' => $convention->getId()]);
     }
 
@@ -154,7 +217,6 @@ class ConventionController extends AbstractController
         $convention->setStatus('pending_validation');
         $this->entityManager->flush();
 
-        // Envoyer un email au professeur référent
         $this->sendValidationRequestEmail($convention);
 
         $this->addFlash('success', 'Votre demande de validation a été envoyée à ' . $professor->getFirstName() . ' ' . $professor->getLastName() . '.');
@@ -188,7 +250,6 @@ class ConventionController extends AbstractController
         $convention->setValidatedAt(new \DateTime());
         $this->entityManager->flush();
 
-        // Notifier l'étudiant
         $this->sendValidationConfirmationEmail($convention);
 
         $this->addFlash('success', 'La convention de ' . $convention->getStudent()->getFirstName() . ' ' . $convention->getStudent()->getLastName() . ' a été validée avec succès.');

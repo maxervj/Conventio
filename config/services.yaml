@@ -30,7 +30,7 @@ services:
     App\Service\YousignService:
         arguments:
             $apiKey: '%env(YOUSIGN_API_KEY)%'
-            $sandbox: '%env(bool:YOUSIGN_SANDBOX)%'
+            $sandbox: '%env(YOUSIGN_SANDBOX)%'
 
     # Webhook Yousign
     App\Controller\YousignWebhookController:

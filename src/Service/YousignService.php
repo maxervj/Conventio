@@ -3,24 +3,11 @@
 namespace App\Service;
 
 use App\Entity\Convention;
+use App\Enum\ApprovalStatusEnum;
 use App\Repository\SignatureRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-/**
- * Service d'intégration Yousign v3.
- *
- * Positionnement des champs de signature via Smart Anchors.
- * Insérer les balises suivantes dans le gabarit PDF de la convention
- * (texte blanc sur fond blanc pour les masquer visuellement) :
- *
- *   {{s1|signature|85|37}}   → étudiant(e)          (signataire 1)
- *   {{s2|signature|85|37}}   → responsable entreprise (signataire 2)
- *   {{s3|signature|85|37}}   → proviseur / école      (signataire 3)
- *
- * Format : {{sN|field_type|width_px|height_px}}
- * Ratio obligatoire width/height ≈ 2.3 (ex. 85×37, 184×80, 230×100)
- */
 class YousignService
 {
     private const SANDBOX_URL    = 'https://api-sandbox.yousign.app/v3';
@@ -33,10 +20,6 @@ class YousignService
         private readonly string               $apiKey,
         private readonly bool                 $sandbox = true,
     ) {}
-
-    // -------------------------------------------------------------------------
-    // Primitives API
-    // -------------------------------------------------------------------------
 
     private function getBaseUrl(): string
     {
@@ -73,10 +56,6 @@ class YousignService
         return $content;
     }
 
-    // -------------------------------------------------------------------------
-    // Étape 1 : Créer une demande de signature
-    // -------------------------------------------------------------------------
-
     public function createSignatureRequest(string $name, string $deliveryMode = 'email'): array
     {
         return $this->request('POST', '/signature_requests', [
@@ -87,13 +66,6 @@ class YousignService
         ]);
     }
 
-    // -------------------------------------------------------------------------
-    // Étape 2 : Uploader le document PDF avec parse_anchors activé
-    // -------------------------------------------------------------------------
-
-    /**
-     * @param bool $parseAnchors Activer la détection des Smart Anchors {{sN|…}} dans le PDF
-     */
     public function addDocument(
         string $signatureRequestId,
         string $pdfPath,
@@ -136,24 +108,9 @@ class YousignService
             ));
         }
 
-        $anchorsFound = $content['total_anchors'] ?? 'n/a';
-        $this->logger->info('Yousign: document uploadé', [
-            'document_id'    => $content['id'],
-            'total_anchors'  => $anchorsFound,
-        ]);
-
         return $content;
     }
 
-    // -------------------------------------------------------------------------
-    // Étape 3 : Ajouter un signataire (les champs sont gérés par les Smart Anchors)
-    // -------------------------------------------------------------------------
-
-    /**
-     * Ajoute un signataire sans spécifier de champs manuels.
-     * Les champs sont automatiquement assignés via les anchors {{sN|…}} du PDF.
-     * L'ordre d'ajout détermine le N : 1er appel → s1, 2e → s2, etc.
-     */
     public function addSigner(
         string $signatureRequestId,
         string $firstName,
@@ -177,18 +134,22 @@ class YousignService
         ]);
     }
 
-    // -------------------------------------------------------------------------
-    // Étape 4 : Activer la demande (envoie les emails aux signataires)
-    // -------------------------------------------------------------------------
+    public function addApprover(string $signatureRequestId, string $approverEmail): array
+    {
+        return $this->request('POST', '/signature_requests/' . $signatureRequestId . '/approvers', [
+            'json' => ['email' => $approverEmail],
+        ]);
+    }
 
     public function activateSignatureRequest(string $signatureRequestId): array
     {
         return $this->request('POST', '/signature_requests/' . $signatureRequestId . '/activate');
     }
 
-    // -------------------------------------------------------------------------
-    // Utilitaires
-    // -------------------------------------------------------------------------
+    public function approveSignatureRequest(string $signatureRequestId): array
+    {
+        return $this->request('POST', '/signature_requests/' . $signatureRequestId . '/approve');
+    }
 
     public function getSignatureRequest(string $signatureRequestId): array
     {
@@ -223,21 +184,12 @@ class YousignService
         return $response->getContent();
     }
 
-    // -------------------------------------------------------------------------
-    // Orchestration complète pour une Convention
-    // -------------------------------------------------------------------------
-
-    /**
-     * Crée et active une demande de signature Yousign pour une convention.
-     *
-     * Prérequis PDF : le gabarit doit contenir les Smart Anchors suivants
-     * (texte blanc sur fond blanc) :
-     *   {{s1|signature|85|37}}  → étudiant(e)
-     *   {{s2|signature|85|37}}  → responsable entreprise
-     *   {{s3|signature|85|37}}  → proviseur / école
-     */
-    public function sendConventionSignatureRequest(Convention $convention, string $pdfPath): Convention
-    {
+    public function sendConventionSignatureRequest(
+        Convention $convention,
+        string $pdfPath,
+        ?bool $requireApproval = null,
+        ?string $approverEmail = null,
+    ): Convention {
         $student         = $convention->getStudent();
         $companyInfo     = $convention->getCompanyInfo();
         $schoolSignature = $this->signatureRepository->findOneBy([]);
@@ -252,32 +204,29 @@ class YousignService
             throw new \LogicException('Aucune configuration de signature école trouvée.');
         }
 
-        // 1. Demande de signature
+        // 1. Créer la demande de signature
         $requestName     = sprintf('Convention de stage – %s %s', $student->getFirstName(), $student->getLastName());
         $signatureRequest = $this->createSignatureRequest($requestName);
         $requestId        = $signatureRequest['id'];
 
         $this->logger->info('Yousign: demande créée', ['id' => $requestId]);
 
-        // 2. Document PDF — parse_anchors: true pour détecter {{s1|…}}, {{s2|…}}, {{s3|…}}
+        // 2. Ajouter le document PDF
         $document   = $this->addDocument($requestId, $pdfPath);
         $documentId = $document['id'];
 
-        // 3. Signataires (ordre : s1 → s2 → s3, doit correspondre aux anchors du PDF)
+        // 3. Ajouter les signataires
         $signers = [
-            // s1 → {{s1|signature|85|37}} dans le PDF
             [
                 'first_name' => $student->getFirstName(),
                 'last_name'  => $student->getLastName(),
                 'email'      => $student->getEmail(),
             ],
-            // s2 → {{s2|signature|85|37}} dans le PDF
             [
                 'first_name' => $companyInfo->getSupervisorFirstName() ?? $companyInfo->getResponsibleFirstName(),
                 'last_name'  => $companyInfo->getSupervisorLastName()  ?? $companyInfo->getResponsibleLastName(),
                 'email'      => $companyInfo->getSupervisorEmail()      ?? $companyInfo->getEmail(),
             ],
-            // s3 → {{s3|signature|85|37}} dans le PDF
             [
                 'first_name' => $schoolSignature->getPrenomProviseur(),
                 'last_name'  => $schoolSignature->getNomProviseur(),
@@ -296,13 +245,21 @@ class YousignService
 
         $this->logger->info('Yousign: signataires ajoutés', ['count' => count($signers)]);
 
-        // 4. Activation → emails envoyés
-        $this->activateSignatureRequest($requestId);
+        // 4. Ajouter approbateur si nécessaire
+        if ($requireApproval && $approverEmail) {
+            $this->addApprover($requestId, $approverEmail);
+            $convention->setApprovalStatus(ApprovalStatusEnum::PENDING);
+            $this->logger->info('Yousign: approbateur ajouté', ['email' => $approverEmail]);
+        } else {
+            $convention->setApprovalStatus(ApprovalStatusEnum::APPROVED);
+        }
 
+        // 5. Activer la demande
+        $this->activateSignatureRequest($requestId);
         $this->logger->info('Yousign: demande activée', ['id' => $requestId]);
 
-        // 5. Mise à jour de la convention
-        $convention->setYousignRequestId($requestId);
+        // 6. Mise à jour de la convention
+        $convention->setSignatureRequestId($requestId);
         $convention->setYousignDocumentId($documentId);
         $convention->setYousignStatus('ongoing');
         $convention->setStatus('pending_signature');
@@ -310,13 +267,9 @@ class YousignService
         return $convention;
     }
 
-    // -------------------------------------------------------------------------
-    // Synchronisation du statut
-    // -------------------------------------------------------------------------
-
     public function syncConventionStatus(Convention $convention): Convention
     {
-        $requestId = $convention->getYousignRequestId();
+        $requestId = $convention->getSignatureRequestId();
         if (!$requestId) {
             throw new \LogicException('La convention n\'a pas de demande Yousign associée.');
         }

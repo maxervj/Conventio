@@ -88,10 +88,20 @@ class Convention
     #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private ?string $yousignStatus = null;
 
+    // Approbation Yousign
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $signatureRequestId = null;
+
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    private ?string $approvalStatus = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTime $approvedAt = null;
+
     /**
      * @var Collection<int, ConventionDate>
      */
-    #[ORM\OneToMany(targetEntity: ConventionDate::class, mappedBy: 'convention')]
+    #[ORM\OneToMany(targetEntity: ConventionDate::class, mappedBy: 'convention', cascade: ['persist', 'remove'])]
     private Collection $conventionDates;
 
     public function __construct()
@@ -438,5 +448,40 @@ class Convention
         $conventionDate->setStartDate($internshipDate->getStartDate());
         $conventionDate->setEndDate($internshipDate->getEndDate());
         $this->addConventionDate($conventionDate);
+    }
+
+    // Getters and setters pour les champs d'approbation Yousign
+    public function getSignatureRequestId(): ?string
+    {
+        return $this->signatureRequestId;
+    }
+
+    public function setSignatureRequestId(?string $signatureRequestId): static
+    {
+        $this->signatureRequestId = $signatureRequestId;
+        return $this;
+    }
+
+    public function getApprovalStatus(): ?string
+    {
+        return $this->approvalStatus;
+    }
+
+    public function setApprovalStatus(?string $approvalStatus): static
+    {
+        $this->approvalStatus = $approvalStatus;
+        return $this;
+    }
+
+    public function getApprovedAt(): ?\DateTime
+    {
+        return $this->approvedAt;
+    }
+
+
+    public function setApprovedAt(?\DateTime $approvedAt): static
+    {
+        $this->approvedAt = $approvedAt;
+        return $this;
     }
 }
